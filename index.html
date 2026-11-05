@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1d3a5f">
+<title>GARÉo Photo · relevé de visite</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon192.png">
+<style>
+:root{--navy:#1d3a5f;--ink:#16202b;--mute:#6b7682;--line:#d9dee4;--bg:#f4f5f7;--card:#fff;--yel:#f4c542;--red:#c8442f;--grn:#2f8a57;--org:#d9822b;--blue:#2c6db5}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.35 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-tap-highlight-color:transparent}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+header{position:sticky;top:0;z-index:20;background:var(--navy);color:#fff;display:flex;align-items:center;gap:8px;padding:8px 10px;padding-top:calc(8px + env(safe-area-inset-top))}
+header .brand{font-weight:700;letter-spacing:.02em;margin-right:auto}
+header .brand small{font-weight:400;opacity:.7;margin-left:6px}
+.tabs button{background:transparent;border:1px solid rgba(255,255,255,.35);color:#fff;border-radius:999px;padding:5px 11px;font-size:13px}
+.tabs button.on{background:var(--yel);color:var(--ink);border-color:var(--yel);font-weight:600}
+main{max-width:1180px;margin:0 auto;padding:10px 10px 90px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px}
+h2{font-size:17px;margin:0 0 8px}
+h3{font-size:15px;margin:12px 0 6px}
+.mute{color:var(--mute)}
+.small{font-size:12.5px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.btn{border:1px solid var(--line);background:#fff;border-radius:10px;padding:10px 12px;min-height:44px;text-align:center}
+.btn.big{min-height:62px;font-size:16px;font-weight:600}
+.btn.pri{background:var(--navy);color:#fff;border-color:var(--navy)}
+.btn.yel{background:var(--yel);border-color:var(--yel);font-weight:600}
+.btn.red{background:#fff;color:var(--red);border-color:var(--red)}
+.btn.ghost{background:transparent}
+.btn:disabled{opacity:.4}
+.chip{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 11px;font-size:13.5px;min-height:36px}
+.chip.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.chip.att.on{background:var(--grn);border-color:var(--grn)}
+.chip.agg.on{background:var(--red);border-color:var(--red)}
+.chip.eva.on{background:var(--org);border-color:var(--org)}
+.chip.star.on{background:var(--yel);color:var(--ink);border-color:var(--yel)}
+input[type=text],input[type=number],input[type=search],select,textarea{width:100%;border:1px solid var(--line);border-radius:9px;padding:10px;background:#fff;min-height:44px}
+label.f{display:block;font-size:12.5px;color:var(--mute);margin:8px 0 3px}
+/* Contexte courant */
+.ctx{position:sticky;top:52px;z-index:10;background:var(--ink);color:#fff;border-radius:14px;padding:12px 14px;margin-bottom:10px;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+.ctx .niv{display:inline-block;background:var(--yel);color:var(--ink);font-weight:700;border-radius:6px;padding:1px 7px;font-size:12.5px;margin-right:6px}
+.ctx .zone{font-size:19px;font-weight:700;margin:4px 0 2px}
+.ctx .eq{font-size:15px}
+.ctx .eq.gen{opacity:.7;font-style:italic}
+.ctx .meta{font-size:12px;opacity:.75;margin-top:4px}
+.ctx .tags span{display:inline-block;background:rgba(255,255,255,.16);border-radius:5px;padding:1px 6px;margin:3px 4px 0 0;font-size:12px}
+.journal .ev{display:flex;gap:8px;align-items:flex-start;padding:7px 0;border-top:1px solid var(--line)}
+.journal .ev:first-child{border-top:0}
+.journal .t{font-variant-numeric:tabular-nums;font-weight:600;min-width:64px}
+.journal .ev .x{margin-left:auto;display:flex;gap:4px}
+.journal .ev .x button{border:1px solid var(--line);background:#fff;border-radius:7px;padding:3px 7px;font-size:12px}
+.banner{background:#fff7dd;border:1px solid #f0d98a;border-radius:10px;padding:9px 11px;margin-bottom:10px;font-size:13.5px}
+.banner.ok{background:#e8f5ec;border-color:#b8dec5}
+.banner.err{background:#fde9e5;border-color:#f2b7ab}
+/* Overlays */
+.ov{position:fixed;inset:0;z-index:50;background:var(--bg);display:flex;flex-direction:column}
+.ov .top{background:var(--navy);color:#fff;display:flex;align-items:center;gap:8px;padding:10px;padding-top:calc(10px + env(safe-area-inset-top))}
+.ov .top b{margin-right:auto;font-size:16px}
+.ov .top button{background:rgba(255,255,255,.15);border:0;color:#fff;border-radius:8px;padding:8px 12px}
+.ov .body{flex:1;overflow:auto;padding:10px}
+.ov .foot{padding:10px;display:flex;gap:8px;background:#fff;border-top:1px solid var(--line);padding-bottom:calc(10px + env(safe-area-inset-bottom))}
+.ov .foot .btn{flex:1}
+.nivtabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px}
+.nivtabs button{flex:0 0 auto}
+.zlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:7px}
+.zlist .btn{text-align:left;font-size:14px;min-height:52px;line-height:1.2}
+.zlist .btn small{display:block;color:var(--mute);font-size:11.5px}
+.eqlist .btn{display:flex;width:100%;text-align:left;margin-bottom:5px;align-items:center;gap:8px}
+.eqlist .btn .nm{flex:1}
+.imp{font-size:11px;font-weight:700;border-radius:5px;padding:1px 5px;white-space:nowrap}
+.imp4{background:#fbe1dc;color:#a8321f}.imp3{background:#fdebd7;color:#a5591a}.imp2{background:#eef0d6;color:#6a6a1d}.imp1{background:#eef1f4;color:#55606b}
+.planwrap{position:relative;overflow:auto;flex:1;background:#fff;touch-action:pan-x pan-y}
+.planwrap img{display:block;max-width:none;user-select:none;-webkit-user-drag:none}
+.pin{position:absolute;width:22px;height:22px;margin:-22px 0 0 -11px;pointer-events:none}
+.pin::before{content:"";position:absolute;left:3px;top:0;width:16px;height:16px;border-radius:50% 50% 50% 0;background:var(--red);transform:rotate(-45deg);box-shadow:0 0 0 2px #fff}
+.dot{position:absolute;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:var(--blue);opacity:.65;pointer-events:none;box-shadow:0 0 0 1px #fff}
+.ver{position:fixed;right:6px;bottom:4px;font-size:10.5px;color:var(--mute);z-index:5;background:rgba(244,245,247,.85);padding:1px 5px;border-radius:4px}
+/* Bureau */
+.seg{border:1px solid var(--line);border-radius:12px;background:#fff;margin-bottom:12px;overflow:hidden}
+.seg>.hd{display:flex;gap:10px;align-items:flex-start;padding:9px 12px;background:#f8f9fb;border-bottom:1px solid var(--line)}
+.seg>.hd .tm{font-variant-numeric:tabular-nums;font-weight:700;min-width:96px}
+.seg>.hd .lb{flex:1}
+.seg>.hd .lb b{font-size:15px}
+.seg .ph{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:8px;padding:10px}
+.ph .it{position:relative;border:2px solid transparent;border-radius:9px;overflow:hidden;background:#eef0f3;cursor:pointer}
+.ph .it.sel{border-color:var(--blue)}
+.ph .it.moved{box-shadow:0 0 0 2px var(--org) inset}
+.ph .it img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;background:#dde2e8}
+.ph .it .vid{display:flex;align-items:center;justify-content:center;aspect-ratio:4/3;font-size:34px;background:#2a3440;color:#fff}
+.ph .it .cap{font-size:11px;padding:3px 5px;display:flex;justify-content:space-between;gap:4px;background:#fff}
+.ph .it .ck{position:absolute;top:5px;left:5px;width:20px;height:20px;border-radius:5px;background:rgba(255,255,255,.9);border:1px solid #889;display:flex;align-items:center;justify-content:center;font-size:13px}
+.ph .it.sel .ck{background:var(--blue);color:#fff;border-color:var(--blue)}
+.toolbar{position:sticky;top:52px;z-index:9;background:var(--ink);color:#fff;border-radius:12px;padding:8px 10px;margin-bottom:10px;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.toolbar .btn{min-height:36px;padding:6px 10px;font-size:13.5px;color:var(--ink)}
+.toolbar .btn:disabled{opacity:.35}
+.toolbar select{color:var(--ink)}
+.toolbar select{width:auto;min-height:36px;max-width:340px}
+.stat{display:inline-block;margin-right:14px}
+.stat b{font-size:18px}
+.prog{height:8px;background:#e3e7ec;border-radius:9px;overflow:hidden;margin-top:6px}
+.prog>div{height:100%;background:var(--navy);width:0}
+.help h3{margin-top:16px}
+.help li{margin:4px 0}
+@media (min-width:900px){.ctx{top:56px}.toolbar{top:56px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">GARÉo Photo<small id="hdrGare"></small></div>
+  <div class="tabs row" id="tabs">
+    <button data-act="mode" data-v="terrain">Terrain</button>
+    <button data-act="mode" data-v="bureau">Bureau</button>
+    <button data-act="mode" data-v="aide">Aide</button>
+  </div>
+</header>
+<main id="app"></main>
+<div id="ov"></div>
+<div class="ver" id="ver"></div>
+<input type="file" id="fJournal" accept=".json,application/json" hidden>
+<input type="file" id="fMedia" accept="image/*,video/*" multiple hidden>
+<input type="file" id="fDir" webkitdirectory multiple hidden>
+
+<script>
+'use strict';
+/* =====================================================================
+   GARÉo Photo — journal de visite horodaté + rapprochement photos
+   Fichier unique, aucune dépendance externe (fonctionne hors-ligne).
+   ===================================================================== */
+const VERSION = 'v2026-11-05 · 1';
+const STORE_KEY = 'gareoPhoto.v1';
+
+/* ---------- Nomenclature équipements (matrice G&C, onglet Priorisation eqpts AA 02072, col. A) ---------- */
+/* l = [intégrité personnes, intégrité biens, exploitation, qualité de service, RSE] ; 4 très élevé … 0 inexistant */
+const EQUIP = [{"n": "Abri vélo", "l": [1, 2, 1, 3, 2], "d": "Abri / structure légère de stationnement et protection des vélos"}, {"n": "Abris de quais/marquise", "l": [3, 3, 2, 4, 1], "d": "Abris ou marquises protégeant les voyageurs sur les quais"}, {"n": "AEP (Adduction eau potable)", "l": [2, 2, 2, 4, 4], "d": "Réseau d’alimentation en eau potable de la gare (sanitaires, robinets, usages courants)"}, {"n": "Alimentation SNCF Réseau", "l": [3, 3, 4, 4, 3], "d": "Alimentation électrique dédiée aux équipements ferroviaires de SNCF Réseau en gare (signalisation, aiguillages, postes, etc.)"}, {"n": "Armoire de climatisation", "l": [1, 2, 3, 1, 1], "d": "Armoire de traitement d’air / climatisation alimentant principalement des locaux techniques ou équipements sensibles"}, {"n": "Armoire élévatique", "l": [3, 2, 2, 4, 1], "d": "Armoire de commande et de puissance des ascenseurs et escaliers mécaniques"}, {"n": "ART PMR", "l": [0, 2, 2, 4, 4], "d": "Dispositif d’aide et d’information dédié aux PMR"}, {"n": "ART/AMT/BLS (Automate de vente)", "l": [0, 2, 2, 4, 0], "d": "Automates de vente de titres de transport"}, {"n": "Ascenseur de service / Monte charge", "l": [1, 2, 3, 1, 1], "d": "Ascenseur dédié aux flux logistiques et manutention"}, {"n": "Ascenseur non secouru", "l": [3, 2, 1, 4, 1], "d": "Ascenseur voyageurs non intégré au dispositif d'évacuation"}, {"n": "Ascenseur secouru", "l": [4, 2, 1, 4, 1], "d": "Ascenseur intégré au dispositif d'évacuation de sécurité"}, {"n": "Assise quais", "l": [2, 1, 0, 4, 1], "d": "Sièges ou bancs installés sur les quais"}, {"n": "BAES", "l": [4, 0, 1, 1, 1], "d": "Blocs autonomes d'éclairage de sécurité"}, {"n": "Baie CFA", "l": [4, 3, 4, 1, 1], "d": "Baie courants faibles pour réseaux et systèmes numériques"}, {"n": "Baie Sono", "l": [4, 1, 2, 3, 1], "d": "Baie de diffusion sonore de sécurité et d'exploitation"}, {"n": "Baie Sono commerciale", "l": [0, 2, 2, 2, 0], "d": "Baie de diffusion sonore à usage commercial/confort"}, {"n": "Balise sonore", "l": [2, 0, 1, 2, 1], "d": "Balise d'orientation sonore pour déficients visuels"}, {"n": "Bandes détection à la canne", "l": [4, 0, 1, 3, 3], "d": "Bandes au sol détectables à la canne des malvoyants"}, {"n": "Bandes pododactiles", "l": [4, 0, 1, 3, 1], "d": "Bandes en relief d'alerte au sol (ex. bord de quai)"}, {"n": "Barrières et clôtures fixes", "l": [4, 2, 3, 1, 1], "d": "Clôtures rigides séparant zones publiques et zones dangereuses"}, {"n": "Barrières extérieurs levantes", "l": [4, 2, 3, 1, 1], "d": "Barrières motorisées de contrôle d'accès véhicules"}, {"n": "Borne d'appel d'urgence", "l": [4, 2, 1, 1, 1], "d": "Borne permettant aux usagers d'alerter en cas d'urgence"}, {"n": "Bureaux", "l": [1, 3, 4, 1, 4], "d": "Locaux administratifs et de travail"}, {"n": "Caméras", "l": [1, 1, 3, 1, 1], "d": "Caméras de vidéosurveillance générales"}, {"n": "Caméras ascenseurs", "l": [4, 1, 1, 3, 1], "d": "Caméras dédiées à la surveillance des cabines d'ascenseurs"}, {"n": "Caméras pour téléopération", "l": [1, 1, 3, 1, 1], "d": "Caméras nécessaires au pilotage à distance d'équipements"}, {"n": "Caméras vente billetterie", "l": [1, 1, 1, 3, 1], "d": "Caméras de surveillance zones de vente/guichets"}, {"n": "Centrale GTC/GTB", "l": [4, 4, 4, 4, 4], "d": "Système centralisé de gestion technique/énergétique du bâtiment"}, {"n": "Centrale SSI", "l": [4, 4, 1, 1, 1], "d": "Unité centrale du Système de Sécurité Incendie"}, {"n": "Chambre froide", "l": [1, 3, 3, 2, 1], "d": "Chambre à froid pour usages commerciaux/restauration"}, {"n": "Château d’eau", "l": [4, 3, 3, 3, 3], "d": "Ouvrage de stockage et de mise en pression de l'eau du site"}, {"n": "Chaudière et circuit d'eau chaude", "l": [1, 4, 1, 3, 3], "d": "Production et distribution d'eau chaude de chauffage"}, {"n": "Clim locaux techniques", "l": [1, 2, 4, 1, 1], "d": "Climatisation des locaux abritant des équipements sensibles"}, {"n": "Cœur de réseau télécoms", "l": [4, 4, 4, 4, 2], "d": "Noyau des infrastructures réseau et télécoms de la gare"}, {"n": "Désenfumage mécanique", "l": [4, 2, 1, 1, 1], "d": "Système motorisé d'extraction des fumées en cas d'incendie"}, {"n": "Désenfumage naturel", "l": [4, 2, 1, 1, 1], "d": "Trappes ou ouvrants pour évacuation naturelle des fumées"}, {"n": "Détecteur incendie", "l": [4, 1, 4, 1, 1], "d": "Capteurs de détection précoce de départ de feu"}, {"n": "Eau chaude sanitaire", "l": [1, 2, 1, 3, 3], "d": "Production d'ECS pour sanitaires et usages courants"}, {"n": "Eclairage", "l": [3, 1, 2, 4, 2], "d": "Éclairage général des espaces gare et accès"}, {"n": "Eclairage de sécurité sur source centrale", "l": [4, 1, 1, 1, 1], "d": "Éclairage de sécurité alimenté par une source centralisée"}, {"n": "Eclairage indispensable à l'ouverture d'un espace", "l": [1, 1, 4, 1, 1], "d": "Éclairage minimal réglementaire conditionnant l'ouverture au public"}, {"n": "Ecran TFT PMR", "l": [1, 2, 2, 3, 4], "d": "Écran d'information adapté aux besoins des PMR"}, {"n": "Ecrans TFT/TIM", "l": [1, 2, 2, 4, 1], "d": "Écrans d'information voyageurs (horaires, voies, messages)"}, {"n": "Emetteur de chaleur ERP", "l": [1, 2, 1, 3, 2], "d": "Radiateurs ou terminaux de chauffage en zones voyageurs"}, {"n": "Emetteur de chaleur ERT", "l": [1, 2, 1, 1, 4], "d": "Radiateurs ou terminaux de chauffage en zones techniques"}, {"n": "Ensemble local technique Transformateur", "l": [4, 4, 4, 4, 4], "d": "Local abritant le transformateur principal d'alimentation de la gare"}, {"n": "Ensemble local technique Transformateur de secours avec Source secours BT/HT", "l": [4, 4, 4, 4, 2], "d": "Local abritant transformateur et source électrique de secours"}, {"n": "Enveloppe", "l": [4, 4, 4, 3, 3], "d": "Façades, toitures, menuiseries, étanchéité du bâtiment"}, {"n": "Equipement ferroviaire réseau", "l": [4, 4, 4, 1, 1], "d": "Équipements d'infrastructure ferroviaire (signalisation, voie, aiguillage…)"}, {"n": "Equipement médical de premiers secours", "l": [4, 1, 1, 1, 1], "d": "\""}, {"n": "Escalier Mécanique", "l": [1, 4, 1, 3, 1], "d": "Escalier motorisé pour le transport de voyageurs"}, {"n": "Escalier Mécanique secouru", "l": [4, 4, 1, 3, 1], "d": "Escalier mécanique intégré aux cheminements de sécurité"}, {"n": "Espace commercial", "l": [1, 4, 3, 3, 1], "d": "Locaux dédiés aux commerces et services en gare"}, {"n": "Espace d'attente", "l": [1, 4, 3, 4, 1], "d": "Zones de salle d'attente et assises voyageurs"}, {"n": "Espace de circulation", "l": [2, 4, 3, 4, 1], "d": "Couloirs, halls et zones de déplacement voyageurs"}, {"n": "Extinction incendie par gaz argon", "l": [4, 3, 4, 1, 1], "d": "Système d'extinction automatisé par gaz en locaux sensibles"}, {"n": "Extinction incendie par sprinklage", "l": [4, 3, 4, 1, 1], "d": "Réseau de sprinklers automatiques contre l'incendie"}, {"n": "Fondation", "l": [4, 4, 4, 1, 1], "d": "Ouvrages de fondation du bâtiment ou de l'ouvrage"}, {"n": "Fontaine à eau", "l": [0, 2, 0, 4, 3], "d": "Fontaines de distribution d'eau potable aux usagers"}, {"n": "Groupe de production de froid", "l": [1, 3, 3, 1, 2], "d": "Production centralisée de froid pour la climatisation"}, {"n": "Haut-parleur", "l": [4, 2, 3, 3, 0], "d": "Diffuseurs sonores dans les espaces voyageurs et techniques"}, {"n": "Interphonie Ascenseur", "l": [4, 2, 1, 3, 1], "d": "Système d'appel et de communication en cabine d'ascenseur"}, {"n": "Interphonie CAB", "l": [1, 1, 2, 2, 1], "d": "Système d'interphonie intégré aux portillons automatiques de contrôle d'accès et de billettique"}, {"n": "Ligne CAB/PEC", "l": [1, 3, 4, 3, 1], "d": "Ligne de portillons de contrôle d'accès ou billettique"}, {"n": "Lignes de vie ou autres dispositifs fixes pour l'entretien", "l": [4, 1, 3, 1, 4], "d": "Dispositifs de protection contre les chutes pour interventions en hauteur"}, {"n": "Local technique", "l": [1, 4, 4, 1, 2], "d": "Local abritant des équipements techniques (élec, CVC, IT…)"}, {"n": "Ouvrage d'assainissement ou technique", "l": [2, 4, 2, 1, 4], "d": "Ouvrages de collecte et gestion des eaux usées/pluviales"}, {"n": "Panneaux photovoltaïques", "l": [1, 3, 3, 1, 4], "d": "Installation de production d'électricité solaire"}, {"n": "Panneaux solaires thermiques", "l": [1, 3, 3, 1, 4], "d": "Capteurs solaires pour production de chaleur ou d'ECS"}, {"n": "Paratonnerre", "l": [4, 3, 2, 1, 1], "d": "Dispositif de protection contre la foudre"}, {"n": "Parking", "l": [1, 3, 1, 4, 1], "d": "Parking voyageurs accolé à la gare"}, {"n": "Parking exploitants", "l": [1, 3, 4, 1, 3], "d": "Parking réservé aux personnels et prestataires"}, {"n": "Passage souterrain", "l": [1, 4, 4, 4, 0], "d": "Ouvrage souterrain pour accéder aux quais et aux espaces"}, {"n": "Passerelle", "l": [4, 4, 4, 4, 0], "d": "Ouvrage aérien piéton pour franchir les voies"}, {"n": "Petit ouvrage sous voie", "l": [1, 4, 2, 1, 1], "d": "Petit ouvrage (buse, dalot) traversant sous la voie ferrée"}, {"n": "Pneumatique", "l": [1, 3, 2, 1, 1], "d": "Réseau d'air comprimé pour automatismes et équipements"}, {"n": "Pompe de relevage", "l": [1, 3, 4, 1, 3], "d": "Pompe évacuant les eaux de locaux bas ou souterrains"}, {"n": "Ponts rails", "l": [4, 4, 4, 1, 1], "d": "Ponts supportant les voies ferrées"}, {"n": "Ponts route", "l": [4, 4, 4, 1, 1], "d": "Ponts routiers associés à la gare ou franchissant la voie"}, {"n": "Portail mécanique de secours téléopéré", "l": [4, 3, 3, 1, 1], "d": "Portail motorisé de secours commandable à distance"}, {"n": "Portes auto", "l": [1, 3, 3, 3, 1], "d": "Portes automatiques d'accès aux bâtiments et espaces"}, {"n": "Pupitre téléopération", "l": [4, 4, 4, 1, 2], "d": "Poste de commande et de supervision centralisé permettant à un opérateur (agent ou centre de téléopération) de contrôler et piloter à distan"}, {"n": "Quai", "l": [1, 4, 4, 4, 2], "d": "Plateforme voyageurs au bord des voies"}, {"n": "Réseaux de plomberies", "l": [1, 3, 4, 3, 3], "d": "Réseaux d'eau, évacuation et raccordements sanitaires"}, {"n": "Rideau mécanique", "l": [4, 2, 3, 1, 1], "d": "Rideau de fermeture manuel ou localement motorisé"}, {"n": "Rideau métallique téléopéré", "l": [4, 2, 3, 1, 1], "d": "Rideau métallique motorisé commandable à distance"}, {"n": "Sanitaire ERP", "l": [1, 3, 1, 4, 2], "d": "Sanitaires accessibles au public voyageurs"}, {"n": "Sanitaires ERT", "l": [1, 3, 1, 1, 4], "d": "Sanitaires pour personnels et zones techniques"}, {"n": "Sirène d'évacuation et diffuseur lumineux", "l": [4, 1, 1, 1, 1], "d": "Dispositifs sonores et visuels d'alarme générale"}, {"n": "Sirène évacuation", "l": [4, 1, 1, 1, 1], "d": "Dispositifs sonores d'alarme incendie et d'évacuation"}, {"n": "Source centrale de secours", "l": [4, 3, 4, 4, 1], "d": "Source électrique centralisée pour circuits de secours"}, {"n": "SSI - Diffuseurs lumineux", "l": [4, 1, 1, 1, 1], "d": "Diffuseurs lumineux contrôlés par le SSI"}, {"n": "Structure", "l": [4, 4, 4, 1, 1], "d": "Ossature porteuse du bâtiment ou de l'ouvrage"}, {"n": "Tableau Divisionnaire", "l": [4, 2, 3, 3, 1], "d": "Tableau électrique distribuant l'électricité à une zone ou un usage"}, {"n": "Tableau divisionnaire de bâtiment", "l": [4, 2, 4, 4, 2], "d": "Tableau électrique dédié à un bâtiment ou une entité"}, {"n": "Tableau Général Secouru", "l": [4, 2, 4, 4, 2], "d": "Tableau alimentant les circuits électriques secourus"}, {"n": "Tarif Jaune/bleu", "l": [4, 3, 4, 4, 1], "d": "Point de livraison électrique du réseau public (comptage HTA/BT)"}, {"n": "téléphone", "l": [1, 1, 2, 1, 1], "d": "Téléphonie fixe interne et externe de la gare"}, {"n": "Terrains nus G&C", "l": [1, 1, 2, 0, 2], "d": "Terrains nus de gestion et construction liés à la gare"}, {"n": "Terrains nus non G&C", "l": [1, 1, 2, 0, 2], "d": "Terrains nus hors périmètre gare ou centre"}, {"n": "TGBT / TGBTR", "l": [4, 4, 4, 4, 2], "d": "Tableau Général Basse Tension (et secouru réseau)"}, {"n": "Traversée de voie piétonne (TVP)", "l": [4, 3, 3, 4, 1], "d": "Passage piéton traversant les voies au niveau du sol"}, {"n": "Ventilation", "l": [2, 2, 1, 4, 1], "d": "Ventilation des locaux, halls et passages"}];
+const EQUIP_HORS = [
+  'Batardeau / protection inondation','Avaloir / caniveau / regard EP','Descente / chéneau EP','Seuil / accès inondable',
+  'Infiltration / trace d\'humidité','Fissure / désordre','Protection solaire / store','Verrière / vitrage',
+  'Brasseur d\'air','Unité extérieure CVC (toiture)','Végétation / espace vert','Thermomètre / affichage température',
+  'Plaque / étiquette / signalétique (repère)','Plan d\'évacuation (repère)','Compteur'
+];
+const EQUIP_FREQ = ['Local technique','TGBT / TGBTR','Ensemble local technique Transformateur','Source centrale de secours',
+  'Centrale GTC/GTB','Baie CFA','Cœur de réseau télécoms','Groupe de production de froid','Clim locaux techniques',
+  'Chaudière et circuit d\'eau chaude','Ventilation','Désenfumage naturel','Enveloppe','Structure','Abris de quais/marquise','Quai',
+  'Ouvrage d\'assainissement ou technique','Pompe de relevage','Réseaux de plomberies','Escalier Mécanique','Ascenseur secouru',
+  'Espace d\'attente','Espace de circulation','Eclairage','Ecrans TFT/TIM','Centrale SSI'];
+
+/* ---------- Aléas & effets (mémoire méthodo ACC PAZ) ---------- */
+const ALEAS = [['CHA','Fortes chaleurs'],['PLU','Inondation pluviale'],['FLU','Crue / inond. fluviale'],['NAP','Remontée de nappe'],
+  ['VEN','Vents forts'],['SEC','Sécheresse'],['RGA','RGA (argiles)'],['GEL','Froid / gel']];
+const EFFETS = [['att','Atténuant'],['agg','Aggravant'],['eva','À évaluer']];
+
+/* ---------- Niveaux & zones Paris-Austerlitz (plans 005348S zones thermiques + Géoprism) ---------- */
+const NIVEAUX = [
+  {id:'EXT', label:'Extérieur · cours', plan:'N00', zones:[
+    'Cour Seine (taxis, dépose)','Cour Muséum','Quai d\'Austerlitz (voirie)','Passage Valhubert','Bd de l\'Hôpital / accès',
+    'Bungalows provisoires (côté Seine)','Bungalows / base de vie (côté Muséum)','Abris vélos (B108 / B109)','Emprise chantier']},
+  {id:'N-1', label:'Sous-sol · RDJ · RER C', plan:null, zones:[
+    'Gare souterraine RER C','Quais RER C','Liaison métro 5 / 10','Rez-de-jardin (RDJ)','Locaux techniques sous-sol',
+    'Galerie / souterrain technique','Batardeau voie souterraine','Parking / sous-sol A7A8']},
+  {id:'N0', label:'RDC · quais', plan:'N00', zones:[
+    'GHV — Grande Halle Voyageurs (B025)','GHV transverse (B006)','Quai voies 14-15 (B029)','Quai voies 16-17 (B028)',
+    'Quai voies 18-19 (B027)','Quai voies 20-21 (B026)','Voie 21 (batardeau)','Petite Halle Voyageurs (PHV)','Hall Seine',
+    'Embarcadère d\'Orléans','Aile d\'Orléans (B068)','Bâtiment Verrière (B009)','Pavillon de l\'Horloge','Bâtiment interstitiel',
+    'Aile Muséum','Hall / Passage Prince','Centre de transit','Kiosques provisoires / commerces','Relay (B086)',
+    'Toilettes · consigne · objets trouvés (B085)','Stock avitaillement / Sélecta / bungalow (B089-091)','Bâtiment La Rampe (B100)',
+    'Bâtiment modulaire relogement (B084)','Local onduleur (B098)','Local HT/BT « Flamand » (B099)','Salle d\'attente temporaire (B110)',
+    'Accès métro','Sortie de secours (inondable)','Sortie Muséum (inondable)']},
+  {id:'N1', label:'R+1', plan:'N01', zones:['Aile d\'Orléans R+1','Bâtiment Verrière R+1','Pavillon de l\'Horloge R+1','Bâtiment interstitiel R+1','Aile Muséum R+1','Embarcadère d\'Orléans R+1']},
+  {id:'N2', label:'R+2', plan:'N02', zones:['Aile d\'Orléans R+2','Bâtiment Verrière R+2','Pavillon de l\'Horloge R+2 (réfectoire, salle d\'échange)','Locaux télécom / répartiteur','Combles Aile Muséum']},
+  {id:'N3', label:'R+3 · combles', plan:'N03', zones:['Aile d\'Orléans R+3','Pavillon de l\'Horloge R+3','Combles Hall Seine','Combles embarcadère d\'Orléans']},
+  {id:'TOIT', label:'Toitures', plan:'N03', zones:['Toiture / verrière GHV','Toiture Aile Muséum','Toiture commerces','Toiture centre de transit','Toiture Petite Halle','Marquise','Rejet CVC embarcadère Orléans','Toiture Hall Seine']},
+];
+const PLANS = {N00:{f:'plans/N00.jpg',t:'Niveau 0 · RDC / quais'},N01:{f:'plans/N01.jpg',t:'Niveau 1'},N02:{f:'plans/N02.jpg',t:'Niveau 2'},N03:{f:'plans/N03.jpg',t:'Niveau 3 · toitures'}};
+
+/* =====================================================================
+   Utilitaires
+   ===================================================================== */
+const $ = (s, r=document) => r.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+const pad = (n, l=2) => String(n).padStart(l, '0');
+const hm = t => { const d = new Date(t); return pad(d.getHours()) + ':' + pad(d.getMinutes()); };
+const hms = t => { const d = new Date(t); return hm(t) + ':' + pad(d.getSeconds()); };
+const ymd = t => { const d = new Date(t); return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate()); };
+const ascii = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[œŒ]/g, 'oe').replace(/[æÆ]/g, 'ae')
+  .replace(/[^A-Za-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+const short = (s, n) => ascii(s).slice(0, n).replace(/-+$/, '');
+const nivOf = id => NIVEAUX.find(n => n.id === id) || {id, label:id, plan:null, zones:[]};
+const eqInfo = n => EQUIP.find(e => e.n === n);
+const maxImp = e => e ? Math.max(...e.l) : -1;
+const impBadge = e => { if (!e) return ''; const m = maxImp(e); const nTE = e.l.filter(x => x === 4).length;
+  const lab = m === 4 ? 'TE' + (nTE > 1 ? '×' + nTE : '') : m === 3 ? 'É' : m === 2 ? 'M' : 'F';
+  return `<span class="imp imp${Math.max(1,m)}" title="Niveau d'impact max dans la matrice G&C">${lab}</span>`; };
+function toast(msg, kind='') { const b = document.createElement('div'); b.className = 'banner ' + kind;
+  b.style.cssText = 'position:fixed;left:10px;right:10px;bottom:24px;z-index:99;max-width:520px;margin:auto;box-shadow:0 6px 20px rgba(0,0,0,.2)';
+  b.textContent = msg; document.body.appendChild(b); setTimeout(() => b.remove(), 2600); }
+function download(name, data, type='application/json') {
+  const blob = data instanceof Blob ? data : new Blob([data], {type});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name;
+  document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+}
+
+/* =====================================================================
+   Persistance (localStorage, écrit à CHAQUE action)
+   ===================================================================== */
+let S = load();
+function load() {
+  try { const s = JSON.parse(localStorage.getItem(STORE_KEY)); if (s && s.visites) return s; } catch (e) {}
+  return {visites:{}, current:null, zonesCustom:{}, eqCustom:[], recentEq:[], prefs:{planAuto:true}};
+}
+function save() {
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(S)); }
+  catch (e) { toast('⚠ Sauvegarde locale impossible : exporte le journal maintenant !', 'err'); }
+}
+if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
+
+const V = () => S.current ? S.visites[S.current] : null;
+const ctxEvents = v => (v ? v.events.filter(e => e.k === 'ctx') : []);
+const cur = () => { const c = ctxEvents(V()); return c.length ? c[c.length - 1] : null; };
+
+/* =====================================================================
+   Actions terrain
+   ===================================================================== */
+function startVisite(gare, code, auteur) {
+  const id = uid(), t = Date.now();
+  S.visites[id] = {id, gare, code: ascii(code).toUpperCase() || 'GARE', auteur, debut:t, fin:null, lastBackup:null,
+    events:[{id:uid(), k:'debut', t}]};
+  S.current = id; save(); render();
+}
+function pushCtx(patch) {
+  const v = V(); if (!v) return;
+  const c = cur() || {niv:'N0', zone:'(zone non définie)', eq:'', al:[], ef:'', star:false, note:'', pt:null};
+  const ev = Object.assign({niv:c.niv, zone:c.zone, eq:c.eq, al:[], ef:'', star:false, note:'', pt:c.pt}, patch,
+    {id:uid(), k:'ctx', t:Date.now(), gps:null});
+  v.events.push(ev); save(); render(); grabGps(ev.id);
+}
+function editCur(patch) { const c = cur(); if (!c) return; Object.assign(c, patch, {mod:Date.now()}); save(); render(); }
+function setZone(niv, zone, pt) { pushCtx({niv, zone, eq:'', pt: pt || null}); }
+function setEq(eq) {
+  if (eq) { S.recentEq = [eq, ...S.recentEq.filter(x => x !== eq)].slice(0, 8); }
+  pushCtx({eq});
+}
+function grabGps(evId) {
+  if (!navigator.geolocation) return;
+  navigator.geolocation.getCurrentPosition(p => {
+    const v = V(); if (!v) return; const ev = v.events.find(e => e.id === evId); if (!ev) return;
+    ev.gps = {lat:+p.coords.latitude.toFixed(6), lon:+p.coords.longitude.toFixed(6), acc:Math.round(p.coords.accuracy)}; save();
+    const ae = document.activeElement;
+    if (UI.mode === 'terrain' && !UI.ov && !(ae && /INPUT|TEXTAREA/.test(ae.tagName))) render();
+  }, () => {}, {enableHighAccuracy:true, timeout:8000, maximumAge:20000});
+}
+function antidate(sec) {
+  const v = V(); const c = cur(); if (!c) return;
+  const prev = v.events.filter(e => e.t < c.t && e.id !== c.id).pop();
+  const min = prev ? prev.t + 1000 : c.t - sec * 1000;
+  c.t = Math.max(min, c.t - sec * 1000); save(); render(); toast('Repère avancé à ' + hms(c.t));
+}
+function delEvent(id) {
+  const v = V(); const e = v.events.find(x => x.id === id); if (!e) return;
+  if (!confirm('Supprimer le repère de ' + hms(e.t) + ' ?\n(les photos seront rattachées au repère précédent)')) return;
+  v.events = v.events.filter(x => x.id !== id); save(); render();
+}
+function journalPayload(v) {
+  return {app:'GAREo-photo', version:VERSION, exported:new Date().toISOString(), visite:{id:v.id, gare:v.gare, code:v.code,
+    auteur:v.auteur, debut:v.debut, fin:v.fin}, events:v.events};
+}
+function journalName(v) { return `${v.code}_journal_${ymd(v.debut)}_${hm(Date.now()).replace(':','h')}.json`; }
+function backupJournal(v = V()) { if (!v) return; download(journalName(v), JSON.stringify(journalPayload(v), null, 1));
+  v.lastBackup = Date.now(); save(); render(); }
+async function shareJournal(v = V()) {
+  if (!v) return; const f = new File([JSON.stringify(journalPayload(v), null, 1)], journalName(v), {type:'application/json'});
+  if (navigator.canShare && navigator.canShare({files:[f]})) {
+    try { await navigator.share({files:[f], title:'Journal de visite ' + v.gare}); v.lastBackup = Date.now(); save(); render(); } catch (e) {}
+  } else { backupJournal(v); }
+}
+function endVisite() {
+  const v = V(); if (!v) return;
+  if (!confirm('Terminer la visite ? Le journal sera téléchargé dans « Téléchargements ».')) return;
+  v.fin = Date.now(); v.events.push({id:uid(), k:'fin', t:v.fin}); save(); backupJournal(v);
+  S.current = null; save(); render();
+}
+
+/* =====================================================================
+   Rendu
+   ===================================================================== */
+const UI = {mode: localStorage.getItem('gareoPhoto.mode') || (matchMedia('(min-width: 900px)').matches ? 'bureau' : 'terrain'),
+  ov:null, niv:'N0', eqQ:'', plan:null, tick:null};
+function render() {
+  document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('on', b.dataset.v === UI.mode));
+  $('#ver').textContent = VERSION;
+  const v = V(); $('#hdrGare').textContent = v ? '· ' + v.code : '';
+  if (UI.mode === 'terrain') $('#app').innerHTML = v ? viewTerrain(v) : viewAccueil();
+  else if (UI.mode === 'bureau') $('#app').innerHTML = viewBureau();
+  else $('#app').innerHTML = viewAide();
+  renderOv();
+}
+function viewAccueil() {
+  const old = Object.values(S.visites).sort((a, b) => b.debut - a.debut);
+  return `<div class="card"><h2>Nouvelle visite</h2>
+    <label class="f">Gare</label><input type="text" id="iGare" value="Paris-Austerlitz">
+    <div class="grid2"><div><label class="f">Code (noms de fichiers)</label><input type="text" id="iCode" value="PAZ"></div>
+    <div><label class="f">Photographe</label><input type="text" id="iAut" value="${esc(localStorage.getItem('gareoPhoto.aut') || '')}" placeholder="Prénom Nom"></div></div>
+    <div style="margin-top:12px"><button class="btn big pri" style="width:100%" data-act="start">▶ Démarrer la visite</button></div>
+    <p class="small mute">Le journal note l'heure de chaque repère. Les photos, prises avec l'appareil photo du téléphone, seront rattachées au bureau grâce à leur heure de prise de vue.</p></div>
+    ${old.length ? `<div class="card"><h2>Visites enregistrées sur ce téléphone</h2>${old.map(o => `
+      <div class="row" style="border-top:1px solid var(--line);padding:8px 0">
+        <div style="flex:1"><b>${esc(o.gare)}</b> · ${ymd(o.debut)} ${hm(o.debut)}${o.fin ? '–' + hm(o.fin) : ' <span class="mute">(en cours)</span>'}<br>
+        <span class="small mute">${ctxEvents(o).length} repères · sauvegarde : ${o.lastBackup ? hm(o.lastBackup) : 'jamais'}</span></div>
+        <button class="btn" data-act="resume" data-id="${o.id}">${o.fin ? 'Rouvrir' : 'Reprendre'}</button>
+        <button class="btn" data-act="exportOld" data-id="${o.id}">💾</button>
+      </div>`).join('')}</div>` : ''}`;
+}
+function viewTerrain(v) {
+  const c = cur(); const n = c ? nivOf(c.niv) : null;
+  const since = c ? Math.floor((Date.now() - c.t) / 1000) : 0;
+  const nb = ctxEvents(v).length;
+  const backupAge = v.lastBackup ? (Date.now() - v.lastBackup) / 60000 : 1e9;
+  const recentZones = [];
+  for (const e of [...ctxEvents(v)].reverse()) { const k = e.niv + '|' + e.zone; if (!recentZones.includes(k) && !(c && c.niv === e.niv && c.zone === e.zone)) recentZones.push(k); if (recentZones.length >= 4) break; }
+  return `
+  ${nb >= 8 && backupAge > 30 ? `<div class="banner">💾 Dernière sauvegarde du journal : ${v.lastBackup ? hm(v.lastBackup) : 'jamais'}. <a href="#" data-act="backup">Sauvegarder maintenant</a></div>` : ''}
+  <div class="ctx">
+    ${c ? `<div><span class="niv">${esc(n.label)}</span><span class="small" style="opacity:.75">repère ${hms(c.t)} · il y a <span id="since">${fmtSince(since)}</span></span></div>
+      <div class="zone">${esc(c.zone)}</div>
+      <div class="eq ${c.eq ? '' : 'gen'}">${c.eq ? '🔧 ' + esc(c.eq) : 'Vues générales de la zone'}</div>
+      <div class="tags">${c.star ? '<span>★ important</span>' : ''}${c.al.map(a => `<span>${esc((ALEAS.find(x => x[0] === a) || [a, a])[1])}</span>`).join('')}${c.ef ? `<span>${esc(EFFETS.find(x => x[0] === c.ef)[1])}</span>` : ''}${c.pt ? `<span>📍 pointé ${esc(c.pt.n)}</span>` : ''}${c.gps ? `<span>GPS ±${c.gps.acc} m</span>` : ''}</div>
+      ${c.note ? `<div class="meta">📝 ${esc(c.note)}</div>` : ''}`
+    : `<div class="zone">Choisis ta première zone</div><div class="meta">Visite démarrée à ${hm(v.debut)}</div>`}
+  </div>
+  <div class="grid3">
+    <button class="btn big pri" data-act="openZone">📍 Zone</button>
+    <button class="btn big pri" data-act="openEq" ${c ? '' : 'disabled'}>🔧 Équipement</button>
+    <button class="btn big" data-act="general" ${c && c.eq ? '' : 'disabled'}>↺ Vue générale</button>
+  </div>
+  ${recentZones.length ? `<div class="row" style="margin-top:8px"><span class="small mute">Retour rapide :</span>${recentZones.map(k => { const [ni, z] = k.split('|');
+      return `<button class="chip" data-act="quickZone" data-niv="${esc(ni)}" data-zone="${esc(z)}">${esc(z.length > 28 ? z.slice(0, 27) + '…' : z)}</button>`; }).join('')}</div>` : ''}
+  <div class="banner" style="margin-top:8px">📷 <b>Photo : double-appui sur le bouton marche/arrêt</b> (appareil photo du téléphone), puis reviens ici par le bouton des applis récentes.
+    <span class="small"><a href="intent:#Intent;action=android.media.action.STILL_IMAGE_CAMERA;end">lien photo</a> · <a href="intent:#Intent;action=android.media.action.VIDEO_CAMERA;end">lien vidéo</a> (à tester, peut ne pas marcher)</span></div>
+  ${c ? `<div class="card" style="margin-top:10px">
+    <div class="small mute" style="margin-bottom:6px">Pour <b>${esc(c.eq || 'cette zone')}</b> — s'applique aux photos depuis ${hm(c.t)} :</div>
+    <div class="row">${ALEAS.map(([k, l]) => `<button class="chip ${c.al.includes(k) ? 'on' : ''}" data-act="al" data-v="${k}">${esc(l)}</button>`).join('')}</div>
+    <div class="row" style="margin-top:7px">${EFFETS.map(([k, l]) => `<button class="chip ${k} ${c.ef === k ? 'on' : ''}" data-act="ef" data-v="${k}">${esc(l)}</button>`).join('')}
+      <button class="chip star ${c.star ? 'on' : ''}" data-act="star">★ Important</button></div>
+    <div class="row" style="margin-top:8px;flex-wrap:nowrap"><input type="text" id="iNote" placeholder="Note rapide (dictée possible 🎤)" value="${esc(c.note)}">
+      <button class="btn" data-act="note">OK</button></div>
+    <div class="row" style="margin-top:8px">
+      <button class="btn" data-act="point" ${nivOf(c.niv).plan ? '' : 'disabled'}>📍 Me pointer sur le plan</button>
+      <button class="btn ghost" data-act="anti" data-v="30">↶ −30 s</button>
+      <button class="btn ghost" data-act="anti" data-v="60">↶ −1 min</button>
+    </div>
+    <div class="small mute" style="margin-top:4px">↶ = j'ai pris des photos <i>avant</i> de taper ce repère : on le recule.</div>
+  </div>` : ''}
+  <div class="card journal"><h2>Journal <span class="mute small">(${nb} repères)</span></h2>
+    ${[...v.events].reverse().slice(0, 40).map(e => evRow(e)).join('') || '<div class="mute">Rien pour l\'instant.</div>'}
+  </div>
+  <div class="grid3">
+    <button class="btn" data-act="backup">💾 Sauvegarder</button>
+    <button class="btn" data-act="share">📤 Envoyer</button>
+    <button class="btn red" data-act="end">■ Fin de visite</button>
+  </div>`;
+}
+function fmtSince(s) { return s < 60 ? s + ' s' : Math.floor(s / 60) + ' min ' + pad(s % 60); }
+function evRow(e) {
+  if (e.k === 'debut') return `<div class="ev"><span class="t">${hms(e.t)}</span><span>▶ Début de visite</span></div>`;
+  if (e.k === 'fin') return `<div class="ev"><span class="t">${hms(e.t)}</span><span>■ Fin de visite</span></div>`;
+  return `<div class="ev"><span class="t">${hms(e.t)}</span><span><b>${esc(nivOf(e.niv).id)}</b> · ${esc(e.zone)}${e.eq ? '<br>🔧 ' + esc(e.eq) : ''}
+    ${e.al.length || e.ef || e.star || e.note ? `<br><span class="small mute">${e.star ? '★ ' : ''}${e.al.join(', ')}${e.ef ? ' · ' + e.ef : ''}${e.note ? ' · ' + esc(e.note) : ''}</span>` : ''}</span>
+    <span class="x"><button data-act="del" data-id="${e.id}">✕</button></span></div>`;
+}
+
+/* ---------- Overlays : zone, équipement, plan ---------- */
+function renderOv() {
+  const o = $('#ov');
+  if (!UI.ov) { o.innerHTML = ''; return; }
+  if (UI.ov === 'zone') o.innerHTML = ovZone();
+  else if (UI.ov === 'eq') o.innerHTML = ovEq();
+  else if (UI.ov === 'plan') { o.innerHTML = ovPlan(); setupPlan(); }
+}
+function ovZone() {
+  const n = nivOf(UI.niv); const custom = S.zonesCustom[n.id] || [];
+  const c = cur();
+  return `<div class="ov"><div class="top"><b>Où es-tu ?</b><button data-act="close">Fermer</button></div>
+  <div class="body">
+    <div class="nivtabs">${NIVEAUX.map(x => `<button class="chip ${x.id === n.id ? 'on' : ''}" data-act="niv" data-v="${x.id}">${esc(x.label)}</button>`).join('')}</div>
+    <div class="zlist">${[...n.zones, ...custom].map(z => `<button class="btn ${c && c.zone === z && c.niv === n.id ? 'yel' : ''}" data-act="pickZone" data-zone="${esc(z)}">${esc(z)}</button>`).join('')}</div>
+    <div class="row" style="margin-top:12px;flex-wrap:nowrap"><input type="text" id="iNewZone" placeholder="Autre zone (ex. local CTA n°12)"><button class="btn pri" data-act="newZone">+ Ajouter</button></div>
+    <label class="row small" style="margin-top:12px"><input type="checkbox" id="cPlanAuto" ${S.prefs.planAuto ? 'checked' : ''} data-act="planAuto"> Proposer de me pointer sur le plan après le choix de zone ${n.plan ? '' : '<span class="mute">(pas de plan pour ce niveau)</span>'}</label>
+  </div></div>`;
+}
+function eqResults() {
+  const q = ascii(UI.eqQ).toLowerCase();
+  const match = n => !q || ascii(n).toLowerCase().includes(q);
+  const all = [...EQUIP.map(e => e.n), ...EQUIP_HORS, ...S.eqCustom];
+  const btn = n => { const e = eqInfo(n); return `<button class="btn" data-act="pickEq" data-v="${esc(n)}"><span class="nm">${esc(n)}</span>${e ? impBadge(e) : '<span class="imp imp1">hors matrice</span>'}</button>`; };
+  const rec = S.recentEq.filter(match);
+  const add = q && !all.some(n => ascii(n).toLowerCase() === q) ? `<button class="btn yel" data-act="pickEqNew" style="margin-top:10px">+ Créer « ${esc(UI.eqQ)} »</button>` : '';
+  return `${rec.length ? `<h3>Récents</h3>${rec.map(btn).join('')}` : ''}
+      ${q ? `<h3>Résultats</h3>${all.filter(match).map(btn).join('') || '<div class="mute">Aucun résultat.</div>'}${add}`
+        : `<h3>Fréquents en ACC</h3>${EQUIP_FREQ.map(btn).join('')}
+           <h3>Hors matrice (constats ACC)</h3>${EQUIP_HORS.map(btn).join('')}
+           ${S.eqCustom.length ? `<h3>Ajoutés</h3>${S.eqCustom.map(btn).join('')}` : ''}
+           <h3>Matrice G&C complète (103)</h3>${EQUIP.map(e => e.n).sort((a, b) => a.localeCompare(b, 'fr')).map(btn).join('')}`}`;
+}
+function ovEq() {
+  return `<div class="ov"><div class="top"><b>Quel élément ?</b><button data-act="close">Fermer</button></div>
+  <div class="body">
+    <input type="search" id="iEqQ" placeholder="Chercher (ex. tgbt, pompe, marquise…)" value="${esc(UI.eqQ)}" autocomplete="off">
+    <div class="eqlist" id="eqRes" style="margin-top:8px">${eqResults()}</div>
+    <p class="small mute">Badge : niveau d'impact maximal dans la matrice G&C (TE = très élevé, É = élevé, M = modéré).</p>
+  </div></div>`;
+}
+function ovPlan() {
+  const p = UI.plan; const pl = PLANS[p.plan];
+  return `<div class="ov"><div class="top"><b>${esc(p.zone)}</b><button data-act="zoom" data-v="-1">−</button><button data-act="zoom" data-v="1">+</button></div>
+  <div class="small" style="padding:6px 10px;background:#fff;border-bottom:1px solid var(--line)">${esc(pl.t)} — touche l'endroit où tu es. Glisse pour te déplacer, +/− pour zoomer.</div>
+  <div class="planwrap" id="planwrap"><div id="planin" style="position:relative;display:inline-block"><img id="planimg" src="${pl.f}" alt="plan"></div></div>
+  <div class="foot"><button class="btn" data-act="planSkip">Passer</button><button class="btn pri" data-act="planOk" id="bPlanOk" ${p.pt ? '' : 'disabled'}>Valider la position</button></div></div>`;
+}
+function setupPlan() {
+  const p = UI.plan; const img = $('#planimg'); const wrap = $('#planwrap'); const inn = $('#planin');
+  const apply = () => {
+    const w = Math.round(wrap.clientWidth * p.zoom); img.style.width = w + 'px';
+    inn.querySelectorAll('.pin,.dot').forEach(x => x.remove());
+    const v = V();
+    ctxEvents(v).filter(e => e.pt && e.pt.n === p.plan).forEach(e => { const d = document.createElement('div'); d.className = 'dot';
+      d.style.left = e.pt.x * 100 + '%'; d.style.top = e.pt.y * 100 + '%'; inn.appendChild(d); });
+    if (p.pt) { const d = document.createElement('div'); d.className = 'pin'; d.style.left = p.pt.x * 100 + '%'; d.style.top = p.pt.y * 100 + '%'; inn.appendChild(d); }
+  };
+  p.apply = apply;
+  const onload = () => { apply(); if (!p.scrolled) { p.scrolled = true; const tgt = p.pt || p.last || {x:0.5, y:0.45};
+    if (tgt) { wrap.scrollLeft = tgt.x * img.clientWidth - wrap.clientWidth / 2; wrap.scrollTop = tgt.y * img.clientHeight - wrap.clientHeight / 2; } } };
+  if (img.complete) onload(); else img.onload = onload;
+  let down = null;
+  img.addEventListener('pointerdown', e => { down = {x:e.clientX, y:e.clientY}; });
+  img.addEventListener('pointerup', e => {
+    if (!down || Math.hypot(e.clientX - down.x, e.clientY - down.y) > 10) return; down = null;
+    const r = img.getBoundingClientRect();
+    p.pt = {n:p.plan, x:+((e.clientX - r.left) / r.width).toFixed(4), y:+((e.clientY - r.top) / r.height).toFixed(4)};
+    $('#bPlanOk').disabled = false; apply();
+  });
+}
+function openPlan(niv, zone, mode) {
+  const n = nivOf(niv); if (!n.plan) return false;
+  const last = ctxEvents(V()).filter(e => e.pt && e.pt.n === n.plan).pop();
+  UI.plan = {niv, zone, plan:n.plan, mode, pt:null, last:last ? last.pt : null, zoom:2.2};
+  UI.ov = 'plan'; render(); return true;
+}
+
+/* =====================================================================
+   BUREAU : rapprochement photos ↔ journal
+   ===================================================================== */
+const B = {journal:null, media:[], loading:null, offset:0, marge:30, horsVisite:false, sel:new Set(), override:{}, exportLog:null, filtre:''};
+
+function viewBureau() {
+  const j = B.journal;
+  const locals = Object.values(S.visites).sort((a, b) => b.debut - a.debut);
+  let h = `<div class="card"><h2>1 · Journal de visite</h2>
+    ${j ? `<div class="banner ok">✔ ${esc(j.visite.gare)} · ${ymd(j.visite.debut)} · ${hm(j.visite.debut)}–${j.visite.fin ? hm(j.visite.fin) : '?'} · ${j.events.filter(e => e.k === 'ctx').length} repères
+      <a href="#" data-act="jReset" style="margin-left:8px">changer</a></div>`
+    : `<div class="row"><button class="btn pri" data-act="pickJournal">📄 Charger le fichier journal (.json)</button>
+      ${locals.map(o => `<button class="btn" data-act="jLocal" data-id="${o.id}">Utiliser « ${esc(o.code)} ${ymd(o.debut)} » de ce navigateur</button>`).join('')}</div>
+      <p class="small mute">Le fichier <code>PAZ_journal_….json</code> est dans les Téléchargements du téléphone (ou envoyé par mail / Teams).</p>`}
+  </div>`;
+  h += `<div class="card"><h2>2 · Photos et vidéos</h2>
+    <div class="row"><button class="btn pri" data-act="pickMedia" ${j ? '' : 'disabled'}>🖼 Choisir des fichiers</button>
+      <button class="btn" data-act="pickDir" ${j ? '' : 'disabled'}>📁 Choisir un dossier (ex. DCIM/Camera)</button>
+      ${B.media.length ? `<button class="btn ghost" data-act="mReset">Vider</button>` : ''}</div>
+    ${B.loading ? `<div class="small" style="margin-top:8px">Lecture des métadonnées… ${B.loading.done} / ${B.loading.total}</div><div class="prog"><div style="width:${100 * B.loading.done / Math.max(1, B.loading.total)}%"></div></div>` : ''}
+    <p class="small mute">Copie les originaux du téléphone par câble USB (dossier <code>DCIM/Camera</code>) : c'est ce qui garde l'heure et le GPS intacts. Tu peux sélectionner tout le dossier, seuls les fichiers pris pendant la visite sont retenus.</p>
+  </div>`;
+  if (j && B.media.length) h += viewRevue();
+  return h;
+}
+function segments() {
+  const j = B.journal; if (!j) return [];
+  const ctx = j.events.filter(e => e.k === 'ctx').sort((a, b) => a.t - b.t);
+  const fin = j.visite.fin || (j.events.find(e => e.k === 'fin') || {}).t || null;
+  return ctx.map((e, i) => Object.assign({}, e, {i, t1: i + 1 < ctx.length ? ctx[i + 1].t : (fin || Infinity)}));
+}
+function assign() {
+  const segs = segments(); const j = B.journal;
+  const d0 = j.visite.debut - B.marge * 60000; const fin = j.visite.fin || (segs.length ? segs[segs.length - 1].t : j.visite.debut) + 3 * 3600000;
+  const d1 = fin + B.marge * 60000;
+  const res = {segs, items:[], horsCount:0};
+  for (const m of B.media) {
+    const t = m.t + B.offset * 1000;
+    const inWin = t >= d0 && t <= d1;
+    if (!inWin && !B.horsVisite) { res.horsCount++; continue; }
+    let si = -1;
+    if (B.override[m.key] !== undefined) si = B.override[m.key];
+    else { for (let k = segs.length - 1; k >= 0; k--) if (segs[k].t <= t) { si = k; break; } }
+    res.items.push(Object.assign(m, {tc:t, si, moved:B.override[m.key] !== undefined, hors:!inWin}));
+  }
+  res.items.sort((a, b) => a.tc - b.tc);
+  res.items.forEach((m, i) => m.seq = i + 1);
+  return res;
+}
+function segLabel(s) { return `${nivOf(s.niv).id} · ${s.zone}${s.eq ? ' › ' + s.eq : ''}`; }
+function viewRevue() {
+  const R = assign(); B.last = R;
+  const photos = R.items.filter(m => m.type === 'photo').length, vids = R.items.length - photos;
+  const nonR = R.items.filter(m => m.si < 0).length;
+  const bySeg = new Map(); R.items.forEach(m => { if (!bySeg.has(m.si)) bySeg.set(m.si, []); bySeg.get(m.si).push(m); });
+  const srcCount = {}; R.items.forEach(m => srcCount[m.src] = (srcCount[m.src] || 0) + 1);
+  let h = `<div class="card"><h2>3 · Vérifier le rangement</h2>
+    <div><span class="stat"><b>${photos}</b> photos</span><span class="stat"><b>${vids}</b> vidéos</span><span class="stat"><b>${R.segs.length}</b> repères</span>
+    ${nonR ? `<span class="stat" style="color:var(--red)"><b>${nonR}</b> non rattachées</span>` : ''}
+    ${R.horsCount ? `<span class="stat mute"><b>${R.horsCount}</b> hors visite ignorées</span>` : ''}</div>
+    <div class="small mute" style="margin-top:4px">Heure lue : ${Object.entries(srcCount).map(([k, n]) => `${esc(k)} ${n}`).join(' · ')}</div>
+    <div class="grid3" style="margin-top:8px">
+      <div><label class="f">Décalage horloge photos (s)</label><input type="number" id="iOffset" value="${B.offset}" step="1"></div>
+      <div><label class="f">Marge autour de la visite (min)</label><input type="number" id="iMarge" value="${B.marge}" step="5" min="0"></div>
+      <div><label class="f">&nbsp;</label><label class="row small"><input type="checkbox" id="cHors" ${B.horsVisite ? 'checked' : ''}> Inclure les fichiers hors visite</label></div>
+    </div>
+    <p class="small mute">Une photo est rangée sous le dernier repère tapé avant elle. Si un repère a été tapé en retard, sélectionne les photos et envoie-les au repère suivant.</p>
+  </div>
+  <div class="toolbar"><span id="selN">${B.sel.size} sélect.</span>
+    <button class="btn" data-act="mvPrev" ${B.sel.size ? '' : 'disabled'}>← repère précédent</button>
+    <button class="btn" data-act="mvNext" ${B.sel.size ? '' : 'disabled'}>repère suivant →</button>
+    <select id="sMove" ${B.sel.size ? '' : 'disabled'}><option value="">Déplacer vers…</option>${R.segs.map(s => `<option value="${s.i}">${hm(s.t)} · ${esc(segLabel(s))}</option>`).join('')}</select>
+    <button class="btn" data-act="mvReset" ${B.sel.size ? '' : 'disabled'}>↺ auto</button>
+    <button class="btn" data-act="selNone" ${B.sel.size ? '' : 'disabled'}>✕</button>
+    <span style="margin-left:auto"></span>
+    <button class="btn yel" data-act="export">📁 Exporter le dossier trié</button>
+  </div>
+  ${B.exportLog ? `<div class="banner ${B.exportLog.err ? 'err' : 'ok'}">${B.exportLog.html}</div>` : ''}`;
+  const order = [...bySeg.keys()].sort((a, b) => a - b);
+  for (const si of order) {
+    const s = si >= 0 ? R.segs[si] : null; const items = bySeg.get(si);
+    h += `<div class="seg"><div class="hd"><div class="tm">${s ? hm(s.t) + (s.t1 !== Infinity ? '–' + hm(s.t1) : '') : '—'}</div>
+      <div class="lb">${s ? `<b>${esc(s.zone)}</b> <span class="mute">${esc(nivOf(s.niv).label)}</span><br>${s.eq ? '🔧 ' + esc(s.eq) : '<i class="mute">Vues générales</i>'}
+        ${s.star ? ' · ★' : ''}${s.al.length ? ' · ' + s.al.map(a => (ALEAS.find(x => x[0] === a) || [a, a])[1]).join(', ') : ''}${s.ef ? ' · ' + EFFETS.find(x => x[0] === s.ef)[1] : ''}
+        ${s.note ? `<div class="small">📝 ${esc(s.note)}</div>` : ''}` : '<b style="color:var(--red)">Non rattachées</b> <span class="small mute">(avant le premier repère)</span>'}</div>
+      <div class="row"><span class="small mute">${items.length}</span><button class="chip" data-act="selSeg" data-v="${si}">tout</button>${s ? `<button class="chip" data-act="editSeg" data-v="${si}">✎</button>` : ''}</div></div>
+      <div class="ph">${items.map(m => `<div class="it ${B.sel.has(m.key) ? 'sel' : ''} ${m.moved ? 'moved' : ''}" data-act="sel" data-k="${esc(m.key)}">
+        ${m.type === 'video' ? '<div class="vid">🎬</div>' : `<img loading="lazy" src="${m.thumb || m.url()}" alt="">`}
+        <span class="ck">${B.sel.has(m.key) ? '✓' : ''}</span>
+        <div class="cap"><b>${hms(m.tc)}</b><span class="mute">${esc(m.name.slice(-12))}</span></div></div>`).join('')}</div></div>`;
+  }
+  return h;
+}
+
+/* ---------- Lecture des métadonnées ---------- */
+async function addMedia(files) {
+  const list = [...files].filter(f => /^(image|video)\//.test(f.type) || /\.(jpe?g|heic|heif|png|mp4|mov|3gp)$/i.test(f.name));
+  B.loading = {done:0, total:list.length}; render();
+  const known = new Set(B.media.map(m => m.key));
+  for (const f of list) {
+    const key = f.name + '|' + f.size + '|' + f.lastModified;
+    if (!known.has(key)) {
+      try { B.media.push(await readMeta(f, key)); } catch (e) { console.warn(f.name, e); }
+      known.add(key);
+    }
+    B.loading.done++;
+    if (B.loading.done % 25 === 0) render();
+  }
+  B.loading = null; render();
+}
+async function readMeta(f, key) {
+  const isVid = /^video\//.test(f.type) || /\.(mp4|mov|3gp)$/i.test(f.name);
+  const m = {key, file:f, name:f.name, type:isVid ? 'video' : 'photo', t:null, src:'', gps:null, thumb:null,
+    url() { return this._u || (this._u = URL.createObjectURL(this.file)); }};
+  if (!isVid && /\.(jpe?g)$/i.test(f.name) || f.type === 'image/jpeg') {
+    const ex = parseExif(await f.slice(0, 262144).arrayBuffer());
+    if (ex) {
+      if (ex.dto) { m.t = exifTime(ex.dto, ex.off); m.src = ex.off ? 'EXIF+fuseau' : 'EXIF'; }
+      if (ex.gps) m.gps = ex.gps;
+      if (ex.thumb) m.thumb = URL.createObjectURL(new Blob([ex.thumb], {type:'image/jpeg'}));
+    }
+  }
+  if (isVid && !m.t) {
+    const t = await mp4Time(f); if (t) { m.t = t; m.src = 'vidéo (mvhd)'; }
+  }
+  if (!m.t) { const fm = f.name.match(/(20\d\d)(\d\d)(\d\d)[_\-]?(\d\d)(\d\d)(\d\d)/);
+    if (fm) { m.t = new Date(+fm[1], +fm[2] - 1, +fm[3], +fm[4], +fm[5], +fm[6]).getTime(); m.src = 'nom de fichier'; } }
+  if (!m.t) { m.t = f.lastModified; m.src = 'date du fichier'; }
+  return m;
+}
+function exifTime(dto, off) {
+  const p = dto.match(/(\d{4}):(\d\d):(\d\d) (\d\d):(\d\d):(\d\d)/); if (!p) return null;
+  if (off && /^[+-]\d\d:\d\d$/.test(off)) return Date.parse(`${p[1]}-${p[2]}-${p[3]}T${p[4]}:${p[5]}:${p[6]}${off}`);
+  return new Date(+p[1], +p[2] - 1, +p[3], +p[4], +p[5], +p[6]).getTime();
+}
+function parseExif(buf) {
+  const dv = new DataView(buf); if (dv.byteLength < 4 || dv.getUint16(0) !== 0xFFD8) return null;
+  let o = 2;
+  while (o + 4 < dv.byteLength) {
+    if (dv.getUint8(o) !== 0xFF) return null;
+    const mk = dv.getUint8(o + 1), len = dv.getUint16(o + 2);
+    if (mk === 0xE1 && dv.getUint32(o + 4) === 0x45786966) return parseTiff(dv, o + 10, Math.min(dv.byteLength, o + 2 + len));
+    if (mk === 0xDA) return null;
+    o += 2 + len;
+  }
+  return null;
+}
+function parseTiff(dv, T, end) {
+  const le = dv.getUint16(T) === 0x4949;
+  const u16 = p => dv.getUint16(p, le), u32 = p => dv.getUint32(p, le);
+  const ascii_ = (p, n) => { let s = ''; for (let i = 0; i < n && p + i < end; i++) { const c = dv.getUint8(p + i); if (!c) break; s += String.fromCharCode(c); } return s; };
+  const readIfd = p => { const out = {}; if (p + 2 > end) return {out, next:0}; const n = u16(p);
+    for (let i = 0; i < n; i++) { const e = p + 2 + i * 12; if (e + 12 > end) break;
+      const tag = u16(e), type = u16(e + 2), cnt = u32(e + 4); const sz = ({1:1, 2:1, 3:2, 4:4, 5:8, 7:1, 9:4, 10:8})[type] || 1;
+      const vp = cnt * sz <= 4 ? e + 8 : T + u32(e + 8);
+      out[tag] = {type, cnt, vp}; }
+    const np = p + 2 + n * 12; return {out, next: np + 4 <= end ? u32(np) : 0}; };
+  const val = en => { if (!en) return null; const {type, cnt, vp} = en;
+    if (type === 2) return ascii_(vp, cnt);
+    if (type === 3) return u16(vp); if (type === 4) return u32(vp);
+    if (type === 5) { const r = []; for (let i = 0; i < cnt; i++) { const d = u32(vp + i * 8 + 4); r.push(d ? u32(vp + i * 8) / d : 0); } return r; }
+    return null; };
+  const res = {dto:null, off:null, gps:null, thumb:null};
+  const i0 = readIfd(T + u32(T + 4));
+  if (i0.out[0x8769]) { const ex = readIfd(T + val(i0.out[0x8769])).out;
+    res.dto = val(ex[0x9003]) || null; res.off = val(ex[0x9011]) || null; }
+  if (!res.dto && i0.out[0x0132]) res.dto = val(i0.out[0x0132]);
+  if (i0.out[0x8825]) { const g = readIfd(T + val(i0.out[0x8825])).out;
+    const la = val(g[2]), lo = val(g[4]);
+    if (la && lo && la.length === 3) { let lat = la[0] + la[1] / 60 + la[2] / 3600, lon = lo[0] + lo[1] / 60 + lo[2] / 3600;
+      if (val(g[1]) === 'S') lat = -lat; if (val(g[3]) === 'W') lon = -lon;
+      if (lat || lon) res.gps = {lat:+lat.toFixed(6), lon:+lon.toFixed(6)}; } }
+  if (i0.next) { const i1 = readIfd(T + i0.next).out; const to = val(i1[0x0201]), tl = val(i1[0x0202]);
+    if (to && tl && T + to + tl <= end) res.thumb = new Uint8Array(dv.buffer, dv.byteOffset + T + to, tl).slice(); }
+  return res;
+}
+async function mp4Time(f) {
+  const scan = async (start, len) => { const b = new Uint8Array(await f.slice(start, start + len).arrayBuffer());
+    for (let i = 4; i < b.length - 24; i++) if (b[i] === 0x6D && b[i + 1] === 0x76 && b[i + 2] === 0x68 && b[i + 3] === 0x64) {
+      const dv = new DataView(b.buffer, i + 4); const ver = dv.getUint8(0);
+      const s = ver === 1 ? Number(dv.getBigUint64(4)) : dv.getUint32(4);
+      if (s > 3000000000) return (s - 2082844800) * 1000; }
+    return null; };
+  return (await scan(0, 2 * 1048576)) || (f.size > 2 * 1048576 ? await scan(Math.max(0, f.size - 8 * 1048576), 8 * 1048576) : null);
+}
+
+/* ---------- Corrections ---------- */
+function moveSel(fn) { const R = B.last; for (const k of B.sel) { const m = R.items.find(x => x.key === k); if (!m) continue;
+  const ni = fn(m.si); if (ni === null) delete B.override[k]; else B.override[k] = Math.max(0, Math.min(R.segs.length - 1, ni)); }
+  B.sel.clear(); render(); }
+function editSeg(si) {
+  const s = B.last.segs[si]; const ev = B.journal.events.find(e => e.id === s.id); if (!ev) return;
+  const z = prompt('Zone', ev.zone); if (z === null) return; const q = prompt('Équipement (vide = vues générales)', ev.eq || ''); if (q === null) return;
+  const n = prompt('Note', ev.note || ''); ev.zone = z.trim() || ev.zone; ev.eq = q.trim(); ev.note = (n || '').trim(); render();
+}
+
+/* ---------- Export dossier trié ---------- */
+async function doExport() {
+  const R = assign(); const j = B.journal; const v = j.visite;
+  if (!window.showDirectoryPicker) { B.exportLog = {err:true, html:'Ce navigateur ne sait pas écrire dans un dossier : ouvre la page dans <b>Chrome</b> ou <b>Edge</b> sur PC. En attendant : <a href="#" data-act="csvOnly">télécharger l\'inventaire CSV</a>.'}; render(); return; }
+  let parent; try { parent = await window.showDirectoryPicker({mode:'readwrite', id:'gareo-export'}); } catch (e) { return; }
+  const rootName = `${v.code}_${ymd(v.debut)}_releve-photo`;
+  const root = await parent.getDirectoryHandle(rootName, {create:true});
+  // Dossiers de zone dans l'ordre du parcours
+  const zoneOrder = []; R.segs.forEach(s => { const k = s.niv + '|' + s.zone; if (!zoneOrder.includes(k)) zoneOrder.push(k); });
+  const zoneDir = s => { if (!s) return '99_Non-rattachees'; const k = s.niv + '|' + s.zone; return pad(zoneOrder.indexOf(k) + 1) + '_' + ascii(s.niv) + '_' + short(s.zone, 48); };
+  const eqDir = s => !s ? '' : s.eq ? short(s.eq, 48) : '_Vues-generales';
+  const rows = []; const dirCache = {};
+  const getDir = async path => { if (dirCache[path]) return dirCache[path]; let d = root; for (const p of path.split('/').filter(Boolean)) d = await d.getDirectoryHandle(p, {create:true}); return dirCache[path] = d; };
+  const thumbsDir = await getDir('_planche/vignettes');
+  B.exportLog = {html:'Export en cours… 0 / ' + R.items.length}; render();
+  let i = 0;
+  for (const m of R.items) {
+    const s = m.si >= 0 ? R.segs[m.si] : null;
+    const ext = (m.name.match(/\.[^.]+$/) || ['.jpg'])[0].toLowerCase();
+    const d = new Date(m.tc);
+    const base = [v.code, pad(m.seq, 4), pad(d.getHours()) + pad(d.getMinutes()) + pad(d.getSeconds()),
+      s ? ascii(s.niv) : 'NR', s ? short(s.zone, 22) : 'non-rattachee', s && s.eq ? short(s.eq, 26) : (s ? 'vue-generale' : '')].filter(Boolean).join('_') + (s && s.star ? '_IMPORTANT' : '');
+    const dir = zoneDir(s) + (s ? '/' + eqDir(s) : '');
+    const fname = base + ext;
+    const fh = await (await getDir(dir)).getFileHandle(fname, {create:true});
+    const w = await fh.createWritable(); await m.file.stream().pipeTo(w);
+    let thumb = '';
+    if (m.type === 'photo') { try { const tb = await makeThumb(m.file); if (tb) { const th = await thumbsDir.getFileHandle(base + '.jpg', {create:true});
+      const tw = await th.createWritable(); await tw.write(tb); await tw.close(); thumb = 'vignettes/' + base + '.jpg'; } } catch (e) {} }
+    const gps = m.gps || (s && s.gps) || null;
+    rows.push({n:m.seq, fichier:fname, dossier:dir, chemin:dir + '/' + fname, origine:m.name, type:m.type, date:ymd(m.tc), heure:hms(m.tc), source_heure:m.src,
+      niveau:s ? nivOf(s.niv).label : '', niv:s ? s.niv : '', zone:s ? s.zone : '', equipement:s ? s.eq : '',
+      matrice:s && s.eq && eqInfo(s.eq) ? 'oui' : (s && s.eq ? 'hors matrice' : ''),
+      aleas:s ? s.al.map(a => (ALEAS.find(x => x[0] === a) || [a, a])[1]).join(', ') : '', effet:s && s.ef ? EFFETS.find(x => x[0] === s.ef)[1] : '',
+      important:s && s.star ? 'oui' : '', note:s ? s.note : '', repere:s ? hms(s.t) : '', ecart_s:s ? Math.round((m.tc - s.t) / 1000) : '',
+      plan:s && s.pt ? s.pt.n : '', plan_x:s && s.pt ? s.pt.x : '', plan_y:s && s.pt ? s.pt.y : '',
+      lat:gps ? gps.lat : '', lon:gps ? gps.lon : '', gps_precision_m:m.gps ? '' : (gps && gps.acc) || '', gps_source:m.gps ? 'photo' : (gps ? 'journal' : ''), corrige:m.moved ? 'oui' : '', thumb, zoneDir:zoneDir(s)});
+    i++; if (i % 10 === 0) { B.exportLog = {html:`Export en cours… ${i} / ${R.items.length}`}; render(); }
+  }
+  // Inventaire CSV (Excel FR : séparateur ;)
+  await writeText(root, `${v.code}_inventaire_photos.csv`, csv(rows), 'text/csv');
+  // GeoJSON (points GPS, utile surtout en extérieur)
+  const feats = rows.filter(r => r.lat !== '').map(r => ({type:'Feature', geometry:{type:'Point', coordinates:[r.lon, r.lat]}, properties:Object.fromEntries(Object.entries(r).filter(([k]) => !['thumb', 'zoneDir'].includes(k)))}));
+  await writeText(root, `${v.code}_photos_gps.geojson`, JSON.stringify({type:'FeatureCollection', features:feats}), 'application/geo+json');
+  // Journal corrigé
+  await writeText(root, `${v.code}_journal_corrige.json`, JSON.stringify(Object.assign({}, j, {corrections:B.override, offset_s:B.offset}), null, 1), 'application/json');
+  // Plans + planche HTML
+  const planDir = await getDir('_planche/plans'); const plansUsed = [...new Set(R.segs.filter(s => s.pt).map(s => s.pt.n))];
+  for (const p of plansUsed) { try { const r = await fetch(PLANS[p].f); if (r.ok) { const fh = await planDir.getFileHandle(p + '.jpg', {create:true}); const w = await fh.createWritable(); await w.write(await r.blob()); await w.close(); } } catch (e) {} }
+  await writeText(await getDir('_planche'), 'planche.html', planche(rows, R, zoneOrder, zoneDir, plansUsed, v), 'text/html');
+  B.exportLog = {html:`✔ ${rows.length} fichiers copiés dans <b>${esc(rootName)}</b> : dossiers par zone (ordre du parcours) puis par équipement, <code>${v.code}_inventaire_photos.csv</code>, <code>_planche/planche.html</code> (à ouvrir), GeoJSON (${feats.length} points GPS). Les originaux n'ont pas été modifiés.`};
+  render();
+}
+async function writeText(dir, name, txt, type) { const fh = await dir.getFileHandle(name, {create:true}); const w = await fh.createWritable(); await w.write(new Blob([txt], {type})); await w.close(); }
+async function makeThumb(file) {
+  if (!window.createImageBitmap) return null;
+  const bmp = await createImageBitmap(file, {resizeWidth:560, resizeQuality:'medium'});
+  const c = document.createElement('canvas'); c.width = bmp.width; c.height = bmp.height; c.getContext('2d').drawImage(bmp, 0, 0); bmp.close && bmp.close();
+  return await new Promise(r => c.toBlob(r, 'image/jpeg', 0.72));
+}
+const CSV_COLS = ['n', 'fichier', 'dossier', 'origine', 'type', 'date', 'heure', 'source_heure', 'niveau', 'zone', 'equipement', 'matrice', 'aleas', 'effet', 'important', 'note', 'repere', 'ecart_s', 'plan', 'plan_x', 'plan_y', 'lat', 'lon', 'gps_precision_m', 'gps_source', 'corrige'];
+function csv(rows) { const q = x => { const s = String(x ?? ''); return /[;"\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+  return '\uFEFF' + [CSV_COLS.join(';'), ...rows.map(r => CSV_COLS.map(c => q(r[c])).join(';'))].join('\r\n'); }
+function planche(rows, R, zoneOrder, zoneDir, plansUsed, v) {
+  const groups = new Map(); rows.forEach(r => { if (!groups.has(r.zoneDir)) groups.set(r.zoneDir, []); groups.get(r.zoneDir).push(r); });
+  const keys = [...groups.keys()].sort();
+  const segPts = R.segs.filter(s => s.pt);
+  const planHtml = plansUsed.map(p => `<section class="pl"><h2>${esc(PLANS[p].t)}</h2><div class="pw"><img src="plans/${p}.jpg">
+    ${segPts.filter(s => s.pt.n === p).map(s => `<a class="pt" href="#z${esc(zoneDir(s))}" style="left:${s.pt.x * 100}%;top:${s.pt.y * 100}%" title="${esc(hm(s.t) + ' ' + segLabel(s))}">${zoneOrder.indexOf(s.niv + '|' + s.zone) + 1}</a>`).join('')}</div></section>`).join('');
+  const card = r => { const src = '../' + r.chemin.split('/').map(encodeURIComponent).join('/');
+    return `<figure>${r.type === 'video' ? `<video src="${src}" controls preload="none"></video>` : `<a href="${src}" target="_blank"><img loading="lazy" src="${r.thumb ? encodeURI(r.thumb) : src}"></a>`}
+    <figcaption><b>n°${r.n}</b> · ${r.heure}${r.important ? ' · ★' : ''}${r.aleas ? '<br>' + esc(r.aleas) : ''}${r.effet ? ' · ' + esc(r.effet) : ''}${r.note ? '<br>📝 ' + esc(r.note) : ''}</figcaption></figure>`; };
+  const body = keys.map(k => { const rs = groups.get(k); const f = rs[0]; const subs = new Map();
+    rs.forEach(r => { const e = r.equipement || 'Vues générales'; if (!subs.has(e)) subs.set(e, []); subs.get(e).push(r); });
+    return `<section id="z${esc(k)}"><h2>${esc(k.slice(0, 2))} · ${esc(f.zone || 'Non rattachées')} <small>${esc(f.niveau)}</small></h2>
+      ${[...subs].map(([e, rr]) => `<h3>${esc(e)} <small>${rr.length}</small></h3><div class="g">${rr.map(card).join('')}</div>`).join('')}</section>`; }).join('');
+  return `<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(v.gare)} – planche photos ${ymd(v.debut)}</title>
+<style>body{font:14px system-ui,sans-serif;margin:0;color:#16202b;background:#f4f5f7}header{background:#1d3a5f;color:#fff;padding:14px 20px}main{max-width:1300px;margin:auto;padding:16px}
+nav a{display:inline-block;margin:3px 6px 3px 0;padding:3px 8px;background:#fff;border:1px solid #d9dee4;border-radius:12px;color:inherit;text-decoration:none;font-size:13px}
+section{background:#fff;border:1px solid #d9dee4;border-radius:10px;padding:12px 14px;margin:14px 0}h2{margin:0 0 6px;font-size:18px}h2 small,h3 small{color:#6b7682;font-weight:400}h3{font-size:14px;margin:12px 0 6px;border-top:1px solid #eee;padding-top:8px}
+.g{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}figure{margin:0}figure img,figure video{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:6px;background:#dde2e8;display:block}
+figcaption{font-size:12px;margin-top:3px}.pw{position:relative;display:inline-block;width:100%}.pw img{width:100%;display:block}
+.pt{position:absolute;transform:translate(-50%,-50%);background:#c8442f;color:#fff;border-radius:50%;width:22px;height:22px;font:700 11px/22px system-ui;text-align:center;text-decoration:none;box-shadow:0 0 0 2px #fff}
+@media print{section{break-inside:avoid-page}header{background:none;color:#000}}</style></head><body>
+<header><b>${esc(v.gare)}</b> · visite du ${ymd(v.debut)} ${hm(v.debut)}${v.fin ? '–' + hm(v.fin) : ''}${v.auteur ? ' · photos ' + esc(v.auteur) : ''} · ${rows.length} fichiers</header>
+<main><nav>${keys.map(k => { const f = groups.get(k)[0]; return `<a href="#z${esc(k)}">${esc(k.slice(0, 2))} ${esc(f.zone || 'Non rattachées')} (${groups.get(k).length})</a>`; }).join('')}</nav>
+${planHtml}${body}<p style="color:#6b7682;font-size:12px">Généré par GARÉo Photo ${esc(VERSION)} — numéros du plan = dossiers de zone.</p></main></body></html>`;
+}
+
+/* =====================================================================
+   Aide
+   ===================================================================== */
+function viewAide() {
+  return `<div class="card help"><h2>Comment ça marche</h2>
+  <ol><li><b>Photos = appareil photo du téléphone</b>, pas l'appli. Une seconde par photo, l'heure (et le GPS si dispo) est inscrite dans chaque fichier, tout reste dans la galerie. Rien ne peut se perdre côté appli.</li>
+  <li><b>Le journal</b> (onglet Terrain) : tu touches <b>📍 Zone</b> quand tu changes d'espace, <b>🔧 Équipement</b> avant de photographier un élément précis, <b>↺ Vue générale</b> quand tu reviens aux vues larges. Chaque repère est horodaté.</li>
+  <li>Toutes les photos prises après un repère sont rangées sous ce repère. Tu as tapé trop tard ? <b>↶ −30 s / −1 min</b>.</li>
+  <li>Aléas, atténuant/aggravant, ★, note : s'appliquent au repère en cours (tu peux les mettre après coup).</li>
+  <li><b>Au bureau</b> : câble USB, copie <code>DCIM/Camera</code> sur le PC, ouvre cette page dans Chrome/Edge, onglet Bureau : charge le journal puis le dossier, vérifie, exporte.</li></ol>
+  <h3>Avant de partir (ce soir)</h3>
+  <ul><li>Appareil photo → réglages → <b>Tags de localisation / Enregistrer la position : ON</b>.</li>
+  <li>Réglages Android → Système → Gestes → <b>Appuyer deux fois sur le bouton Marche/Arrêt pour l'appareil photo : ON</b> (accès caméra en 1 geste).</li>
+  <li>Ouvrir cette page une fois avec réseau, <b>Ajouter à l'écran d'accueil</b> (menu ⋮ de Chrome) : elle marche ensuite sans réseau.</li>
+  <li>Faire une mini-visite test chez toi : 3 repères, 5 photos, puis Fin de visite → vérifier que le .json est dans Téléchargements.</li>
+  <li>Batterie pleine + batterie externe, au moins 10 Go libres.</li>
+  <li>Vérifier l'heure du téléphone en automatique (réglage réseau).</li></ul>
+  <h3>Les photos qui servent vraiment (ACC)</h3>
+  <ul><li><b>En entrant dans chaque espace</b> : 1 photo de la porte / plaque / panneau (nom du local, n°) ou du <b>plan d'évacuation « vous êtes ici »</b> → localisation certaine même sans GPS.</li>
+  <li><b>Vues générales</b> : 2 à 4 photos depuis les angles, dont une qui montre le sol et le plafond.</li>
+  <li><b>Équipement</b> : plan large (situé dans le local) + plan serré + <b>plaque constructeur / étiquette</b> (marque, modèle, année, puissance).</li>
+  <li><b>Inondation</b> : hauteur de pose par rapport au sol (équipement au sol ou surélevé, mets un pied ou un objet pour l'échelle), seuils de porte, avaloirs, grilles, regards, pompes, traces d'eau, batardeaux, entrées inondables (sortie de secours, sortie Muséum).</li>
+  <li><b>Chaleur</b> : verrières, orientation des vitrages, protections solaires, ventilation, unités de clim (intérieures et en toiture), affichages de température, locaux techniques non climatisés.</li>
+  <li><b>Vent / toitures</b> : éléments en toiture, fixations, marquises, chéneaux, descentes EP.</li>
+  <li><b>Désordres</b> : fissures, infiltrations, corrosion, humidité — 1 photo large + 1 serrée.</li>
+  <li><b>Vidéo</b> : courte (30 s) pour un parcours ou un espace complexe, en commentant à voix haute (zone, équipement).</li>
+  <li>Demande toujours l'autorisation avant de photographier un agent, un écran de supervision ou un document.</li></ul>
+  <h3>Sécurité des données</h3>
+  <ul><li>Aucune donnée n'est envoyée sur Internet : le journal est stocké dans le téléphone et exporté en fichier.</li>
+  <li><b>💾 Sauvegarder</b> télécharge le journal (.json) dans Téléchargements ; <b>📤 Envoyer</b> l'envoie par mail / Teams. Fais-le à mi-visite et à la fin.</li>
+  <li>Même si le journal était perdu, les photos restent dans la galerie avec leur heure : on peut toujours les trier à la main.</li></ul>
+  <p class="small mute">Version ${esc(VERSION)}</p></div>`;
+}
+
+/* =====================================================================
+   Événements
+   ===================================================================== */
+document.addEventListener('click', async ev => {
+  const el = ev.target.closest('[data-act]'); if (!el) return;
+  const a = el.dataset.act;
+  if (el.tagName === 'A' && el.getAttribute('href') === '#') ev.preventDefault();
+  if (el.type === 'checkbox' && a !== 'planAuto') return;
+  switch (a) {
+    case 'mode': UI.mode = el.dataset.v; localStorage.setItem('gareoPhoto.mode', UI.mode); UI.ov = null; render(); break;
+    case 'start': { const g = $('#iGare').value.trim() || 'Gare', c = $('#iCode').value.trim() || 'GARE', au = $('#iAut').value.trim();
+      localStorage.setItem('gareoPhoto.aut', au); startVisite(g, c, au); UI.niv = 'N0'; UI.ov = 'zone'; render(); break; }
+    case 'resume': { const o = S.visites[el.dataset.id]; if (o.fin) { o.events = o.events.filter(e => e.k !== 'fin'); o.fin = null; } S.current = o.id; save(); render(); break; }
+    case 'exportOld': backupJournal(S.visites[el.dataset.id]); break;
+    case 'openZone': { const c = cur(); UI.niv = c ? c.niv : UI.niv; UI.ov = 'zone'; render(); break; }
+    case 'niv': UI.niv = el.dataset.v; render(); break;
+    case 'pickZone': case 'quickZone': { const niv = el.dataset.niv || UI.niv, zone = el.dataset.zone;
+      if (a === 'pickZone' && S.prefs.planAuto && openPlan(niv, zone, 'zone')) break;
+      UI.ov = null; setZone(niv, zone); break; }
+    case 'newZone': { const z = $('#iNewZone').value.trim(); if (!z) break; (S.zonesCustom[UI.niv] = S.zonesCustom[UI.niv] || []).push(z); save();
+      if (S.prefs.planAuto && openPlan(UI.niv, z, 'zone')) break; UI.ov = null; setZone(UI.niv, z); break; }
+    case 'planAuto': S.prefs.planAuto = el.checked; save(); break;
+    case 'close': UI.ov = null; render(); break;
+    case 'zoom': { const p = UI.plan, w = $('#planwrap'), img = $('#planimg'); const cx = (w.scrollLeft + w.clientWidth / 2) / img.clientWidth, cy = (w.scrollTop + w.clientHeight / 2) / img.clientHeight;
+      p.zoom = Math.max(1, Math.min(8, p.zoom * (el.dataset.v === '1' ? 1.5 : 1 / 1.5))); p.apply();
+      w.scrollLeft = cx * img.clientWidth - w.clientWidth / 2; w.scrollTop = cy * img.clientHeight - w.clientHeight / 2; break; }
+    case 'planOk': case 'planSkip': { const p = UI.plan; UI.ov = null; const pt = a === 'planOk' ? p.pt : null;
+      if (p.mode === 'zone') setZone(p.niv, p.zone, pt); else if (pt) pushCtx({pt, al:cur().al, ef:cur().ef, star:cur().star}); else render(); break; }
+    case 'point': { const c = cur(); if (c) openPlan(c.niv, c.zone, 'point'); break; }
+    case 'openEq': UI.eqQ = ''; UI.ov = 'eq'; render(); break;
+    case 'pickEq': UI.ov = null; setEq(el.dataset.v); break;
+    case 'pickEqNew': { const q = UI.eqQ.trim(); if (!S.eqCustom.includes(q)) S.eqCustom.push(q); UI.ov = null; setEq(q); break; }
+    case 'general': setEq(''); break;
+    case 'al': { const c = cur(); const k = el.dataset.v; editCur({al: c.al.includes(k) ? c.al.filter(x => x !== k) : [...c.al, k]}); break; }
+    case 'ef': { const c = cur(); editCur({ef: c.ef === el.dataset.v ? '' : el.dataset.v}); break; }
+    case 'star': editCur({star: !cur().star}); break;
+    case 'note': editCur({note: $('#iNote').value.trim()}); toast('Note enregistrée'); break;
+    case 'anti': antidate(+el.dataset.v); break;
+    case 'del': delEvent(el.dataset.id); break;
+    case 'backup': backupJournal(); break;
+    case 'share': shareJournal(); break;
+    case 'end': endVisite(); break;
+    // Bureau
+    case 'pickJournal': $('#fJournal').click(); break;
+    case 'jLocal': { const o = S.visites[el.dataset.id]; B.journal = JSON.parse(JSON.stringify(journalPayload(o))); B.override = {}; render(); break; }
+    case 'jReset': B.journal = null; B.override = {}; B.sel.clear(); render(); break;
+    case 'pickMedia': $('#fMedia').click(); break;
+    case 'pickDir': $('#fDir').click(); break;
+    case 'mReset': B.media = []; B.sel.clear(); B.override = {}; B.exportLog = null; render(); break;
+    case 'sel': { const k = el.dataset.k; B.sel.has(k) ? B.sel.delete(k) : B.sel.add(k); el.classList.toggle('sel'); el.querySelector('.ck').textContent = B.sel.has(k) ? '✓' : '';
+      refreshToolbar(); break; }
+    case 'selSeg': { const si = +el.dataset.v; B.last.items.filter(m => m.si === si).forEach(m => B.sel.add(m.key)); render(); break; }
+    case 'selNone': B.sel.clear(); render(); break;
+    case 'mvPrev': moveSel(si => si - 1); break;
+    case 'mvNext': moveSel(si => si + 1); break;
+    case 'mvReset': moveSel(() => null); break;
+    case 'editSeg': editSeg(+el.dataset.v); break;
+    case 'export': try { await doExport(); } catch (e) { console.error(e); B.exportLog = {err:true, html:'Erreur pendant l\'export : ' + esc(e.message)}; render(); } break;
+    case 'csvOnly': { const R = assign(); download(B.journal.visite.code + '_inventaire_photos.csv', csv(R.items.map(m => { const s = R.segs[m.si];
+      return {n:m.seq, origine:m.name, type:m.type, date:ymd(m.tc), heure:hms(m.tc), source_heure:m.src, niveau:s ? nivOf(s.niv).label : '', zone:s ? s.zone : '', equipement:s ? s.eq : '',
+        aleas:s ? s.al.join(', ') : '', effet:s ? s.ef : '', important:s && s.star ? 'oui' : '', note:s ? s.note : '', lat:m.gps ? m.gps.lat : '', lon:m.gps ? m.gps.lon : ''}; })), 'text/csv'); break; }
+  }
+});
+function refreshToolbar() { const n = B.sel.size; const t = $('.toolbar'); if (!t) return; $('#selN').textContent = n + ' sélect.';
+  t.querySelectorAll('[data-act=mvPrev],[data-act=mvNext],[data-act=mvReset],[data-act=selNone],#sMove').forEach(b => b.disabled = !n); }
+document.addEventListener('input', ev => {
+  if (ev.target.id === 'iEqQ') { UI.eqQ = ev.target.value; $('#eqRes').innerHTML = eqResults(); }
+});
+document.addEventListener('change', ev => {
+  const t = ev.target;
+  if (t.id === 'iOffset') { B.offset = +t.value || 0; render(); }
+  if (t.id === 'iMarge') { B.marge = Math.max(0, +t.value || 0); render(); }
+  if (t.id === 'cHors') { B.horsVisite = t.checked; render(); }
+  if (t.id === 'sMove' && t.value !== '') { const to = +t.value; moveSel(() => to); }
+  if (t.id === 'fJournal' && t.files[0]) { t.files[0].text().then(txt => { try { const j = JSON.parse(txt); if (!j.events || !j.visite) throw 0; B.journal = j; B.override = {}; render(); }
+    catch (e) { alert('Ce fichier n\'est pas un journal GARÉo Photo.'); } t.value = ''; }); }
+  if ((t.id === 'fMedia' || t.id === 'fDir') && t.files.length) { addMedia(t.files).then(() => { t.value = ''; }); }
+});
+document.addEventListener('keydown', ev => { if (ev.key === 'Enter' && ev.target.id === 'iNote') { editCur({note: ev.target.value.trim()}); toast('Note enregistrée'); }
+  if (ev.key === 'Enter' && ev.target.id === 'iNewZone') $('[data-act=newZone]').click(); });
+setInterval(() => { const c = cur(); const s = $('#since'); if (c && s) s.textContent = fmtSince(Math.floor((Date.now() - c.t) / 1000)); }, 1000);
+document.addEventListener('visibilitychange', () => { if (!document.hidden && UI.mode === 'terrain' && !UI.ov) { S = load(); render(); } });
+window.addEventListener('beforeunload', e => { if (B.media.length && UI.mode === 'bureau') { e.preventDefault(); e.returnValue = ''; } });
+if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
+render();
+</script>
+</body>
+</html>
