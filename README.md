@@ -1,6 +1,6 @@
 # GARÉo Photo — relevé photo de visite
 
-Page web hors-ligne : journal horodaté de la visite (zones, équipements, aléas) + rangement automatique des photos au bureau.
+Appli photo hors-ligne : on prend la photo, on la pointe sur le plan (position + direction), on la range (zone libre, un ou plusieurs équipements, aléas, note). Chaque photo est gardée dans l'appli et copiée, déjà nommée, dans Téléchargements.
 
 ## Mise en ligne (GitHub Pages)
 1. github.com → New repository → `gareo-photo` (public) → Create.
@@ -14,6 +14,6 @@ Page web hors-ligne : journal horodaté de la visite (zones, équipements, aléa
 - Après une mise à jour : ouvrir avec `?v=2` (incrémenter) pour forcer la nouvelle version.
 
 ## Au bureau
-Chrome ou Edge sur PC → onglet **Bureau** → charger le journal `.json` → choisir le dossier `DCIM/Camera` copié par câble USB → vérifier → **Exporter le dossier trié**.
+Chrome ou Edge sur PC → onglet **Bureau** → charger le relevé `PAZ_releve_….json` → choisir les fichiers `PAZ_0001_…` du dossier `Download` du téléphone (copié par câble USB) → **Exporter le dossier trié**.
 
-Résultat : `PAZ_AAAA-MM-JJ_releve-photo/` avec des dossiers par zone (ordre du parcours) puis par équipement, `PAZ_inventaire_photos.csv` (Excel), `_planche/planche.html`, GeoJSON des points GPS, journal corrigé. Les originaux ne sont jamais modifiés.
+Résultat : `PAZ_AAAA-MM-JJ_releve-photo/` avec des dossiers par zone (ordre de prise) puis par équipement, `PAZ_inventaire_photos.csv` (Excel), `_planche/planche.html` (photos numérotées sur le plan), GeoJSON. Les originaux ne sont jamais modifiés.
