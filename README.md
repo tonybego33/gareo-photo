@@ -4,7 +4,7 @@ Appli photo hors-ligne : on prend la photo, on la pointe sur le plan (position +
 
 ## Mise en ligne (GitHub Pages)
 1. github.com → New repository → `gareo-photo` (public) → Create.
-2. « uploading an existing file » → glisser **tout le contenu** de ce dossier (index.html, sw.js, manifest.webmanifest, icônes, dossier `plans/`) → Commit.
+2. « uploading an existing file » →  glisser **tout le contenu** de ce dossier (index.html, sw.js, manifest.webmanifest, icônes, dossier `plans/`) → Commit.
 3. Settings → Pages → Source : *Deploy from a branch*, branche `main`, dossier `/ (root)` → Save.
 4. Après 1 à 2 min : `https://tonybego33.github.io/gareo-photo/`
 
