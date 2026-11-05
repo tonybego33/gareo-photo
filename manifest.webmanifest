@@ -1,2 +1,2 @@
-{"name":"GARÉo Photo","short_name":"GARÉo Photo","start_url":"./","scope":"./","display":"standalone","background_color":"#1A1A1A","theme_color":"#1A1A1A",
- "icons":[{"src":"icon192.png","sizes":"192x192","type":"image/png"},{"src":"icon512.png","sizes":"512x512","type":"image/png"},{"src":"icon512.png","sizes":"512x512","type":"image/png","purpose":"maskable"}]}
+{"name":"GARÉo Photo","short_name":"GARÉo Photo","id":"./?app=gareo-photo","start_url":"./","scope":"./","display":"standalone","background_color":"#1A1A1A","theme_color":"#1A1A1A",
+ "icons":[{"src":"gareo-192.png","sizes":"192x192","type":"image/png","purpose":"any"},{"src":"gareo-512.png","sizes":"512x512","type":"image/png","purpose":"any"},{"src":"gareo-maskable-512.png","sizes":"512x512","type":"image/png","purpose":"maskable"}]}

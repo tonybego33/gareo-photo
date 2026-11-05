@@ -4,7 +4,7 @@ Appli photo hors-ligne : on prend la photo, on la pointe sur le plan (position +
 
 ## Mise en ligne (GitHub Pages)
 1. github.com → New repository → `gareo-photo` (public) → Create.
-2. « uploading an existing file » →  glisser **tout le contenu** de ce dossier (index.html, sw.js, manifest.webmanifest, icônes, dossier `plans/`) → Commit.
+2. « uploading an existing file » → glisser **tout le contenu** de ce dossier (index.html, sw.js, manifest.webmanifest, icônes, dossier `plans/`) → Commit.
 3. Settings → Pages → Source : *Deploy from a branch*, branche `main`, dossier `/ (root)` → Save.
 4. Après 1 à 2 min : `https://tonybego33.github.io/gareo-photo/`
 
@@ -12,6 +12,9 @@ Appli photo hors-ligne : on prend la photo, on la pointe sur le plan (position +
 - Ouvrir l'adresse dans Chrome, menu ⋮ → **Ajouter à l'écran d'accueil**.
 - Vérifier le badge de version en bas à droite.
 - Après une mise à jour : ouvrir avec `?v=2` (incrémenter) pour forcer la nouvelle version.
+
+## ZIP classé
+Onglet **Export → 📦 Télécharger le ZIP classé** : toutes les photos/vidéos rangées par zone puis par équipement, noms explicites, inventaire Excel, relevé, synthèse. Fonctionne directement sur le téléphone.
 
 ## Synthèse
 Onglet **Export** → **✨ Générer la synthèse** : un fichier HTML autonome (couverture, aléas surlignés, tableau zones × aléas, points d'attention, plans avec photos numérotées et flèches de direction, une fiche par zone). Imprimer en PDF depuis le navigateur.

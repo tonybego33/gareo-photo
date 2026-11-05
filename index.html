@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1A1A1A">
 <title>GARÉo Photo</title>
-<link rel="manifest" href="manifest.webmanifest">
+<link rel="manifest" href="manifest.webmanifest?v=5">
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
-<link rel="icon" href="icon192.png">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="gareo-192.png">
+<link rel="apple-touch-icon" href="gareo-apple-180.png">
 <style>
 :root{--navy:#1A1A1A;--ink:#1A1A1A;--mute:#8B8680;--line:#D9D3C4;--bg:#F5F2EB;--yel:#C8102E;--red:#C8102E;--grn:#1D5E3A;--org:#C77800;--blue:#2C7E9C;--paper:#FAF8F3;--tint:#FBEAEC}
 *{box-sizing:border-box}
@@ -90,6 +90,13 @@ label.f{display:block;font-size:12.5px;color:var(--mute);margin:10px 0 4px}
 .ver{position:fixed;right:6px;bottom:4px;font-size:10.5px;color:var(--mute);z-index:5;background:rgba(245,242,235,.9);padding:1px 5px;border-radius:4px}
 .stat{display:inline-block;margin-right:14px}.stat b{font-size:18px}
 .prog{height:8px;background:#e3e7ec;border-radius:9px;overflow:hidden;margin-top:6px}.prog>div{height:100%;background:var(--navy);width:0}
+.lbl{font-size:11.5px;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:var(--mute);margin:12px 0 6px}
+.lbl:first-child{margin-top:0}
+.chip.alc.on{background:color-mix(in srgb,var(--c) 15%,#fff);color:var(--c);border-color:var(--c);font-weight:800}
+.seg3{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.seg3 button{border:0;border-right:1px solid var(--line);background:#fff;padding:10px 4px;min-height:48px;font-weight:700;font-size:14px;color:var(--ink)}
+.seg3 button:last-child{border-right:0}.seg3 .agg b{color:#C8102E}.seg3 .att b{color:#1D5E3A}.seg3 .eva b{color:#C77800}
+.seg3 .agg.on{background:#C8102E;color:#fff}.seg3 .att.on{background:#1D5E3A;color:#fff}.seg3 .eva.on{background:#C77800;color:#fff}.seg3 .on b{color:#fff}
 .zgrp{margin-bottom:12px}.zgrp h3{margin:10px 0 6px}
 .help li{margin:4px 0}
 </style>
@@ -121,7 +128,7 @@ label.f{display:block;font-size:12.5px;color:var(--mute);margin:10px 0 4px}
    plan, on la range (zone libre, équipements, aléas, note).
    Fichier unique, aucune dépendance externe, fonctionne hors-ligne.
    ===================================================================== */
-const VERSION = 'v2026-11-05 · 4';
+const VERSION = 'v2026-11-05 · 6';
 const STORE_KEY = 'gareoPhoto.v2';
 
 const EQUIP = [{"n": "Abri vélo", "l": [1, 2, 1, 3, 2], "d": "Abri / structure légère de stationnement et protection des vélos"}, {"n": "Abris de quais/marquise", "l": [3, 3, 2, 4, 1], "d": "Abris ou marquises protégeant les voyageurs sur les quais"}, {"n": "AEP (Adduction eau potable)", "l": [2, 2, 2, 4, 4], "d": "Réseau d’alimentation en eau potable de la gare (sanitaires, robinets, usages courants)"}, {"n": "Alimentation SNCF Réseau", "l": [3, 3, 4, 4, 3], "d": "Alimentation électrique dédiée aux équipements ferroviaires de SNCF Réseau en gare (signalisation, aiguillages, postes, etc.)"}, {"n": "Armoire de climatisation", "l": [1, 2, 3, 1, 1], "d": "Armoire de traitement d’air / climatisation alimentant principalement des locaux techniques ou équipements sensibles"}, {"n": "Armoire élévatique", "l": [3, 2, 2, 4, 1], "d": "Armoire de commande et de puissance des ascenseurs et escaliers mécaniques"}, {"n": "ART PMR", "l": [0, 2, 2, 4, 4], "d": "Dispositif d’aide et d’information dédié aux PMR"}, {"n": "ART/AMT/BLS (Automate de vente)", "l": [0, 2, 2, 4, 0], "d": "Automates de vente de titres de transport"}, {"n": "Ascenseur de service / Monte charge", "l": [1, 2, 3, 1, 1], "d": "Ascenseur dédié aux flux logistiques et manutention"}, {"n": "Ascenseur non secouru", "l": [3, 2, 1, 4, 1], "d": "Ascenseur voyageurs non intégré au dispositif d'évacuation"}, {"n": "Ascenseur secouru", "l": [4, 2, 1, 4, 1], "d": "Ascenseur intégré au dispositif d'évacuation de sécurité"}, {"n": "Assise quais", "l": [2, 1, 0, 4, 1], "d": "Sièges ou bancs installés sur les quais"}, {"n": "BAES", "l": [4, 0, 1, 1, 1], "d": "Blocs autonomes d'éclairage de sécurité"}, {"n": "Baie CFA", "l": [4, 3, 4, 1, 1], "d": "Baie courants faibles pour réseaux et systèmes numériques"}, {"n": "Baie Sono", "l": [4, 1, 2, 3, 1], "d": "Baie de diffusion sonore de sécurité et d'exploitation"}, {"n": "Baie Sono commerciale", "l": [0, 2, 2, 2, 0], "d": "Baie de diffusion sonore à usage commercial/confort"}, {"n": "Balise sonore", "l": [2, 0, 1, 2, 1], "d": "Balise d'orientation sonore pour déficients visuels"}, {"n": "Bandes détection à la canne", "l": [4, 0, 1, 3, 3], "d": "Bandes au sol détectables à la canne des malvoyants"}, {"n": "Bandes pododactiles", "l": [4, 0, 1, 3, 1], "d": "Bandes en relief d'alerte au sol (ex. bord de quai)"}, {"n": "Barrières et clôtures fixes", "l": [4, 2, 3, 1, 1], "d": "Clôtures rigides séparant zones publiques et zones dangereuses"}, {"n": "Barrières extérieurs levantes", "l": [4, 2, 3, 1, 1], "d": "Barrières motorisées de contrôle d'accès véhicules"}, {"n": "Borne d'appel d'urgence", "l": [4, 2, 1, 1, 1], "d": "Borne permettant aux usagers d'alerter en cas d'urgence"}, {"n": "Bureaux", "l": [1, 3, 4, 1, 4], "d": "Locaux administratifs et de travail"}, {"n": "Caméras", "l": [1, 1, 3, 1, 1], "d": "Caméras de vidéosurveillance générales"}, {"n": "Caméras ascenseurs", "l": [4, 1, 1, 3, 1], "d": "Caméras dédiées à la surveillance des cabines d'ascenseurs"}, {"n": "Caméras pour téléopération", "l": [1, 1, 3, 1, 1], "d": "Caméras nécessaires au pilotage à distance d'équipements"}, {"n": "Caméras vente billetterie", "l": [1, 1, 1, 3, 1], "d": "Caméras de surveillance zones de vente/guichets"}, {"n": "Centrale GTC/GTB", "l": [4, 4, 4, 4, 4], "d": "Système centralisé de gestion technique/énergétique du bâtiment"}, {"n": "Centrale SSI", "l": [4, 4, 1, 1, 1], "d": "Unité centrale du Système de Sécurité Incendie"}, {"n": "Chambre froide", "l": [1, 3, 3, 2, 1], "d": "Chambre à froid pour usages commerciaux/restauration"}, {"n": "Château d’eau", "l": [4, 3, 3, 3, 3], "d": "Ouvrage de stockage et de mise en pression de l'eau du site"}, {"n": "Chaudière et circuit d'eau chaude", "l": [1, 4, 1, 3, 3], "d": "Production et distribution d'eau chaude de chauffage"}, {"n": "Clim locaux techniques", "l": [1, 2, 4, 1, 1], "d": "Climatisation des locaux abritant des équipements sensibles"}, {"n": "Cœur de réseau télécoms", "l": [4, 4, 4, 4, 2], "d": "Noyau des infrastructures réseau et télécoms de la gare"}, {"n": "Désenfumage mécanique", "l": [4, 2, 1, 1, 1], "d": "Système motorisé d'extraction des fumées en cas d'incendie"}, {"n": "Désenfumage naturel", "l": [4, 2, 1, 1, 1], "d": "Trappes ou ouvrants pour évacuation naturelle des fumées"}, {"n": "Détecteur incendie", "l": [4, 1, 4, 1, 1], "d": "Capteurs de détection précoce de départ de feu"}, {"n": "Eau chaude sanitaire", "l": [1, 2, 1, 3, 3], "d": "Production d'ECS pour sanitaires et usages courants"}, {"n": "Eclairage", "l": [3, 1, 2, 4, 2], "d": "Éclairage général des espaces gare et accès"}, {"n": "Eclairage de sécurité sur source centrale", "l": [4, 1, 1, 1, 1], "d": "Éclairage de sécurité alimenté par une source centralisée"}, {"n": "Eclairage indispensable à l'ouverture d'un espace", "l": [1, 1, 4, 1, 1], "d": "Éclairage minimal réglementaire conditionnant l'ouverture au public"}, {"n": "Ecran TFT PMR", "l": [1, 2, 2, 3, 4], "d": "Écran d'information adapté aux besoins des PMR"}, {"n": "Ecrans TFT/TIM", "l": [1, 2, 2, 4, 1], "d": "Écrans d'information voyageurs (horaires, voies, messages)"}, {"n": "Emetteur de chaleur ERP", "l": [1, 2, 1, 3, 2], "d": "Radiateurs ou terminaux de chauffage en zones voyageurs"}, {"n": "Emetteur de chaleur ERT", "l": [1, 2, 1, 1, 4], "d": "Radiateurs ou terminaux de chauffage en zones techniques"}, {"n": "Ensemble local technique Transformateur", "l": [4, 4, 4, 4, 4], "d": "Local abritant le transformateur principal d'alimentation de la gare"}, {"n": "Ensemble local technique Transformateur de secours avec Source secours BT/HT", "l": [4, 4, 4, 4, 2], "d": "Local abritant transformateur et source électrique de secours"}, {"n": "Enveloppe", "l": [4, 4, 4, 3, 3], "d": "Façades, toitures, menuiseries, étanchéité du bâtiment"}, {"n": "Equipement ferroviaire réseau", "l": [4, 4, 4, 1, 1], "d": "Équipements d'infrastructure ferroviaire (signalisation, voie, aiguillage…)"}, {"n": "Equipement médical de premiers secours", "l": [4, 1, 1, 1, 1], "d": "\""}, {"n": "Escalier Mécanique", "l": [1, 4, 1, 3, 1], "d": "Escalier motorisé pour le transport de voyageurs"}, {"n": "Escalier Mécanique secouru", "l": [4, 4, 1, 3, 1], "d": "Escalier mécanique intégré aux cheminements de sécurité"}, {"n": "Espace commercial", "l": [1, 4, 3, 3, 1], "d": "Locaux dédiés aux commerces et services en gare"}, {"n": "Espace d'attente", "l": [1, 4, 3, 4, 1], "d": "Zones de salle d'attente et assises voyageurs"}, {"n": "Espace de circulation", "l": [2, 4, 3, 4, 1], "d": "Couloirs, halls et zones de déplacement voyageurs"}, {"n": "Extinction incendie par gaz argon", "l": [4, 3, 4, 1, 1], "d": "Système d'extinction automatisé par gaz en locaux sensibles"}, {"n": "Extinction incendie par sprinklage", "l": [4, 3, 4, 1, 1], "d": "Réseau de sprinklers automatiques contre l'incendie"}, {"n": "Fondation", "l": [4, 4, 4, 1, 1], "d": "Ouvrages de fondation du bâtiment ou de l'ouvrage"}, {"n": "Fontaine à eau", "l": [0, 2, 0, 4, 3], "d": "Fontaines de distribution d'eau potable aux usagers"}, {"n": "Groupe de production de froid", "l": [1, 3, 3, 1, 2], "d": "Production centralisée de froid pour la climatisation"}, {"n": "Haut-parleur", "l": [4, 2, 3, 3, 0], "d": "Diffuseurs sonores dans les espaces voyageurs et techniques"}, {"n": "Interphonie Ascenseur", "l": [4, 2, 1, 3, 1], "d": "Système d'appel et de communication en cabine d'ascenseur"}, {"n": "Interphonie CAB", "l": [1, 1, 2, 2, 1], "d": "Système d'interphonie intégré aux portillons automatiques de contrôle d'accès et de billettique"}, {"n": "Ligne CAB/PEC", "l": [1, 3, 4, 3, 1], "d": "Ligne de portillons de contrôle d'accès ou billettique"}, {"n": "Lignes de vie ou autres dispositifs fixes pour l'entretien", "l": [4, 1, 3, 1, 4], "d": "Dispositifs de protection contre les chutes pour interventions en hauteur"}, {"n": "Local technique", "l": [1, 4, 4, 1, 2], "d": "Local abritant des équipements techniques (élec, CVC, IT…)"}, {"n": "Ouvrage d'assainissement ou technique", "l": [2, 4, 2, 1, 4], "d": "Ouvrages de collecte et gestion des eaux usées/pluviales"}, {"n": "Panneaux photovoltaïques", "l": [1, 3, 3, 1, 4], "d": "Installation de production d'électricité solaire"}, {"n": "Panneaux solaires thermiques", "l": [1, 3, 3, 1, 4], "d": "Capteurs solaires pour production de chaleur ou d'ECS"}, {"n": "Paratonnerre", "l": [4, 3, 2, 1, 1], "d": "Dispositif de protection contre la foudre"}, {"n": "Parking", "l": [1, 3, 1, 4, 1], "d": "Parking voyageurs accolé à la gare"}, {"n": "Parking exploitants", "l": [1, 3, 4, 1, 3], "d": "Parking réservé aux personnels et prestataires"}, {"n": "Passage souterrain", "l": [1, 4, 4, 4, 0], "d": "Ouvrage souterrain pour accéder aux quais et aux espaces"}, {"n": "Passerelle", "l": [4, 4, 4, 4, 0], "d": "Ouvrage aérien piéton pour franchir les voies"}, {"n": "Petit ouvrage sous voie", "l": [1, 4, 2, 1, 1], "d": "Petit ouvrage (buse, dalot) traversant sous la voie ferrée"}, {"n": "Pneumatique", "l": [1, 3, 2, 1, 1], "d": "Réseau d'air comprimé pour automatismes et équipements"}, {"n": "Pompe de relevage", "l": [1, 3, 4, 1, 3], "d": "Pompe évacuant les eaux de locaux bas ou souterrains"}, {"n": "Ponts rails", "l": [4, 4, 4, 1, 1], "d": "Ponts supportant les voies ferrées"}, {"n": "Ponts route", "l": [4, 4, 4, 1, 1], "d": "Ponts routiers associés à la gare ou franchissant la voie"}, {"n": "Portail mécanique de secours téléopéré", "l": [4, 3, 3, 1, 1], "d": "Portail motorisé de secours commandable à distance"}, {"n": "Portes auto", "l": [1, 3, 3, 3, 1], "d": "Portes automatiques d'accès aux bâtiments et espaces"}, {"n": "Pupitre téléopération", "l": [4, 4, 4, 1, 2], "d": "Poste de commande et de supervision centralisé permettant à un opérateur (agent ou centre de téléopération) de contrôler et piloter à distan"}, {"n": "Quai", "l": [1, 4, 4, 4, 2], "d": "Plateforme voyageurs au bord des voies"}, {"n": "Réseaux de plomberies", "l": [1, 3, 4, 3, 3], "d": "Réseaux d'eau, évacuation et raccordements sanitaires"}, {"n": "Rideau mécanique", "l": [4, 2, 3, 1, 1], "d": "Rideau de fermeture manuel ou localement motorisé"}, {"n": "Rideau métallique téléopéré", "l": [4, 2, 3, 1, 1], "d": "Rideau métallique motorisé commandable à distance"}, {"n": "Sanitaire ERP", "l": [1, 3, 1, 4, 2], "d": "Sanitaires accessibles au public voyageurs"}, {"n": "Sanitaires ERT", "l": [1, 3, 1, 1, 4], "d": "Sanitaires pour personnels et zones techniques"}, {"n": "Sirène d'évacuation et diffuseur lumineux", "l": [4, 1, 1, 1, 1], "d": "Dispositifs sonores et visuels d'alarme générale"}, {"n": "Sirène évacuation", "l": [4, 1, 1, 1, 1], "d": "Dispositifs sonores d'alarme incendie et d'évacuation"}, {"n": "Source centrale de secours", "l": [4, 3, 4, 4, 1], "d": "Source électrique centralisée pour circuits de secours"}, {"n": "SSI - Diffuseurs lumineux", "l": [4, 1, 1, 1, 1], "d": "Diffuseurs lumineux contrôlés par le SSI"}, {"n": "Structure", "l": [4, 4, 4, 1, 1], "d": "Ossature porteuse du bâtiment ou de l'ouvrage"}, {"n": "Tableau Divisionnaire", "l": [4, 2, 3, 3, 1], "d": "Tableau électrique distribuant l'électricité à une zone ou un usage"}, {"n": "Tableau divisionnaire de bâtiment", "l": [4, 2, 4, 4, 2], "d": "Tableau électrique dédié à un bâtiment ou une entité"}, {"n": "Tableau Général Secouru", "l": [4, 2, 4, 4, 2], "d": "Tableau alimentant les circuits électriques secourus"}, {"n": "Tarif Jaune/bleu", "l": [4, 3, 4, 4, 1], "d": "Point de livraison électrique du réseau public (comptage HTA/BT)"}, {"n": "téléphone", "l": [1, 1, 2, 1, 1], "d": "Téléphonie fixe interne et externe de la gare"}, {"n": "Terrains nus G&C", "l": [1, 1, 2, 0, 2], "d": "Terrains nus de gestion et construction liés à la gare"}, {"n": "Terrains nus non G&C", "l": [1, 1, 2, 0, 2], "d": "Terrains nus hors périmètre gare ou centre"}, {"n": "TGBT / TGBTR", "l": [4, 4, 4, 4, 2], "d": "Tableau Général Basse Tension (et secouru réseau)"}, {"n": "Traversée de voie piétonne (TVP)", "l": [4, 3, 3, 4, 1], "d": "Passage piéton traversant les voies au niveau du sol"}, {"n": "Ventilation", "l": [2, 2, 1, 4, 1], "d": "Ventilation des locaux, halls et passages"}];
@@ -254,7 +261,7 @@ async function onCapture(files, how) {
     const L = (how === 'import' ? null : S.last) || {};
     const p = {id, n:v.seq, t:Date.now(), type:isVid ? 'video' : 'photo', how, name:f.name, size:f.size, mime:f.type,
       niv:L.niv || 'N0', zone:L.zone || '', pt:L.pt ? {n:L.pt.n, x:L.pt.x, y:L.pt.y} : null, eqs:[...(L.eqs || [])],
-      al:[], ef:'', star:false, note:'', done:false, dl:null, gps:null, exT:null, exGps:null, stored:false};
+      al:[], ef:'', star:false, note:'', dl:null, gps:null, exT:null, exGps:null, stored:false};
     v.photos.push(p); save();
     try { await DB.put('blobs', id, f); p.stored = true; }
     catch (e) { toast('⚠ Mémoire pleine : copie de secours dans Téléchargements', 'err'); download(id + '_' + f.name, f); p.dl = Date.now(); }
@@ -262,11 +269,12 @@ async function onCapture(files, how) {
       if (ex && ex.dto) p.exT = exifTime(ex.dto, ex.off); if (ex && ex.gps) p.exGps = ex.gps; } catch (e) {} }
     if (how === 'import' && p.exT) p.t = p.exT;
     save(); created.push(p);
+    if (S.prefs.dlCopy && p.stored && how !== 'import') { try { download(rawName(p), f); p.dl = Date.now(); save(); } catch (e) {} }
     makeThumb(f, isVid).then(tb => tb && DB.put('thumbs', id, tb)).then(() => { if (!UI.ov) renderGal(); else if (UI.fiche === id) refreshPrev(); }).catch(() => {});
     grabGps(id);
   }
   if (created.length === 1) openFiche(created[0].id);
-  else { UI.filtre = 'todo'; render(); toast(created.length + ' fichiers importés : à classer'); }
+  else { render(); toast(created.length + ' fichiers importés'); }
 }
 function grabGps(id) { if (!navigator.geolocation) return;
   navigator.geolocation.getCurrentPosition(pos => { const p = P(id); if (!p) return;
@@ -275,12 +283,14 @@ function grabGps(id) { if (!navigator.geolocation) return;
 function fileName(p, v) {
   const d = new Date(p.t); const ext = ((p.name || '').match(/\.[A-Za-z0-9]+$/) || [p.type === 'video' ? '.mp4' : '.jpg'])[0].toLowerCase();
   const eq = p.eqs.length ? short(p.eqs[0], 26) + (p.eqs.length > 1 ? '+' + (p.eqs.length - 1) : '') : 'vue-generale';
-  return [p.id, pad(d.getHours()) + pad(d.getMinutes()) + pad(d.getSeconds()), ascii(p.niv), short(p.zone || 'zone', 26), eq].join('_') + (p.star ? '_IMPORTANT' : '') + ext;
+  return [p.id, pad(d.getHours()) + pad(d.getMinutes()) + pad(d.getSeconds()), ascii(p.niv), short(p.zone || 'sans-zone', 26), eq].join('_') + (p.star ? '_IMPORTANT' : '') + ext;
 }
+function rawName(p) { const d = new Date(p.t); const ext = ((p.name || '').match(/\.[A-Za-z0-9]+$/) || [p.type === 'video' ? '.mp4' : '.jpg'])[0].toLowerCase();
+  return p.id + '_' + pad(d.getHours()) + pad(d.getMinutes()) + pad(d.getSeconds()) + ext; }
 async function dlCopy(p) {
   const v = V() || Object.values(S.visites).find(x => x.photos.includes(p));
   const b = await DB.get('blobs', p.id).catch(() => null); if (!b) return false;
-  download(fileName(p, v), b); p.dl = Date.now(); p.dlName = fileName(p, v); save(); return true;
+  download(rawName(p), b); p.dl = Date.now(); save(); return true;
 }
 
 /* =====================================================================
@@ -308,13 +318,12 @@ function viewAccueil() {
     ${old.length ? `<div class="card"><h2>Visites sur ce téléphone</h2>${old.map(o => `
       <div class="row" style="border-top:1px solid var(--line);padding:8px 0">
         <div style="flex:1"><b>${esc(o.gare)}</b> · ${ymd(o.debut)} ${hm(o.debut)}${o.fin ? '–' + hm(o.fin) : ' <span class="mute">(en cours)</span>'}<br>
-        <span class="small mute">${o.photos.length} photos/vidéos · ${o.photos.filter(p => !p.done).length} à classer</span></div>
+        <span class="small mute">${o.photos.length} photos/vidéos</span></div>
         <button class="btn" data-act="resume" data-id="${o.id}">${o.fin ? 'Rouvrir' : 'Reprendre'}</button>
       </div>`).join('')}</div>` : ''}`;
 }
 function viewTerrain(v) {
-  const todo = v.photos.filter(p => !p.done).length;
-  const notDl = S.prefs.dlCopy ? v.photos.filter(p => p.done && !p.dl).length : 0;
+  const notDl = S.prefs.dlCopy ? v.photos.filter(p => !p.dl).length : 0;
   const L = S.last;
   return `
   <div class="grid3" style="grid-template-columns:2fr 1fr 1fr">
@@ -323,11 +332,9 @@ function viewTerrain(v) {
     <button class="btn huge" data-act="imp" style="font-size:15px">🖼<br>Galerie</button>
   </div>
   <div class="small mute" style="margin:7px 2px 10px">${L && L.zone ? `Lieu repris pour la prochaine photo : <b>${esc(nivOf(L.niv).id)} · ${esc(L.zone)}</b>${L.pt ? ' · 📍' : ''}${L.eqs && L.eqs.length ? ' · ' + esc(L.eqs.join(', ')) : ''}` : 'Prends une photo : tu la pointes ensuite sur le plan.'}</div>
-  ${notDl ? `<div class="banner">${notDl} photo(s) classée(s) pas encore copiée(s) dans Téléchargements. <a href="#" data-act="dlMissing">Copier maintenant</a></div>` : ''}
+  ${notDl ? `<div class="banner">${notDl} photo(s) pas encore copiée(s) dans Téléchargements. <a href="#" data-act="dlMissing">Copier maintenant</a></div>` : ''}
   <div class="card">
-    <div class="row" style="margin-bottom:8px"><b style="margin-right:auto">${v.photos.length} prises</b>
-      <button class="chip ${UI.filtre === 'all' ? 'on' : ''}" data-act="filtre" data-v="all">Toutes</button>
-      <button class="chip ${UI.filtre === 'todo' ? 'on' : ''}" data-act="filtre" data-v="todo">À classer (${todo})</button></div>
+    <div class="row" style="margin-bottom:8px"><b style="margin-right:auto">${v.photos.length} prises</b><span class="small mute">touche une photo pour la modifier</span></div>
     <div id="gal">${galHtml(v)}</div>
   </div>
   <div class="grid3">
@@ -338,11 +345,11 @@ function viewTerrain(v) {
   <div class="small mute" id="quota" style="margin-top:8px"></div>`;
 }
 function galHtml(v) {
-  const list = [...v.photos].reverse().filter(p => UI.filtre !== 'todo' || !p.done);
-  if (!list.length) return `<div class="mute small">${UI.filtre === 'todo' ? 'Tout est classé 👍' : 'Aucune photo pour l\'instant.'}</div>`;
+  const list = [...v.photos].reverse();
+  if (!list.length) return `<div class="mute small">Aucune photo pour l'instant.</div>`;
   return `<div class="gal">${list.map(p => `<div class="it" data-act="openFiche" data-id="${p.id}">
     <img data-th="${p.id}" alt="" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=">
-    <span class="bd">${p.type === 'video' ? '🎬 ' : ''}${p.n}</span>${p.done ? '' : '<span class="todo">à classer</span>'}
+    <span class="bd">${p.type === 'video' ? '🎬 ' : ''}${p.n}</span>${p.ef ? `<span class="todo" style="background:${EF_COL[p.ef]}">${p.ef === 'agg' ? '▲' : p.ef === 'att' ? '▼' : '?'}</span>` : ''}
     <div class="lb">${esc(p.zone || '—')}${p.eqs.length ? '<br>🔧 ' + esc(p.eqs[0]) + (p.eqs.length > 1 ? ' +' + (p.eqs.length - 1) : '') : ''}</div></div>`).join('')}</div>`;
 }
 function renderGal() { const v = V(); const g = $('#gal'); if (g && v) { g.innerHTML = galHtml(v); fillThumbs(g); } }
@@ -359,7 +366,7 @@ function renderOv() {
   o.innerHTML = `<div class="ov"><div class="top"><b>${esc(p.id)} · ${hms(p.t)}</b><button data-act="delPhoto">🗑</button><button data-act="closeFiche">Fermer</button></div>
   <div class="body">
     <div class="prev"><span id="prevBox">${p.type === 'video' ? '<div class="ph0">🎬</div>' : `<img data-th="${p.id}" alt="" data-act="full">`}</span>
-      <div class="small"><b>${p.type === 'video' ? 'Vidéo' : 'Photo'} n°${p.n}</b><br>${p.done ? '✔ classée' : '<span style="color:var(--org)">à classer</span>'}
+      <div class="small"><b>${p.type === 'video' ? 'Vidéo' : 'Photo'} n°${p.n}</b><br>${hms(p.t)}
       ${p.gps ? `<br>GPS ±${p.gps.acc} m` : ''}${p.stored ? '' : '<br><span style="color:var(--red)">non stockée dans l\'appli</span>'}
       <br><a href="#" data-act="full">voir en grand</a> · <a href="#" data-act="clearAll">tout effacer</a></div></div>
     <div class="sec"><h3>1 · Où ?</h3>
@@ -454,13 +461,15 @@ function renderEq(p) {
   $('#fEqSug').innerHTML = h;
 }
 function renderTags(p) {
-  $('#fTags').innerHTML = `<div class="row">${ALEAS.map(([k, l]) => `<button class="chip ${p.al.includes(k) ? 'on' : ''}" data-act="al" data-v="${k}">${esc(l)}</button>`).join('')}</div>
-    <div class="row" style="margin-top:7px">${EFFETS.map(([k, l]) => `<button class="chip ${k} ${p.ef === k ? 'on' : ''}" data-act="ef" data-v="${k}">${esc(l)}</button>`).join('')}
-    <button class="chip star ${p.star ? 'on' : ''}" data-act="star">★ Important</button></div>`;
+  $('#fTags').innerHTML = `<div class="lbl">Aléa(s) concerné(s)</div>
+    <div class="row">${ALEAS.map(([k, l]) => `<button class="chip alc ${p.al.includes(k) ? 'on' : ''}" style="--c:${AL_COL[k]}" data-act="al" data-v="${k}">${esc(l)}</button>`).join('')}</div>
+    <div class="lbl">Effet sur la vulnérabilité <span style="text-transform:none;letter-spacing:0;font-weight:400">— ce que montre la photo</span></div>
+    <div class="seg3">${EFFETS.map(([k, l]) => `<button class="${k} ${p.ef === k ? 'on' : ''}" data-act="ef" data-v="${k}"><b>${k === 'agg' ? '▲' : k === 'att' ? '▼' : '?'}</b> ${esc(l)}</button>`).join('')}</div>
+    <div class="row" style="margin-top:10px"><button class="chip star ${p.star ? 'on' : ''}" data-act="star">★ Photo importante</button></div>`;
 }
 function commitFiche(p) {
   const z = $('#fZone'); if (z) p.zone = z.value.trim(); const n = $('#fNote'); if (n) p.note = n.value.trim();
-  p.done = true; p.mod = Date.now();
+  p.mod = Date.now();
   S.last = {niv:p.niv, zone:p.zone, pt:p.pt ? {n:p.pt.n, x:p.pt.x, y:p.pt.y} : null, eqs:[...p.eqs], al:[...p.al], ef:p.ef};
   save();
 }
@@ -476,12 +485,12 @@ function exportReleve(v = V()) { download(releveName(v), JSON.stringify(relevePa
 async function shareReleve(v = V()) { const f = new File([JSON.stringify(relevePayload(v), null, 1)], releveName(v), {type:'application/json'});
   if (navigator.canShare && navigator.canShare({files:[f]})) { try { await navigator.share({files:[f], title:'Relevé ' + v.gare}); } catch (e) {} } else exportReleve(v); }
 const CSV_COLS = ['n', 'id', 'fichier', 'dossier', 'origine', 'type', 'date', 'heure', 'niveau', 'zone', 'equipements', 'nb_equipements', 'aleas', 'effet', 'important', 'note',
-  'plan', 'plan_x', 'plan_y', 'direction_deg', 'lat', 'lon', 'gps_precision_m', 'gps_source', 'classee'];
+  'plan', 'plan_x', 'plan_y', 'direction_deg', 'lat', 'lon', 'gps_precision_m', 'gps_source'];
 function rowOf(p, v, ex) { const gps = p.exGps || p.gps;
   return {n:p.n, id:p.id, fichier:ex ? ex.fname : fileName(p, v), dossier:ex ? ex.dir : '', origine:p.name, type:p.type, date:ymd(p.t), heure:hms(p.t),
     niveau:nivOf(p.niv).label, niv:p.niv, zone:p.zone, equipements:p.eqs.join(' | '), nb_equipements:p.eqs.length, aleas:p.al.map(alLabel).join(', '), effet:p.ef ? efLabel(p.ef) : '',
     important:p.star ? 'oui' : '', note:p.note, plan:p.pt ? p.pt.n : '', plan_x:p.pt ? p.pt.x : '', plan_y:p.pt ? p.pt.y : '', direction_deg:p.pt && p.pt.dir != null ? p.pt.dir : '',
-    lat:gps ? gps.lat : '', lon:gps ? gps.lon : '', gps_precision_m:!p.exGps && p.gps ? p.gps.acc : '', gps_source:p.exGps ? 'photo' : (p.gps ? 'navigateur' : ''), classee:p.done ? 'oui' : 'non'}; }
+    lat:gps ? gps.lat : '', lon:gps ? gps.lon : '', gps_precision_m:!p.exGps && p.gps ? p.gps.acc : '', gps_source:p.exGps ? 'photo' : (p.gps ? 'navigateur' : '')}; }
 function csv(rows) { const q = x => { const s = String(x ?? ''); return /[;"\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
   return '﻿' + [CSV_COLS.join(';'), ...rows.map(r => CSV_COLS.map(c => q(r[c])).join(';'))].join('\r\n'); }
 
@@ -510,8 +519,8 @@ function viewBureau() {
 function viewSynth(r) {
   const groups = groupByZone(r.photos);
   let h = `<div class="card"><h2>3 · Rangement</h2><div class="row"><span class="stat"><b>${groups.length}</b> zones</span>
-    <span class="stat"><b>${r.photos.filter(p => p.pt).length}</b> pointées sur plan</span><span class="stat"><b>${r.photos.filter(p => !p.done).length}</b> non classées</span>
-    <span style="margin-left:auto"></span><button class="btn yel" data-act="export">📁 Exporter le dossier trié</button></div>
+    <span class="stat"><b>${r.photos.filter(p => p.pt).length}</b> pointées sur plan</span>
+    <span style="margin-left:auto"></span><button class="btn" data-act="export">📁 Écrire dans un dossier</button><button class="btn yel" data-act="goZip">📦 ZIP classé…</button></div>
     ${B.log ? `<div class="banner ${B.log.err ? 'err' : 'ok'}" style="margin-top:8px">${B.log.html}</div>` : ''}</div>`;
   groups.forEach((g, i) => { h += `<div class="card zgrp"><h3>${pad(i + 1)} · ${esc(g.zone || 'Sans zone')} <span class="small mute">${esc(nivOf(g.niv).label)} · ${g.items.length}</span></h3>
     <div class="gal">${g.items.map(p => `<div class="it"><img ${B.local ? `data-th="${p.id}"` : `src="${B.files[p.id] ? B.files[p.id].thumb || B.files[p.id].url() : ''}"`} loading="lazy" alt="">
@@ -521,7 +530,7 @@ function viewSynth(r) {
 }
 function groupByZone(photos) {
   const map = new Map();
-  [...photos].sort((a, b) => a.n - b.n).forEach(p => { const k = (p.done ? p.niv + '|' + (p.zone || '') : '~todo'); if (!map.has(k)) map.set(k, {k, niv:p.done ? p.niv : '', zone:p.done ? p.zone : 'Non classées', items:[]}); map.get(k).items.push(p); });
+  [...photos].sort((a, b) => a.n - b.n).forEach(p => { const k = p.niv + '|' + (p.zone || ''); if (!map.has(k)) map.set(k, {k, niv:p.niv, zone:p.zone || '', items:[]}); map.get(k).items.push(p); });
   const arr = [...map.values()]; const todo = arr.findIndex(g => g.k === '~todo'); if (todo >= 0) arr.push(arr.splice(todo, 1)[0]); return arr;
 }
 async function addFiles(files) {
@@ -609,17 +618,23 @@ ${plans}${body}<p style="color:#6b7682;font-size:12px">GARÉo Photo ${esc(VERSIO
    ===================================================================== */
 const AL_COL = {CHA:'#D9480F', PLU:'#1C7ED6', FLU:'#1864AB', NAP:'#0B7285', VEN:'#6741D9', SEC:'#B08900', RGA:'#8B5E34', GEL:'#4DABF7'};
 const EF_COL = {agg:'#C8102E', att:'#1D5E3A', eva:'#C77800'};
-const X = {src:null, all:true, busy:null, last:null};
+const X = {src:null, all:true, busy:null, last:null, zipSyn:true, zipLog:null};
 function viewExport() {
   const locals = Object.values(S.visites).filter(v => v.photos.length).sort((a, b) => b.debut - a.debut);
   const srcs = locals.map(v => ({k:v.id, lb:`${v.gare} · ${ymd(v.debut)} · ${v.photos.length} prises (ce téléphone/navigateur)`}));
   if (B.rel && !B.local && Object.keys(B.files).length) srcs.push({k:'bureau', lb:`Relevé chargé dans Bureau · ${B.rel.visite.gare} · ${Object.keys(B.files).length} fichiers`});
   if (!X.src || !srcs.some(s => s.k === X.src)) X.src = srcs.length ? srcs[0].k : null;
   const v = X.src && X.src !== 'bureau' ? S.visites[X.src] : null;
-  return `<div class="card"><h2>Synthèse de visite</h2>
+  return `${srcs.length ? `<div class="card"><h2>📦 ZIP classé</h2>
+    <p class="small mute" style="margin-top:0">Toutes les photos et vidéos, rangées <b>dossier par zone → sous-dossier par équipement</b>, avec des noms explicites (<code>PAZ_0012_094210_N0_GHV_Abris-de-quais.jpg</code>), l'inventaire Excel et le relevé. À ouvrir sur PC, à déposer sur SharePoint.</p>
+    <label class="f">Visite</label><select id="xSrc">${srcs.map(s => `<option value="${s.k}" ${s.k === X.src ? 'selected' : ''}>${esc(s.lb)}</option>`).join('')}</select>
+    <label class="row small" style="margin-top:10px"><input type="checkbox" id="xZipSyn" ${X.zipSyn ? 'checked' : ''}> Ajouter la synthèse dans le ZIP</label>
+    <div style="margin-top:12px"><button class="btn big yel" style="width:100%" data-act="zip" ${X.busy ? 'disabled' : ''}>📦 Télécharger le ZIP classé</button></div>
+    ${X.zipLog ? `<div class="banner ok" style="margin-top:10px">${X.zipLog}</div>` : ''}
+    <p class="small mute">Sur le téléphone, le ZIP arrive dans Téléchargements : envoie-le sur ton PC (câble, OneDrive, Teams). Au-delà de 3,5 Go il est découpé en plusieurs parties.</p></div>` : ''}
+  <div class="card"><h2>Synthèse de visite</h2>
     <p class="small mute" style="margin-top:0">Un document prêt à l'emploi : couverture, aléas surlignés, tableau zones × aléas, points d'attention, plans avec les photos numérotées et leur direction, puis une fiche par zone. Fichier HTML autonome (s'ouvre partout), à imprimer en PDF.</p>
-    ${srcs.length ? `<label class="f">Visite</label><select id="xSrc">${srcs.map(s => `<option value="${s.k}" ${s.k === X.src ? 'selected' : ''}>${esc(s.lb)}</option>`).join('')}</select>
-    <label class="row small" style="margin-top:10px"><input type="checkbox" id="xAll" ${X.all ? 'checked' : ''}> Toutes les photos dans les fiches de zone (sinon : ★, aggravant et notes d'abord, 8 max par zone)</label>
+    ${srcs.length ? `<label class="row small" style="margin-top:4px"><input type="checkbox" id="xAll" ${X.all ? 'checked' : ''}> Toutes les photos dans les fiches de zone (sinon : ★, aggravant et notes d'abord, 8 max par zone)</label>
     <div style="margin-top:12px"><button class="btn big yel" style="width:100%" data-act="synth" ${X.busy ? 'disabled' : ''}>✨ Générer la synthèse</button></div>
     ${X.busy ? `<div class="small" style="margin-top:8px">${esc(X.busy.lb)} ${X.busy.done} / ${X.busy.total}</div><div class="prog"><div style="width:${100 * X.busy.done / Math.max(1, X.busy.total)}%"></div></div>` : ''}
     ${X.last ? `<div class="banner ok" style="margin-top:10px">✔ <b>${esc(X.last.name)}</b> téléchargé (${(X.last.size / 1e6).toFixed(1)} Mo). <a href="${X.last.url}" target="_blank">Ouvrir l'aperçu</a> · pour un PDF : menu ⋮ → Partager → Imprimer (téléphone) ou Ctrl+P (PC).</div>` : ''}`
@@ -631,6 +646,14 @@ function viewExport() {
     <p class="small mute">Le relevé .json sert à l'onglet Bureau (dossier trié). Le .csv s'ouvre dans Excel.</p></div>` : ''}`;
 }
 const toDataUrl = b => new Promise(res => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = () => res(''); r.readAsDataURL(b); });
+async function synthHtmlFor(r, fromBureau) {
+  const getThumb = fromBureau ? async p => { const e = B.files[p.id]; if (!e) return null; if (e.thumb) return await (await fetch(e.thumb)).blob(); return await makeThumb(e.file, p.type === 'video'); }
+    : p => DB.get('thumbs', p.id).catch(() => null);
+  const photos = [...r.photos].sort((a, b) => a.n - b.n); const th = {};
+  for (const p of photos) { try { const b = await getThumb(p); if (b) th[p.id] = await toDataUrl(b); } catch (e) {} }
+  const planData = {}; for (const pl of [...new Set(photos.filter(p => p.pt).map(p => p.pt.n))]) { try { const res = await fetch(PLANS[pl].f); if (res.ok) planData[pl] = await toDataUrl(await res.blob()); } catch (e) {} }
+  return syntheseHtml(r, photos, th, planData);
+}
 async function genSynthese() {
   let r, getThumb;
   if (X.src === 'bureau') { r = B.rel; getThumb = async p => { const e = B.files[p.id]; if (!e) return null; if (e.thumb) return await (await fetch(e.thumb)).blob(); return await makeThumb(e.file, p.type === 'video'); }; }
@@ -649,10 +672,11 @@ async function genSynthese() {
 }
 function syntheseHtml(r, photos, th, planData) {
   const v = r.visite; const groups = groupByZone(photos);
-  const zg = groups.filter(g => g.k !== '~todo'); const todo = groups.find(g => g.k === '~todo');
+  const zg = groups; const todo = null;
   const alUsed = ALEAS.filter(([k]) => photos.some(p => p.al.includes(k)));
   const eqAll = new Map(); photos.forEach(p => p.eqs.forEach(e => eqAll.set(e, (eqAll.get(e) || 0) + 1)));
-  const attention = photos.filter(p => p.star || p.ef === 'agg');
+  const attention = photos.filter(p => p.star);
+  const byEf = {agg:photos.filter(p => p.ef === 'agg'), att:photos.filter(p => p.ef === 'att'), eva:photos.filter(p => p.ef === 'eva')};
   const pill = k => `<span class="al" style="--c:${AL_COL[k] || '#555'}">${esc(alLabel(k))}</span>`;
   const efPill = k => k ? `<span class="ef" style="--c:${EF_COL[k]}">${k === 'agg' ? '▲ ' : k === 'att' ? '▼ ' : '? '}${esc(efLabel(k))}</span>` : '';
   const imp = n => { const e = eqInfo(n); if (!e) return '<span class="imp imp1">hors matrice</span>'; const m = Math.max(...e.l), nTE = e.l.filter(x => x === 4).length;
@@ -672,24 +696,25 @@ function syntheseHtml(r, photos, th, planData) {
     const sc = crop ? 0.75 : 1.25;
     const marks = [...grp.values()].map(xs => { const p0 = xs[0]; const cx = p0.pt.x * PLAN_W, cy = p0.pt.y * PLAN_H;
       const lab = xs.length === 1 ? String(p0.n) : xs[0].n + '–' + xs[xs.length - 1].n; const w = Math.max(46, lab.length * 15 + 18) * sc, h = 46 * sc;
-      const hot = xs.some(p => p.ef === 'agg' || p.star);
+      const ef = xs.some(p => p.ef === 'agg') ? 'agg' : xs.some(p => p.ef === 'att') ? 'att' : xs.some(p => p.ef === 'eva') ? 'eva' : ''; const st = xs.some(p => p.star);
       const arrows = xs.filter(p => p.pt.dir != null).map(p => { const d = p.pt.dir * Math.PI / 180, L = 95 * sc;
         return `<line x1="${cx}" y1="${cy}" x2="${(cx + L * Math.cos(d)).toFixed(1)}" y2="${(cy + L * Math.sin(d)).toFixed(1)}" stroke="#C8102E" stroke-width="${8 * sc}" marker-end="url(#ar)"/>`; }).join('');
-      return `<a href="#p${p0.n}"><g>${arrows}<rect x="${cx - w / 2}" y="${cy - h / 2}" width="${w}" height="${h}" rx="${h / 2}" fill="${hot ? '#C8102E' : '#1A1A1A'}" stroke="#fff" stroke-width="${5 * sc}"/>
+      return `<a href="#p${p0.n}"><g>${arrows}<rect x="${cx - w / 2}" y="${cy - h / 2}" width="${w}" height="${h}" rx="${h / 2}" fill="${ef ? EF_COL[ef] : '#1A1A1A'}" stroke="${st ? '#F2B705' : '#fff'}" stroke-width="${(st ? 8 : 5) * sc}"/>
         <text x="${cx}" y="${cy + 9 * sc}" text-anchor="middle" font-size="${26 * sc}" font-weight="800" fill="#fff">${lab}</text></g></a>`; }).join('');
     return `<svg class="map" viewBox="${vb}" preserveAspectRatio="xMidYMid meet"><use href="#plan-${pl}"/>${marks}</svg>`;
   };
-  const card = p => `<figure id="p${p.n}" class="${p.star || p.ef === 'agg' ? 'hot' : ''}">${img(p)}
+  const card = p => `<figure id="p${p.n}" class="${p.ef ? 'ef-' + p.ef : ''} ${p.star ? 'st' : ''}">${img(p)}
     <figcaption><div class="cap1"><b>n°${p.n}</b><span>${hm(p.t)}</span>${p.type === 'video' ? '<span>🎬 vidéo</span>' : ''}${p.star ? '<span class="star">★</span>' : ''}${p.pt ? '<span>📍</span>' : ''}</div>
     <div class="eqs">${p.eqs.length ? p.eqs.map(esc).join(' · ') : '<i>Vue générale</i>'}</div>
-    ${p.al.length || p.ef ? `<div class="tags">${p.al.map(pill).join('')}${efPill(p.ef)}</div>` : ''}${p.note ? `<div class="note">${esc(p.note)}</div>` : ''}</figcaption></figure>`;
-  const pick = items => { if (X.all) return items; const pri = items.filter(p => p.star || p.ef === 'agg' || p.note); const rest = items.filter(p => !pri.includes(p)); return [...pri, ...rest].slice(0, Math.max(8, pri.length)).sort((a, b) => a.n - b.n); };
+    ${p.al.length ? `<div class="tags"><span class="tl">Aléa</span>${p.al.map(pill).join('')}</div>` : ''}${p.ef ? `<div class="tags"><span class="tl">Effet</span>${efPill(p.ef)}</div>` : ''}${p.note ? `<div class="note">${esc(p.note)}</div>` : ''}</figcaption></figure>`;
+  const pick = items => { if (X.all) return items; const pri = items.filter(p => p.star || p.ef || p.note); const rest = items.filter(p => !pri.includes(p)); return [...pri, ...rest].slice(0, Math.max(8, pri.length)).sort((a, b) => a.n - b.n); };
   /* --- matrice zones × aléas --- */
   const matrix = alUsed.length ? `<table class="mx"><thead><tr><th>Zone</th>${alUsed.map(([k]) => `<th>${pill(k)}</th>`).join('')}</tr></thead><tbody>
     ${zg.map(g => `<tr><td><a href="#z${zNum(g)}"><b>${zNum(g)}</b> ${esc(g.zone || 'Sans zone')}</a></td>${alUsed.map(([k]) => { const ps = g.items.filter(p => p.al.includes(k));
-      if (!ps.length) return '<td></td>'; const ef = ps.some(p => p.ef === 'agg') ? 'agg' : ps.some(p => p.ef === 'eva') ? 'eva' : ps.some(p => p.ef === 'att') ? 'att' : '';
-      return `<td class="c" style="--c:${AL_COL[k]}">${ps.length}${ef ? `<span class="mk" style="color:${EF_COL[ef]}">${ef === 'agg' ? '▲' : ef === 'att' ? '▼' : '?'}</span>` : ''}</td>`; }).join('')}</tr>`).join('')}
-    </tbody></table><p class="leg">Chiffre = nombre de photos. <span style="color:#C8102E">▲ aggravant</span> · <span style="color:#1D5E3A">▼ atténuant</span> · <span style="color:#C77800">? à évaluer</span></p>`
+      if (!ps.length) return '<td></td>'; const n = k2 => ps.filter(p => p.ef === k2).length;
+      const det = [['agg', '▲'], ['att', '▼'], ['eva', '?']].filter(([k2]) => n(k2)).map(([k2, s]) => `<span class="mk" style="color:${EF_COL[k2]}">${n(k2)}${s}</span>`).join('');
+      return `<td class="c" style="--c:${AL_COL[k]}"><b>${ps.length}</b>${det ? `<div class="det">${det}</div>` : ''}</td>`; }).join('')}</tr>`).join('')}
+    </tbody></table><p class="leg">Gros chiffre = nombre de photos concernées par l'aléa · en dessous, leur effet : <span style="color:#C8102E">▲ aggravant</span> · <span style="color:#1D5E3A">▼ atténuant</span> · <span style="color:#C77800">? à évaluer</span></p>`
     : '<p class="mute">Aucun aléa renseigné sur les photos.</p>';
   const zoneSec = g => { const n = zNum(g); const items = g.items; const pts = items.filter(p => p.pt);
     const eqs = new Map(); items.forEach(p => p.eqs.forEach(e => eqs.set(e, (eqs.get(e) || 0) + 1)));
@@ -725,7 +750,7 @@ h2{font-size:19px;margin:0 0 10px;font-weight:800}h3{font-size:12px;text-transfo
 .imp{font-size:10.5px;font-weight:700;border-radius:5px;padding:1px 6px;white-space:nowrap}.imp4{background:#FBEAEC;color:#9E0B24}.imp3{background:#FDEBD7;color:#A5591A}.imp2{background:#EEF0D6;color:#6A6A1D}.imp1{background:#EEF1F4;color:#55606B}
 .mx{border-collapse:collapse;width:100%;background:#fff;font-size:12.5px}.mx th,.mx td{border:1px solid var(--bd);padding:6px 8px;text-align:center}.mx td:first-child,.mx th:first-child{text-align:left}
 .mx td.c{background:color-mix(in srgb,var(--c) 18%,#fff);font-weight:800;color:var(--c)}.mx .mk{margin-left:4px;font-size:11px}.mx a{text-decoration:none}.leg{font-size:11.5px;color:var(--taupe)}
-.att{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}.att a{display:flex;gap:10px;background:#fff;border:1px solid var(--bd);border-left:4px solid var(--red);border-radius:9px;padding:8px;text-decoration:none}
+.att{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}.att a{display:flex;gap:10px;background:#fff;border:1px solid var(--bd);border-left:4px solid #F2B705;border-radius:9px;padding:8px;text-decoration:none}
 .att img,.att .noimg{width:86px;height:64px;object-fit:cover;border-radius:6px;flex:0 0 auto}.att .t{font-size:12px}
 .map{width:100%;height:auto;display:block;background:#fff;border:1px solid var(--bd);border-radius:8px}.cap{font-size:11px;color:var(--taupe);margin-top:4px}
 .zone{background:var(--pl);border:1px solid var(--bd);border-radius:12px;padding:16px 18px;margin-bottom:18px}
@@ -735,7 +760,12 @@ h2{font-size:19px;margin:0 0 10px;font-weight:800}h3{font-size:12px;text-transfo
 .eql{list-style:none;margin:0;padding:0}.eql li{display:flex;gap:8px;align-items:center;padding:5px 0;border-bottom:1px solid var(--bd)}.eql li span:first-child{flex:1;font-weight:600}.eql em{font-style:normal;color:var(--taupe);font-size:12px}
 .nl{margin:0;padding-left:18px}.nl li{margin:4px 0}
 .g{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}
-figure{margin:0;background:#fff;border:1px solid var(--bd);border-radius:9px;overflow:hidden}figure.hot{border:2px solid var(--red)}figure:target{outline:3px solid var(--red);outline-offset:2px}
+figure{margin:0;background:#fff;border:1px solid var(--bd);border-radius:9px;overflow:hidden}figure.ef-agg{border:2px solid #C8102E}figure.ef-att{border:2px solid #1D5E3A}figure.ef-eva{border:2px solid #C77800}figure.st{box-shadow:0 0 0 3px #F2B705}
+.tl{display:inline-block;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--taupe);width:38px}
+.mx td.c b{font-size:15px}.mx .det{font-size:11px;margin-top:2px}.mx .det .mk{margin:0 3px}.kpi .g2 b{color:#1D5E3A}
+.fv{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.fvc{border-top:4px solid var(--c);background:#fff;border-radius:8px;padding:8px 10px}.fvc h3{color:var(--c);margin:2px 0 8px;font-size:13px}.fvc h3 span{float:right}
+.fvc a{display:flex;gap:8px;text-decoration:none;padding:6px 0;border-top:1px solid var(--bd);font-size:12px}.fvc img,.fvc .noimg{width:72px;height:54px;object-fit:cover;border-radius:5px;flex:0 0 auto}
+@media (max-width:760px){.fv{grid-template-columns:1fr}}figure:target{outline:3px solid var(--red);outline-offset:2px}
 figure img,.noimg{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:#E6E0CF}.noimg{display:flex;align-items:center;justify-content:center;font-size:26px;color:var(--taupe)}
 figcaption{padding:6px 8px 8px;font-size:12px}.cap1{display:flex;gap:7px;color:var(--taupe)}.cap1 b{color:var(--ink)}.cap1 .star{color:#C77800}.eqs{font-weight:700;margin-top:2px}.tags{margin-top:3px}.note{margin-top:4px;color:var(--ink-soft,#3D3D3D)}
 .mute{color:var(--taupe)}.small{font-size:12px}.foot{color:var(--taupe);font-size:11px;text-align:center;padding:14px}
@@ -745,17 +775,78 @@ figcaption{padding:6px 8px 8px;font-size:12px}.cap1{display:flex;gap:7px;color:v
 <div class="cover">${logo}<div class="kick">Relevé photo de visite</div><h1>${esc(v.gare)}</h1>
 <div class="meta">Visite du ${new Date(v.debut).toLocaleDateString('fr-FR', {weekday:'long', day:'numeric', month:'long', year:'numeric'})} · ${hm(t0)}–${hm(t1)}${v.auteur ? ' · photos : ' + esc(v.auteur) : ''}</div>
 <div class="kpi"><div><b>${photos.length}</b><span>prises</span></div><div><b>${zg.length}</b><span>zones</span></div><div><b>${eqAll.size}</b><span>équipements distincts</span></div>
-<div><b>${photos.filter(p => p.pt).length}</b><span>pointées sur plan</span></div><div class="r"><b>${attention.length}</b><span>points d'attention</span></div>${todo ? `<div><b>${todo.items.length}</b><span>non classées</span></div>` : ''}</div>
+<div><b>${photos.filter(p => p.pt).length}</b><span>pointées sur plan</span></div><div class="r"><b>${byEf.agg.length}</b><span>▲ aggravants</span></div><div class="g2"><b>${byEf.att.length}</b><span>▼ atténuants</span></div><div><b>${attention.length}</b><span>★ importantes</span></div>${todo ? `<div><b>${todo.items.length}</b><span>non classées</span></div>` : ''}</div>
 ${alUsed.length ? `<h3 style="margin-top:18px">Aléas relevés</h3><div>${alUsed.map(([k]) => `${pill(k)}<span class="small mute" style="margin-right:10px">${photos.filter(p => p.al.includes(k)).length}</span>`).join('')}</div>` : ''}</div>
 <div class="block"><h2>Aléas par zone</h2>${matrix}</div>
-${attention.length ? `<div class="block"><h2>Points d'attention <span class="small mute">(★ important ou aggravant)</span></h2><div class="att">${attention.map(p => `<a href="#p${p.n}">${img(p)}<div class="t"><b>n°${p.n}</b> · ${esc(p.zone || '—')}<br><b>${esc(p.eqs.join(' · ') || 'Vue générale')}</b><br>${p.al.map(pill).join('')}${efPill(p.ef)}${p.note ? '<br>' + esc(p.note) : ''}</div></a>`).join('')}</div></div>` : ''}
-${Object.keys(planData).map(pl => `<div class="block pl"><h2>${esc(PLANS[pl].t)} <span class="small mute">— ${photos.filter(p => p.pt && p.pt.n === pl).length} prises pointées</span></h2>${mapSvg(pl, photos.filter(p => p.pt && p.pt.n === pl), false)}<div class="cap">Numéro = n° de photo (clic = aller à la photo) · rouge = point d'attention · flèche = direction de prise de vue</div></div>`).join('')}
+${byEf.agg.length + byEf.att.length + byEf.eva.length ? `<div class="block"><h2>Facteurs de vulnérabilité</h2><div class="fv">${[['agg', '▲ Facteurs aggravants'], ['att', '▼ Facteurs atténuants'], ['eva', '? Impacts à évaluer']].map(([k, lb]) => `<div class="fvc" style="--c:${EF_COL[k]}"><h3>${lb} <span>${byEf[k].length}</span></h3>${byEf[k].length ? byEf[k].map(p => `<a href="#p${p.n}">${img(p)}<div><b>n°${p.n}</b> · ${esc(p.zone || 'Sans zone')}<br><b>${esc(p.eqs.join(' · ') || 'Vue générale')}</b>${p.al.length ? '<br>' + p.al.map(pill).join('') : ''}${p.note ? '<br>' + esc(p.note) : ''}</div></a>`).join('') : '<p class="mute small">Aucun.</p>'}</div>`).join('')}</div></div>` : ''}
+${attention.length ? `<div class="block"><h2>★ Photos importantes</h2><div class="att">${attention.map(p => `<a href="#p${p.n}">${img(p)}<div class="t"><b>n°${p.n}</b> · ${esc(p.zone || '—')}<br><b>${esc(p.eqs.join(' · ') || 'Vue générale')}</b><br>${p.al.map(pill).join('')}${efPill(p.ef)}${p.note ? '<br>' + esc(p.note) : ''}</div></a>`).join('')}</div></div>` : ''}
+${Object.keys(planData).map(pl => `<div class="block pl"><h2>${esc(PLANS[pl].t)} <span class="small mute">— ${photos.filter(p => p.pt && p.pt.n === pl).length} prises pointées</span></h2>${mapSvg(pl, photos.filter(p => p.pt && p.pt.n === pl), false)}<div class="cap">Numéro = n° de photo (clic = aller à la photo) · couleur = effet : <b style="color:#C8102E">▲ aggravant</b>, <b style="color:#1D5E3A">▼ atténuant</b>, <b style="color:#C77800">? à évaluer</b>, noir = sans effet · contour doré = ★ · flèche = direction de prise de vue</div></div>`).join('')}
 ${zg.map(zoneSec).join('')}
 ${todo ? `<section class="zone" id="ztodo"><div class="zh"><span class="zn" style="background:#8B8680">?</span><div><h2>Non classées</h2><div class="sub">${todo.items.length} prises à ranger</div></div></div><div class="g">${todo.items.map(card).join('')}</div></section>` : ''}
 <div class="foot">Généré par GARÉo Photo ${esc(VERSION)} le ${new Date().toLocaleString('fr-FR')} · nomenclature équipements : matrice de risques SNCF G&C</div>
 </div></body></html>`;
 }
 
+/* =====================================================================
+   ZIP CLASSÉ (sans compression : les photos le sont déjà) — écrit en flux,
+   les photos ne sont pas chargées en mémoire. Découpé en parties de 3,5 Go max.
+   ===================================================================== */
+const CRC_T = (() => { const t = new Uint32Array(256); for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
+async function crcBlob(b) { let c = 0xFFFFFFFF; const rd = b.stream().getReader();
+  for (;;) { const {done, value} = await rd.read(); if (done) break; for (let i = 0; i < value.length; i++) c = CRC_T[(c ^ value[i]) & 0xFF] ^ (c >>> 8); }
+  return (c ^ 0xFFFFFFFF) >>> 0; }
+function dosTime(t) { const d = new Date(t); return {time:(d.getHours() << 11) | (d.getMinutes() << 5) | (d.getSeconds() >> 1), date:((d.getFullYear() - 1980) << 9) | ((d.getMonth() + 1) << 5) | d.getDate()}; }
+function zipWriter() {
+  const parts = [], cd = []; let off = 0;
+  return {
+    get size() { return off; },
+    async add(path, blob, t) {
+      const name = new TextEncoder().encode(path), crc = await crcBlob(blob), sz = blob.size, {time, date} = dosTime(t || Date.now());
+      const h = new DataView(new ArrayBuffer(30));
+      h.setUint32(0, 0x04034b50, true); h.setUint16(4, 20, true); h.setUint16(6, 0x0800, true); h.setUint16(8, 0, true); h.setUint16(10, time, true); h.setUint16(12, date, true);
+      h.setUint32(14, crc, true); h.setUint32(18, sz, true); h.setUint32(22, sz, true); h.setUint16(26, name.length, true); h.setUint16(28, 0, true);
+      parts.push(h.buffer, name, blob);
+      const c = new DataView(new ArrayBuffer(46));
+      c.setUint32(0, 0x02014b50, true); c.setUint16(4, 20, true); c.setUint16(6, 20, true); c.setUint16(8, 0x0800, true); c.setUint16(10, 0, true); c.setUint16(12, time, true); c.setUint16(14, date, true);
+      c.setUint32(16, crc, true); c.setUint32(20, sz, true); c.setUint32(24, sz, true); c.setUint16(28, name.length, true); c.setUint32(42, off, true);
+      cd.push(c.buffer, name); off += 30 + name.length + sz;
+    },
+    finish() { const cdSize = cd.reduce((s, x) => s + x.byteLength, 0); const n = cd.length / 2;
+      const e = new DataView(new ArrayBuffer(22)); e.setUint32(0, 0x06054b50, true); e.setUint16(8, n, true); e.setUint16(10, n, true); e.setUint32(12, cdSize, true); e.setUint32(16, off, true);
+      return new Blob([...parts, ...cd, e.buffer], {type:'application/zip'}); }
+  };
+}
+/* Liste des fichiers à écrire, rangés zone / équipement — partagée par le ZIP et le dossier trié */
+function plan_rangement(r) {
+  const v = r.visite; const groups = groupByZone(r.photos); const out = [];
+  groups.forEach((g, gi) => { const zdir = pad(gi + 1) + '_' + ascii(g.niv) + '_' + short(g.zone || 'sans-zone', 48);
+    g.items.forEach(p => { const dir = zdir + '/' + (p.eqs.length ? short(p.eqs[0], 48) : '_Vues-generales'); out.push({p, dir, fname:fileName(p, v), zdir}); }); });
+  return {groups, out};
+}
+async function zipExport() {
+  let r, getFile;
+  if (X.src === 'bureau') { r = B.rel; getFile = async p => B.files[p.id] ? B.files[p.id].file : null; }
+  else { r = JSON.parse(JSON.stringify(relevePayload(S.visites[X.src]))); getFile = async p => { const b = await DB.get('blobs', p.id).catch(() => null); return b || null; }; }
+  const v = r.visite; const root = `${v.code}_${ymd(v.debut)}_releve-photo`; const {out} = plan_rangement(r);
+  const LIM = 3.5e9; let part = 1, zw = zipWriter(), miss = 0; const made = [];
+  const flush = last => { const b = zw.finish(); const nm = `${root}${part > 1 || !last ? '_partie' + part : ''}.zip`; download(nm, b); made.push({nm, size:b.size}); part++; zw = zipWriter(); };
+  X.busy = {lb:'ZIP : ajout des photos…', done:0, total:out.length}; render();
+  const rows = [];
+  for (const e of out) {
+    const f = await getFile(e.p);
+    if (f) { if (zw.size + f.size > LIM && zw.size > 0) flush(false); await zw.add(`${root}/${e.dir}/${e.fname}`, f, e.p.t); }
+    else miss++;
+    rows.push(rowOf(e.p, v, {fname: f ? e.fname : '(manquant)', dir:e.dir}));
+    X.busy.done++; if (X.busy.done % 5 === 0) render();
+  }
+  await zw.add(`${root}/${v.code}_inventaire_photos.csv`, new Blob([csv(rows)], {type:'text/csv'}));
+  await zw.add(`${root}/${v.code}_releve.json`, new Blob([JSON.stringify(r, null, 1)], {type:'application/json'}));
+  if (X.zipSyn) { X.busy = {lb:'ZIP : synthèse…', done:0, total:1}; render();
+    const html = await synthHtmlFor(r, X.src === 'bureau'); await zw.add(`${root}/${v.code}_synthese.html`, new Blob([html], {type:'text/html'})); }
+  flush(true); X.busy = null;
+  X.zipLog = `✔ ${made.map(m => `<b>${esc(m.nm)}</b> (${(m.size / 1e6).toFixed(0)} Mo)`).join(', ')} téléchargé${made.length > 1 ? 's' : ''} : un dossier par zone puis par équipement, inventaire Excel, relevé${X.zipSyn ? ', synthèse' : ''}.${miss ? ` <b style="color:var(--red)">${miss} fichier(s) introuvable(s)</b>.` : ''}`;
+  render();
+}
 /* ---------- Lecture EXIF / vidéo ---------- */
 function exifTime(dto, off) {
   const p = dto.match(/(\d{4}):(\d\d):(\d\d) (\d\d):(\d\d):(\d\d)/); if (!p) return null;
@@ -820,13 +911,13 @@ function viewAide() {
   return `<div class="card help"><h2>Comment ça marche</h2>
   <ol><li><b>📷 Photo</b> ouvre l'appareil photo. Après la prise, la <b>fiche</b> s'ouvre : tu touches le plan où tu es (1er appui) puis vers où tu regardes (2e appui ; un 3e appui replace le point), tu tapes la zone, tu ajoutes un ou plusieurs équipements, aléas, note.</li>
   <li>La fiche reprend le lieu et les équipements de la photo précédente : souvent il suffit d'appuyer sur <b>✓ + 📷 suivante</b>.</li>
-  <li>Pressé ? Enregistre sans rien remplir, la photo reste « à classer » et tu la ranges plus tard (filtre « À classer »).</li>
-  <li>Chaque photo est gardée <b>dans l'appli</b> et, à l'enregistrement, une <b>copie nommée</b> part dans <b>Téléchargements</b> (ex. <code>PAZ_0012_094210_N0_GHV_Abris-de-quais.jpg</code>).</li>
+  <li>Pressé ? Ferme la fiche sans rien remplir : la photo est gardée, tu la complètes plus tard en la touchant dans la liste.</li>
+  <li>Chaque photo est gardée <b>dans l'appli</b> et, dès la prise, une <b>copie de secours</b> part dans <b>Téléchargements</b> (ex. <code>PAZ_0012_094210.jpg</code>). Les noms complets (zone, équipement) sont donnés dans le ZIP.</li>
   <li>Fin de visite : <b>💾 Exporter le relevé</b> → un .json + un .csv dans Téléchargements. Onglet <b>Export</b> : la <b>synthèse</b> prête à l'emploi (aléas, plans, fiches par zone), à imprimer en PDF.</li>
-  <li>Au bureau : câble USB, copie le dossier <code>Download</code> du téléphone, ouvre cette page sur PC (Chrome/Edge), onglet <b>Bureau</b> : relevé .json + fichiers → <b>Exporter le dossier trié</b> (dossiers par zone/équipement, Excel, planche avec les photos numérotées sur le plan).</li></ol>
+  <li><b>Récupérer tout, rangé</b> : onglet <b>Export → 📦 ZIP classé</b>, directement depuis le téléphone (dossiers par zone puis par équipement, Excel, synthèse). Ou au bureau : copie le dossier <code>Download</code> du téléphone, onglet <b>Bureau</b> (relevé .json + fichiers), puis ZIP.</li></ol>
   <h3>Ce soir</h3><ul><li>Ouvrir la page avec du réseau, menu ⋮ → <b>Ajouter à l'écran d'accueil</b>.</li>
   <li>Autoriser la localisation et l'appareil photo quand c'est demandé.</li>
-  <li>Test : 3 photos + 1 vidéo, les classer, vérifier les copies dans Téléchargements (appli Fichiers), Exporter le relevé.</li>
+  <li>Test : 3 photos + 1 vidéo, remplir les fiches, vérifier les copies dans Téléchargements (appli Fichiers), Exporter le relevé.</li>
   <li>Batterie externe, 10 Go libres minimum (les vidéos prennent ~100 Mo/min, et elles sont stockées 2 fois : appli + Téléchargements).</li></ul>
   <h3>Les photos utiles (ACC)</h3><ul>
   <li>En entrant dans un espace : la porte / plaque du local ou le <b>plan d'évacuation « vous êtes ici »</b>.</li>
@@ -837,7 +928,7 @@ function viewAide() {
   <li>Toitures / vent : éléments en toiture, fixations, marquises, chéneaux, descentes EP.</li>
   <li>Désordres : fissures, infiltrations, corrosion — 1 large + 1 serrée.</li>
   <li>Demande avant de photographier un agent, un écran de supervision ou un document.</li></ul>
-  <h3>Réglages</h3><label class="row"><input type="checkbox" id="cDl" ${S.prefs.dlCopy ? 'checked' : ''}> Copier chaque photo enregistrée dans Téléchargements (recommandé)</label>
+  <h3>Réglages</h3><label class="row"><input type="checkbox" id="cDl" ${S.prefs.dlCopy ? 'checked' : ''}> Copie de secours de chaque photo dans Téléchargements dès la prise (recommandé)</label>
   <p class="small mute">Version ${esc(VERSION)}</p></div>`;
 }
 
@@ -857,7 +948,7 @@ document.addEventListener('click', async ev => {
     case 'imp': $('#imp').click(); break;
     case 'filtre': UI.filtre = el.dataset.v; render(); break;
     case 'openFiche': openFiche(el.dataset.id); break;
-    case 'closeFiche': { if (p) { const z = $('#fZone'), n = $('#fNote'); if (z) p.zone = z.value.trim(); if (n) p.note = n.value.trim(); save(); } closeOv(); break; }
+    case 'closeFiche': { if (p) commitFiche(p); closeOv(); break; }
     case 'full': { if (!p) break; const b = await DB.get('blobs', p.id).catch(() => null); if (!b) { toast('Fichier non disponible'); break; }
       const u = URL.createObjectURL(b); const d = document.createElement('div'); d.className = 'full';
       d.innerHTML = (p.type === 'video' ? `<video src="${u}" controls autoplay playsinline></video>` : `<img src="${u}">`) + '<button>Fermer</button>';
@@ -879,14 +970,15 @@ document.addEventListener('click', async ev => {
     case 'ef': p.ef = p.ef === el.dataset.v ? '' : el.dataset.v; save(); renderTags(p); break;
     case 'star': p.star = !p.star; save(); renderTags(p); break;
     case 'clearAll': p.zone = ''; p.pt = null; p.eqs = []; p.al = []; p.ef = ''; p.star = false; save(); renderOv(); break;
-    case 'saveFiche': case 'saveNext': { commitFiche(p); if (S.prefs.dlCopy) await dlCopy(p); closeOv(); if (a === 'saveNext') $('#capP').click(); else toast('✔ ' + p.id + ' enregistrée'); break; }
+    case 'saveFiche': case 'saveNext': { commitFiche(p); closeOv(); if (a === 'saveNext') $('#capP').click(); else toast('✔ ' + p.id + ' enregistrée'); break; }
     case 'delPhoto': { if (!confirm('Supprimer ' + p.id + ' de l\'appli ?')) break; const v = V(); v.photos = v.photos.filter(x => x.id !== p.id); save(); DB.del('blobs', p.id).catch(() => {}); DB.del('thumbs', p.id).catch(() => {}); closeOv(); break; }
-    case 'dlMissing': { const v = V(); for (const q of v.photos.filter(x => x.done && !x.dl)) { await dlCopy(q); await new Promise(r => setTimeout(r, 400)); } render(); break; }
+    case 'dlMissing': { const v = V(); for (const q of v.photos.filter(x => !x.dl)) { await dlCopy(q); await new Promise(r => setTimeout(r, 400)); } render(); break; }
     case 'exportRel': exportReleve(); toast('Relevé exporté dans Téléchargements'); break;
     case 'shareRel': shareReleve(); break;
-    case 'end': { const v = V(); const todo = v.photos.filter(x => !x.done).length;
-      if (!confirm((todo ? todo + ' photo(s) encore à classer (tu pourras les classer plus tard).\n' : '') + 'Terminer la visite ? Le relevé sera exporté dans Téléchargements.')) break;
+    case 'end': { const v = V();
+      if (!confirm('Terminer la visite ? Le relevé (.json + .csv) sera exporté dans Téléchargements. Tu pourras encore modifier les fiches et faire le ZIP depuis l\'onglet Export.')) break;
       v.fin = Date.now(); exportReleve(v); S.current = null; save(); render(); break; }
+    case 'zip': try { await zipExport(); } catch (e) { console.error(e); X.busy = null; toast('Erreur ZIP : ' + e.message, 'err'); render(); } break;
     case 'synth': try { await genSynthese(); } catch (e) { console.error(e); X.busy = null; toast('Erreur : ' + e.message, 'err'); render(); } break;
     case 'xRel': exportReleve(S.visites[X.src]); toast('Relevé exporté dans Téléchargements'); break;
     case 'xDl': { const v = S.visites[X.src]; for (const q of v.photos.filter(x => !x.dl)) { await dlCopy(q); await new Promise(r => setTimeout(r, 400)); } render(); break; }
@@ -896,6 +988,7 @@ document.addEventListener('click', async ev => {
     case 'bReset': Object.assign(B, {rel:null, local:false, files:{}, unknown:[], log:null}); render(); break;
     case 'pickMedia': $('#fMedia').click(); break;
     case 'pickDir': $('#fDir').click(); break;
+    case 'goZip': UI.mode = 'export'; X.src = 'bureau'; localStorage.setItem('gareoPhoto.mode', 'export'); render(); break;
     case 'export': try { await doExport(); } catch (e) { console.error(e); B.log = {err:true, html:'Erreur pendant l\'export : ' + esc(e.message)}; render(); } break;
   }
 });
@@ -910,8 +1003,9 @@ document.addEventListener('change', ev => {
   const t = ev.target;
   if (t.id === 'capP' || t.id === 'capV' || t.id === 'imp') { const fs = [...t.files]; t.value = ''; onCapture(fs, t.id === 'imp' ? 'import' : t.id === 'capV' ? 'video' : 'camera'); }
   if (t.id === 'cDl') { S.prefs.dlCopy = t.checked; save(); }
-  if (t.id === 'xSrc') { X.src = t.value; X.last = null; render(); }
+  if (t.id === 'xSrc') { X.src = t.value; X.last = null; X.zipLog = null; render(); }
   if (t.id === 'xAll') { X.all = t.checked; }
+  if (t.id === 'xZipSyn') { X.zipSyn = t.checked; }
   if (t.id === 'fJson' && t.files[0]) { t.files[0].text().then(txt => { try { const j = JSON.parse(txt); if (!j.photos || !j.visite) throw 0; Object.assign(B, {rel:j, local:false, files:{}, unknown:[], log:null}); render(); }
     catch (e) { alert('Ce fichier n\'est pas un relevé GARÉo Photo.'); } t.value = ''; }); }
   if ((t.id === 'fMedia' || t.id === 'fDir') && t.files.length) { const fs = [...t.files]; t.value = ''; addFiles(fs); }
