@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1A1A1A">
+<title>GARÉo Photo</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" href="icon192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<style>
+:root{--navy:#1A1A1A;--ink:#1A1A1A;--mute:#8B8680;--line:#D9D3C4;--bg:#F5F2EB;--yel:#C8102E;--red:#C8102E;--grn:#1D5E3A;--org:#C77800;--blue:#2C7E9C;--paper:#FAF8F3;--tint:#FBEAEC}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.4 "Manrope",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+header{position:sticky;top:0;z-index:20;background:#1A1A1A;color:#fff;display:flex;align-items:center;gap:8px;padding:8px 10px;padding-top:calc(8px + env(safe-area-inset-top))}
+header .brand{font-weight:700;margin-right:auto;display:flex;align-items:center;gap:7px}
+header .glogo{height:30px;width:auto;display:block}
+header .bsub{font-weight:600;font-size:15px;opacity:.9}
+@media (max-width:460px){header .bsub,#hdrGare{display:none}.tabs button{padding:5px 8px;font-size:12.5px}header .glogo{height:26px}}
+header .brand small{font-weight:400;opacity:.7;margin-left:6px}
+.tabs button{background:transparent;border:1px solid rgba(255,255,255,.35);color:#fff;border-radius:999px;padding:5px 11px;font-size:13px}
+.tabs button.on{background:var(--red);color:#fff;border-color:var(--red);font-weight:700}
+main{max-width:1180px;margin:0 auto;padding:10px 10px 90px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px}
+h2{font-size:17px;margin:0 0 8px}
+h3{font-size:15px;margin:4px 0 8px}
+.mute{color:var(--mute)}.small{font-size:12.5px}
+.row{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.btn{border:1px solid var(--line);background:#fff;border-radius:10px;padding:10px 12px;min-height:44px;text-align:center;color:var(--ink)}
+.btn.big{min-height:64px;font-size:16px;font-weight:600}
+.btn.huge{min-height:96px;font-size:20px;font-weight:700}
+.btn.pri{background:var(--navy);color:#fff;border-color:var(--navy)}
+.btn.yel{background:var(--red);border-color:var(--red);color:#fff;font-weight:800}
+.btn.red{color:var(--red);border-color:var(--red)}
+.btn:disabled{opacity:.4}
+.chip{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 11px;font-size:13.5px;min-height:36px;color:var(--ink)}
+.chip.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.chip.att.on{background:var(--grn);border-color:var(--grn)}.chip.agg.on{background:var(--red);border-color:var(--red)}.chip.eva.on{background:var(--org);border-color:var(--org)}
+.chip.star.on{background:var(--org);color:#fff;border-color:var(--org)}
+.chip.sel{background:var(--tint);border-color:var(--red);color:var(--ink);font-weight:600}
+.chip .x{font-weight:700;opacity:.6;margin-left:2px}
+input[type=text],input[type=number],input[type=search],select,textarea{width:100%;border:1px solid var(--line);border-radius:9px;padding:10px;background:#fff;min-height:44px}
+textarea{min-height:70px;resize:vertical}
+label.f{display:block;font-size:12.5px;color:var(--mute);margin:10px 0 4px}
+.banner{background:#FAEFD9;border:1px solid #E8D3A8;border-radius:10px;padding:9px 11px;margin-bottom:10px;font-size:13.5px}
+.banner.ok{background:#e8f5ec;border-color:#b8dec5}.banner.err{background:#fde9e5;border-color:#f2b7ab}
+.imp{font-size:10.5px;font-weight:700;border-radius:5px;padding:1px 5px;white-space:nowrap}
+.imp4{background:#fbe1dc;color:#a8321f}.imp3{background:#fdebd7;color:#a5591a}.imp2{background:#eef0d6;color:#6a6a1d}.imp1{background:#eef1f4;color:#55606b}
+/* galerie */
+.gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:6px}
+.gal .it{position:relative;border-radius:9px;overflow:hidden;background:#dde2e8;border:2px solid transparent;cursor:pointer}
+.gal .it img,.gal .it .ph0{display:block;width:100%;aspect-ratio:1;object-fit:cover}
+.gal .it .ph0{display:flex;align-items:center;justify-content:center;font-size:28px;color:#fff;background:#2a3440}
+.gal .it .lb{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(transparent,rgba(0,0,0,.75));color:#fff;font-size:10.5px;padding:12px 5px 4px;line-height:1.15}
+.gal .it .bd{position:absolute;top:4px;left:4px;background:rgba(0,0,0,.6);color:#fff;font-size:10.5px;border-radius:5px;padding:1px 5px}
+.gal .it .todo{position:absolute;top:4px;right:4px;background:var(--org);color:#fff;font-size:10.5px;font-weight:700;border-radius:5px;padding:1px 5px}
+.gal .it.sel{border-color:var(--red)}
+/* overlay fiche */
+.ov{position:fixed;inset:0;z-index:50;background:var(--bg);display:flex;flex-direction:column}
+.ov .top{background:#1A1A1A;color:#fff;display:flex;align-items:center;gap:8px;padding:9px 10px;padding-top:calc(9px + env(safe-area-inset-top))}
+.ov .top b{margin-right:auto;font-size:15px;font-weight:800}
+.ov .top button{background:rgba(255,255,255,.15);border:0;color:#fff;border-radius:8px;padding:8px 11px}
+.ov .body{flex:1;overflow:auto;padding:10px}
+.ov .foot{padding:9px 10px;display:flex;gap:8px;background:#fff;border-top:1px solid var(--line);padding-bottom:calc(9px + env(safe-area-inset-bottom))}
+.ov .foot .btn{flex:1}
+.prev{display:flex;gap:10px;align-items:center;margin-bottom:10px}
+.prev img,.prev .ph0{width:112px;height:84px;object-fit:cover;border-radius:9px;background:#dde2e8;flex:0 0 auto}
+.prev .ph0{display:flex;align-items:center;justify-content:center;font-size:30px;background:#2a3440;color:#fff}
+.sec{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:10px;margin-bottom:10px}
+.nivtabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px}
+.nivtabs .chip{flex:0 0 auto}
+.planbox{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.planwrap{position:relative;overflow:auto;height:40vh;min-height:230px;background:#fff}
+.planwrap img{display:block;max-width:none;user-select:none;-webkit-user-drag:none}
+.pctl{display:flex;gap:6px;padding:6px;border-top:1px solid var(--line);background:#f8f9fb;align-items:center;flex-wrap:wrap}
+.pctl .chip{min-height:34px;padding:5px 10px}
+.pin{position:absolute;width:0;height:0;pointer-events:none}
+.pin i{position:absolute;left:-9px;top:-9px;width:18px;height:18px;border-radius:50%;background:var(--red);box-shadow:0 0 0 3px #fff,0 1px 6px rgba(0,0,0,.5)}
+.pin b{position:absolute;left:0;top:-2px;width:46px;height:4px;background:var(--red);transform-origin:0 50%;border-radius:2px;box-shadow:0 0 0 1px #fff}
+.pin b::after{content:"";position:absolute;right:-6px;top:-5px;border-left:10px solid var(--red);border-top:7px solid transparent;border-bottom:7px solid transparent}
+.dot{position:absolute;width:9px;height:9px;margin:-4.5px 0 0 -4.5px;border-radius:50%;background:var(--blue);opacity:.55;pointer-events:none;box-shadow:0 0 0 1px #fff}
+.full{position:fixed;inset:0;z-index:80;background:#000;display:flex;align-items:center;justify-content:center}
+.full img,.full video{max-width:100%;max-height:100%}
+.full button{position:absolute;top:calc(10px + env(safe-area-inset-top));right:10px;background:rgba(255,255,255,.2);color:#fff;border:0;border-radius:8px;padding:9px 13px}
+.ver{position:fixed;right:6px;bottom:4px;font-size:10.5px;color:var(--mute);z-index:5;background:rgba(245,242,235,.9);padding:1px 5px;border-radius:4px}
+.stat{display:inline-block;margin-right:14px}.stat b{font-size:18px}
+.prog{height:8px;background:#e3e7ec;border-radius:9px;overflow:hidden;margin-top:6px}.prog>div{height:100%;background:var(--navy);width:0}
+.zgrp{margin-bottom:12px}.zgrp h3{margin:10px 0 6px}
+.help li{margin:4px 0}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><svg class="glogo" role="img" aria-label="GARÉo" viewBox="0 28 352 130"><polyline points="-12,152 249.54,152 275.54,92.6" fill="none" stroke="#C8102E" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round"/><g stroke-width="6" stroke-linecap="round"><line x1="261.64" y1="68.52" x2="244.64" y2="39.08" stroke="#FF2A43"/><line x1="279.41" y1="65.07" x2="282.19" y2="45.27" stroke="#268A52"/><line x1="295.54" y1="73.29" x2="316.40" y2="53.14" stroke="#2C7E9C"/><line x1="303.07" y1="88.73" x2="342.68" y2="83.16" stroke="#FF2A43"/><line x1="299.62" y1="106.50" x2="319.53" y2="118.00" stroke="#268A52"/><line x1="285.05" y1="118.72" x2="296.33" y2="149.73" stroke="#2C7E9C"/></g><text x="8" y="122" font-family="Manrope,system-ui,sans-serif" font-weight="800" font-size="96" letter-spacing="-4.5" fill="#FAF8F3">GARÉ</text><circle cx="275.54" cy="92.6" r="23.8" fill="#C8102E"/><circle cx="275.54" cy="92.6" r="8.57" fill="#FAF8F3"/><circle cx="244.64" cy="39.08" r="4.5" fill="#FF2A43"/><circle cx="282.19" cy="45.27" r="4.5" fill="#268A52"/><circle cx="316.40" cy="53.14" r="4.5" fill="#2C7E9C"/><circle cx="342.68" cy="83.16" r="4.5" fill="#FF2A43"/><circle cx="319.53" cy="118.00" r="4.5" fill="#268A52"/><circle cx="296.33" cy="149.73" r="4.5" fill="#2C7E9C"/></svg><span class="bsub">Photo</span><small id="hdrGare"></small></div>
+  <div class="tabs row" id="tabs">
+    <button data-act="mode" data-v="terrain">Terrain</button>
+    <button data-act="mode" data-v="bureau">Bureau</button>
+    <button data-act="mode" data-v="export">Export</button>
+    <button data-act="mode" data-v="aide">Aide</button>
+  </div>
+</header>
+<main id="app"></main>
+<div id="ov"></div>
+<div class="ver" id="ver"></div>
+<input type="file" id="capP" accept="image/*" capture="environment" hidden>
+<input type="file" id="capV" accept="video/*" capture="environment" hidden>
+<input type="file" id="imp" accept="image/*,video/*" multiple hidden>
+<input type="file" id="fJson" accept=".json,application/json" hidden>
+<input type="file" id="fMedia" accept="image/*,video/*" multiple hidden>
+<input type="file" id="fDir" webkitdirectory multiple hidden>
+
+<script>
+'use strict';
+/* =====================================================================
+   GARÉo Photo — photo d'abord : on prend la photo, on la pointe sur le
+   plan, on la range (zone libre, équipements, aléas, note).
+   Fichier unique, aucune dépendance externe, fonctionne hors-ligne.
+   ===================================================================== */
+const VERSION = 'v2026-11-05 · 4';
+const STORE_KEY = 'gareoPhoto.v2';
+
+const EQUIP = [{"n": "Abri vélo", "l": [1, 2, 1, 3, 2], "d": "Abri / structure légère de stationnement et protection des vélos"}, {"n": "Abris de quais/marquise", "l": [3, 3, 2, 4, 1], "d": "Abris ou marquises protégeant les voyageurs sur les quais"}, {"n": "AEP (Adduction eau potable)", "l": [2, 2, 2, 4, 4], "d": "Réseau d’alimentation en eau potable de la gare (sanitaires, robinets, usages courants)"}, {"n": "Alimentation SNCF Réseau", "l": [3, 3, 4, 4, 3], "d": "Alimentation électrique dédiée aux équipements ferroviaires de SNCF Réseau en gare (signalisation, aiguillages, postes, etc.)"}, {"n": "Armoire de climatisation", "l": [1, 2, 3, 1, 1], "d": "Armoire de traitement d’air / climatisation alimentant principalement des locaux techniques ou équipements sensibles"}, {"n": "Armoire élévatique", "l": [3, 2, 2, 4, 1], "d": "Armoire de commande et de puissance des ascenseurs et escaliers mécaniques"}, {"n": "ART PMR", "l": [0, 2, 2, 4, 4], "d": "Dispositif d’aide et d’information dédié aux PMR"}, {"n": "ART/AMT/BLS (Automate de vente)", "l": [0, 2, 2, 4, 0], "d": "Automates de vente de titres de transport"}, {"n": "Ascenseur de service / Monte charge", "l": [1, 2, 3, 1, 1], "d": "Ascenseur dédié aux flux logistiques et manutention"}, {"n": "Ascenseur non secouru", "l": [3, 2, 1, 4, 1], "d": "Ascenseur voyageurs non intégré au dispositif d'évacuation"}, {"n": "Ascenseur secouru", "l": [4, 2, 1, 4, 1], "d": "Ascenseur intégré au dispositif d'évacuation de sécurité"}, {"n": "Assise quais", "l": [2, 1, 0, 4, 1], "d": "Sièges ou bancs installés sur les quais"}, {"n": "BAES", "l": [4, 0, 1, 1, 1], "d": "Blocs autonomes d'éclairage de sécurité"}, {"n": "Baie CFA", "l": [4, 3, 4, 1, 1], "d": "Baie courants faibles pour réseaux et systèmes numériques"}, {"n": "Baie Sono", "l": [4, 1, 2, 3, 1], "d": "Baie de diffusion sonore de sécurité et d'exploitation"}, {"n": "Baie Sono commerciale", "l": [0, 2, 2, 2, 0], "d": "Baie de diffusion sonore à usage commercial/confort"}, {"n": "Balise sonore", "l": [2, 0, 1, 2, 1], "d": "Balise d'orientation sonore pour déficients visuels"}, {"n": "Bandes détection à la canne", "l": [4, 0, 1, 3, 3], "d": "Bandes au sol détectables à la canne des malvoyants"}, {"n": "Bandes pododactiles", "l": [4, 0, 1, 3, 1], "d": "Bandes en relief d'alerte au sol (ex. bord de quai)"}, {"n": "Barrières et clôtures fixes", "l": [4, 2, 3, 1, 1], "d": "Clôtures rigides séparant zones publiques et zones dangereuses"}, {"n": "Barrières extérieurs levantes", "l": [4, 2, 3, 1, 1], "d": "Barrières motorisées de contrôle d'accès véhicules"}, {"n": "Borne d'appel d'urgence", "l": [4, 2, 1, 1, 1], "d": "Borne permettant aux usagers d'alerter en cas d'urgence"}, {"n": "Bureaux", "l": [1, 3, 4, 1, 4], "d": "Locaux administratifs et de travail"}, {"n": "Caméras", "l": [1, 1, 3, 1, 1], "d": "Caméras de vidéosurveillance générales"}, {"n": "Caméras ascenseurs", "l": [4, 1, 1, 3, 1], "d": "Caméras dédiées à la surveillance des cabines d'ascenseurs"}, {"n": "Caméras pour téléopération", "l": [1, 1, 3, 1, 1], "d": "Caméras nécessaires au pilotage à distance d'équipements"}, {"n": "Caméras vente billetterie", "l": [1, 1, 1, 3, 1], "d": "Caméras de surveillance zones de vente/guichets"}, {"n": "Centrale GTC/GTB", "l": [4, 4, 4, 4, 4], "d": "Système centralisé de gestion technique/énergétique du bâtiment"}, {"n": "Centrale SSI", "l": [4, 4, 1, 1, 1], "d": "Unité centrale du Système de Sécurité Incendie"}, {"n": "Chambre froide", "l": [1, 3, 3, 2, 1], "d": "Chambre à froid pour usages commerciaux/restauration"}, {"n": "Château d’eau", "l": [4, 3, 3, 3, 3], "d": "Ouvrage de stockage et de mise en pression de l'eau du site"}, {"n": "Chaudière et circuit d'eau chaude", "l": [1, 4, 1, 3, 3], "d": "Production et distribution d'eau chaude de chauffage"}, {"n": "Clim locaux techniques", "l": [1, 2, 4, 1, 1], "d": "Climatisation des locaux abritant des équipements sensibles"}, {"n": "Cœur de réseau télécoms", "l": [4, 4, 4, 4, 2], "d": "Noyau des infrastructures réseau et télécoms de la gare"}, {"n": "Désenfumage mécanique", "l": [4, 2, 1, 1, 1], "d": "Système motorisé d'extraction des fumées en cas d'incendie"}, {"n": "Désenfumage naturel", "l": [4, 2, 1, 1, 1], "d": "Trappes ou ouvrants pour évacuation naturelle des fumées"}, {"n": "Détecteur incendie", "l": [4, 1, 4, 1, 1], "d": "Capteurs de détection précoce de départ de feu"}, {"n": "Eau chaude sanitaire", "l": [1, 2, 1, 3, 3], "d": "Production d'ECS pour sanitaires et usages courants"}, {"n": "Eclairage", "l": [3, 1, 2, 4, 2], "d": "Éclairage général des espaces gare et accès"}, {"n": "Eclairage de sécurité sur source centrale", "l": [4, 1, 1, 1, 1], "d": "Éclairage de sécurité alimenté par une source centralisée"}, {"n": "Eclairage indispensable à l'ouverture d'un espace", "l": [1, 1, 4, 1, 1], "d": "Éclairage minimal réglementaire conditionnant l'ouverture au public"}, {"n": "Ecran TFT PMR", "l": [1, 2, 2, 3, 4], "d": "Écran d'information adapté aux besoins des PMR"}, {"n": "Ecrans TFT/TIM", "l": [1, 2, 2, 4, 1], "d": "Écrans d'information voyageurs (horaires, voies, messages)"}, {"n": "Emetteur de chaleur ERP", "l": [1, 2, 1, 3, 2], "d": "Radiateurs ou terminaux de chauffage en zones voyageurs"}, {"n": "Emetteur de chaleur ERT", "l": [1, 2, 1, 1, 4], "d": "Radiateurs ou terminaux de chauffage en zones techniques"}, {"n": "Ensemble local technique Transformateur", "l": [4, 4, 4, 4, 4], "d": "Local abritant le transformateur principal d'alimentation de la gare"}, {"n": "Ensemble local technique Transformateur de secours avec Source secours BT/HT", "l": [4, 4, 4, 4, 2], "d": "Local abritant transformateur et source électrique de secours"}, {"n": "Enveloppe", "l": [4, 4, 4, 3, 3], "d": "Façades, toitures, menuiseries, étanchéité du bâtiment"}, {"n": "Equipement ferroviaire réseau", "l": [4, 4, 4, 1, 1], "d": "Équipements d'infrastructure ferroviaire (signalisation, voie, aiguillage…)"}, {"n": "Equipement médical de premiers secours", "l": [4, 1, 1, 1, 1], "d": "\""}, {"n": "Escalier Mécanique", "l": [1, 4, 1, 3, 1], "d": "Escalier motorisé pour le transport de voyageurs"}, {"n": "Escalier Mécanique secouru", "l": [4, 4, 1, 3, 1], "d": "Escalier mécanique intégré aux cheminements de sécurité"}, {"n": "Espace commercial", "l": [1, 4, 3, 3, 1], "d": "Locaux dédiés aux commerces et services en gare"}, {"n": "Espace d'attente", "l": [1, 4, 3, 4, 1], "d": "Zones de salle d'attente et assises voyageurs"}, {"n": "Espace de circulation", "l": [2, 4, 3, 4, 1], "d": "Couloirs, halls et zones de déplacement voyageurs"}, {"n": "Extinction incendie par gaz argon", "l": [4, 3, 4, 1, 1], "d": "Système d'extinction automatisé par gaz en locaux sensibles"}, {"n": "Extinction incendie par sprinklage", "l": [4, 3, 4, 1, 1], "d": "Réseau de sprinklers automatiques contre l'incendie"}, {"n": "Fondation", "l": [4, 4, 4, 1, 1], "d": "Ouvrages de fondation du bâtiment ou de l'ouvrage"}, {"n": "Fontaine à eau", "l": [0, 2, 0, 4, 3], "d": "Fontaines de distribution d'eau potable aux usagers"}, {"n": "Groupe de production de froid", "l": [1, 3, 3, 1, 2], "d": "Production centralisée de froid pour la climatisation"}, {"n": "Haut-parleur", "l": [4, 2, 3, 3, 0], "d": "Diffuseurs sonores dans les espaces voyageurs et techniques"}, {"n": "Interphonie Ascenseur", "l": [4, 2, 1, 3, 1], "d": "Système d'appel et de communication en cabine d'ascenseur"}, {"n": "Interphonie CAB", "l": [1, 1, 2, 2, 1], "d": "Système d'interphonie intégré aux portillons automatiques de contrôle d'accès et de billettique"}, {"n": "Ligne CAB/PEC", "l": [1, 3, 4, 3, 1], "d": "Ligne de portillons de contrôle d'accès ou billettique"}, {"n": "Lignes de vie ou autres dispositifs fixes pour l'entretien", "l": [4, 1, 3, 1, 4], "d": "Dispositifs de protection contre les chutes pour interventions en hauteur"}, {"n": "Local technique", "l": [1, 4, 4, 1, 2], "d": "Local abritant des équipements techniques (élec, CVC, IT…)"}, {"n": "Ouvrage d'assainissement ou technique", "l": [2, 4, 2, 1, 4], "d": "Ouvrages de collecte et gestion des eaux usées/pluviales"}, {"n": "Panneaux photovoltaïques", "l": [1, 3, 3, 1, 4], "d": "Installation de production d'électricité solaire"}, {"n": "Panneaux solaires thermiques", "l": [1, 3, 3, 1, 4], "d": "Capteurs solaires pour production de chaleur ou d'ECS"}, {"n": "Paratonnerre", "l": [4, 3, 2, 1, 1], "d": "Dispositif de protection contre la foudre"}, {"n": "Parking", "l": [1, 3, 1, 4, 1], "d": "Parking voyageurs accolé à la gare"}, {"n": "Parking exploitants", "l": [1, 3, 4, 1, 3], "d": "Parking réservé aux personnels et prestataires"}, {"n": "Passage souterrain", "l": [1, 4, 4, 4, 0], "d": "Ouvrage souterrain pour accéder aux quais et aux espaces"}, {"n": "Passerelle", "l": [4, 4, 4, 4, 0], "d": "Ouvrage aérien piéton pour franchir les voies"}, {"n": "Petit ouvrage sous voie", "l": [1, 4, 2, 1, 1], "d": "Petit ouvrage (buse, dalot) traversant sous la voie ferrée"}, {"n": "Pneumatique", "l": [1, 3, 2, 1, 1], "d": "Réseau d'air comprimé pour automatismes et équipements"}, {"n": "Pompe de relevage", "l": [1, 3, 4, 1, 3], "d": "Pompe évacuant les eaux de locaux bas ou souterrains"}, {"n": "Ponts rails", "l": [4, 4, 4, 1, 1], "d": "Ponts supportant les voies ferrées"}, {"n": "Ponts route", "l": [4, 4, 4, 1, 1], "d": "Ponts routiers associés à la gare ou franchissant la voie"}, {"n": "Portail mécanique de secours téléopéré", "l": [4, 3, 3, 1, 1], "d": "Portail motorisé de secours commandable à distance"}, {"n": "Portes auto", "l": [1, 3, 3, 3, 1], "d": "Portes automatiques d'accès aux bâtiments et espaces"}, {"n": "Pupitre téléopération", "l": [4, 4, 4, 1, 2], "d": "Poste de commande et de supervision centralisé permettant à un opérateur (agent ou centre de téléopération) de contrôler et piloter à distan"}, {"n": "Quai", "l": [1, 4, 4, 4, 2], "d": "Plateforme voyageurs au bord des voies"}, {"n": "Réseaux de plomberies", "l": [1, 3, 4, 3, 3], "d": "Réseaux d'eau, évacuation et raccordements sanitaires"}, {"n": "Rideau mécanique", "l": [4, 2, 3, 1, 1], "d": "Rideau de fermeture manuel ou localement motorisé"}, {"n": "Rideau métallique téléopéré", "l": [4, 2, 3, 1, 1], "d": "Rideau métallique motorisé commandable à distance"}, {"n": "Sanitaire ERP", "l": [1, 3, 1, 4, 2], "d": "Sanitaires accessibles au public voyageurs"}, {"n": "Sanitaires ERT", "l": [1, 3, 1, 1, 4], "d": "Sanitaires pour personnels et zones techniques"}, {"n": "Sirène d'évacuation et diffuseur lumineux", "l": [4, 1, 1, 1, 1], "d": "Dispositifs sonores et visuels d'alarme générale"}, {"n": "Sirène évacuation", "l": [4, 1, 1, 1, 1], "d": "Dispositifs sonores d'alarme incendie et d'évacuation"}, {"n": "Source centrale de secours", "l": [4, 3, 4, 4, 1], "d": "Source électrique centralisée pour circuits de secours"}, {"n": "SSI - Diffuseurs lumineux", "l": [4, 1, 1, 1, 1], "d": "Diffuseurs lumineux contrôlés par le SSI"}, {"n": "Structure", "l": [4, 4, 4, 1, 1], "d": "Ossature porteuse du bâtiment ou de l'ouvrage"}, {"n": "Tableau Divisionnaire", "l": [4, 2, 3, 3, 1], "d": "Tableau électrique distribuant l'électricité à une zone ou un usage"}, {"n": "Tableau divisionnaire de bâtiment", "l": [4, 2, 4, 4, 2], "d": "Tableau électrique dédié à un bâtiment ou une entité"}, {"n": "Tableau Général Secouru", "l": [4, 2, 4, 4, 2], "d": "Tableau alimentant les circuits électriques secourus"}, {"n": "Tarif Jaune/bleu", "l": [4, 3, 4, 4, 1], "d": "Point de livraison électrique du réseau public (comptage HTA/BT)"}, {"n": "téléphone", "l": [1, 1, 2, 1, 1], "d": "Téléphonie fixe interne et externe de la gare"}, {"n": "Terrains nus G&C", "l": [1, 1, 2, 0, 2], "d": "Terrains nus de gestion et construction liés à la gare"}, {"n": "Terrains nus non G&C", "l": [1, 1, 2, 0, 2], "d": "Terrains nus hors périmètre gare ou centre"}, {"n": "TGBT / TGBTR", "l": [4, 4, 4, 4, 2], "d": "Tableau Général Basse Tension (et secouru réseau)"}, {"n": "Traversée de voie piétonne (TVP)", "l": [4, 3, 3, 4, 1], "d": "Passage piéton traversant les voies au niveau du sol"}, {"n": "Ventilation", "l": [2, 2, 1, 4, 1], "d": "Ventilation des locaux, halls et passages"}];
+const EQUIP_HORS = [
+  'Batardeau / protection inondation','Avaloir / caniveau / regard EP','Descente / chéneau EP','Seuil / accès inondable',
+  'Infiltration / trace d\'humidité','Fissure / désordre','Protection solaire / store','Verrière / vitrage',
+  'Brasseur d\'air','Unité extérieure CVC (toiture)','Végétation / espace vert','Thermomètre / affichage température',
+  'Plaque / étiquette / signalétique (repère)','Plan d\'évacuation (repère)','Compteur'
+];
+const EQUIP_FREQ = ['Local technique','TGBT / TGBTR','Ensemble local technique Transformateur','Source centrale de secours',
+  'Centrale GTC/GTB','Baie CFA','Cœur de réseau télécoms','Groupe de production de froid','Clim locaux techniques',
+  'Chaudière et circuit d\'eau chaude','Ventilation','Désenfumage naturel','Enveloppe','Structure','Abris de quais/marquise','Quai',
+  'Ouvrage d\'assainissement ou technique','Pompe de relevage','Réseaux de plomberies','Escalier Mécanique','Ascenseur secouru',
+  'Espace d\'attente','Espace de circulation','Eclairage','Ecrans TFT/TIM','Centrale SSI'];
+
+/* ---------- Aléas & effets (mémoire méthodo ACC PAZ) ---------- */
+const ALEAS = [['CHA','Fortes chaleurs'],['PLU','Inondation pluviale'],['FLU','Crue / inond. fluviale'],['NAP','Remontée de nappe'],
+  ['VEN','Vents forts'],['SEC','Sécheresse'],['RGA','RGA (argiles)'],['GEL','Froid / gel']];
+const EFFETS = [['att','Atténuant'],['agg','Aggravant'],['eva','À évaluer']];
+
+/* ---------- Niveaux & zones Paris-Austerlitz (plans 005348S zones thermiques + Géoprism) ---------- */
+const NIVEAUX = [
+  {id:'N0', label:'RDC · quais', plan:'N00', zones:[
+    'GHV — Grande Halle Voyageurs (B025)','GHV transverse (B006)','Quai voies 14-15 (B029)','Quai voies 16-17 (B028)',
+    'Quai voies 18-19 (B027)','Quai voies 20-21 (B026)','Voie 21 (batardeau)','Petite Halle Voyageurs (PHV)','Hall Seine',
+    'Embarcadère d\'Orléans','Aile d\'Orléans (B068)','Bâtiment Verrière (B009)','Pavillon de l\'Horloge','Bâtiment interstitiel',
+    'Aile Muséum','Hall / Passage Prince','Centre de transit','Kiosques provisoires / commerces','Relay (B086)',
+    'Toilettes · consigne · objets trouvés (B085)','Stock avitaillement / Sélecta / bungalow (B089-091)','Bâtiment La Rampe (B100)',
+    'Bâtiment modulaire relogement (B084)','Local onduleur (B098)','Local HT/BT « Flamand » (B099)','Salle d\'attente temporaire (B110)',
+    'Accès métro','Sortie de secours (inondable)','Sortie Muséum (inondable)']},
+  {id:'EXT', label:'Extérieur · cours', plan:'N00', zones:[
+    'Cour Seine (taxis, dépose)','Cour Muséum','Quai d\'Austerlitz (voirie)','Passage Valhubert','Bd de l\'Hôpital / accès',
+    'Bungalows provisoires (côté Seine)','Bungalows / base de vie (côté Muséum)','Abris vélos (B108 / B109)','Emprise chantier']},
+  {id:'N-1', label:'Sous-sol · RDJ · RER C', plan:null, zones:[
+    'Gare souterraine RER C','Quais RER C','Liaison métro 5 / 10','Rez-de-jardin (RDJ)','Locaux techniques sous-sol',
+    'Galerie / souterrain technique','Batardeau voie souterraine','Parking / sous-sol A7A8']},
+  {id:'N1', label:'R+1', plan:'N01', zones:['Aile d\'Orléans R+1','Bâtiment Verrière R+1','Pavillon de l\'Horloge R+1','Bâtiment interstitiel R+1','Aile Muséum R+1','Embarcadère d\'Orléans R+1']},
+  {id:'N2', label:'R+2', plan:'N02', zones:['Aile d\'Orléans R+2','Bâtiment Verrière R+2','Pavillon de l\'Horloge R+2 (réfectoire, salle d\'échange)','Locaux télécom / répartiteur','Combles Aile Muséum']},
+  {id:'N3', label:'R+3 · combles', plan:'N03', zones:['Aile d\'Orléans R+3','Pavillon de l\'Horloge R+3','Combles Hall Seine','Combles embarcadère d\'Orléans']},
+  {id:'TOIT', label:'Toitures', plan:'N03', zones:['Toiture / verrière GHV','Toiture Aile Muséum','Toiture commerces','Toiture centre de transit','Toiture Petite Halle','Marquise','Rejet CVC embarcadère Orléans','Toiture Hall Seine']},
+];
+const PLANS = {N00:{f:'plans/N00.jpg',t:'Niveau 0 · RDC / quais'},N01:{f:'plans/N01.jpg',t:'Niveau 1'},N02:{f:'plans/N02.jpg',t:'Niveau 2'},N03:{f:'plans/N03.jpg',t:'Niveau 3 · toitures'}};
+
+
+const PLAN_W = 2948, PLAN_H = 2124;
+
+/* ---------- Utilitaires ---------- */
+const $ = (s, r=document) => r.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+const pad = (n, l=2) => String(n).padStart(l, '0');
+const hm = t => { const d = new Date(t); return pad(d.getHours()) + ':' + pad(d.getMinutes()); };
+const hms = t => { const d = new Date(t); return hm(t) + ':' + pad(d.getSeconds()); };
+const ymd = t => { const d = new Date(t); return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate()); };
+const ascii = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[œŒ]/g, 'oe').replace(/[æÆ]/g, 'ae')
+  .replace(/[^A-Za-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+const short = (s, n) => ascii(s).slice(0, n).replace(/-+$/, '');
+const norm = s => ascii(s).toLowerCase();
+const nivOf = id => NIVEAUX.find(n => n.id === id) || {id, label:id || '?', plan:null, zones:[]};
+const eqInfo = n => EQUIP.find(e => e.n === n);
+const alLabel = k => (ALEAS.find(x => x[0] === k) || [k, k])[1];
+const efLabel = k => (EFFETS.find(x => x[0] === k) || [k, k])[1];
+const impBadge = n => { const e = eqInfo(n); if (!e) return ''; const m = Math.max(...e.l); const nTE = e.l.filter(x => x === 4).length;
+  const lab = m === 4 ? 'TE' + (nTE > 1 ? '×' + nTE : '') : m === 3 ? 'É' : m === 2 ? 'M' : 'F';
+  return `<span class="imp imp${Math.max(1, m)}">${lab}</span>`; };
+function toast(msg, kind='') { const b = document.createElement('div'); b.className = 'banner ' + kind;
+  b.style.cssText = 'position:fixed;left:10px;right:10px;bottom:22px;z-index:99;max-width:520px;margin:auto;box-shadow:0 6px 20px rgba(0,0,0,.2)';
+  b.textContent = msg; document.body.appendChild(b); setTimeout(() => b.remove(), 2600); }
+function download(name, data, type='application/octet-stream') {
+  const blob = data instanceof Blob ? data : new Blob([data], {type});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name;
+  document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 4000);
+}
+
+/* ---------- IndexedDB : les fichiers photo/vidéo ---------- */
+const DB = {
+  _db:null,
+  open() { if (this._db) return Promise.resolve(this._db);
+    return new Promise((res, rej) => { const r = indexedDB.open('gareoPhoto', 1);
+      r.onupgradeneeded = () => { const d = r.result; if (!d.objectStoreNames.contains('blobs')) d.createObjectStore('blobs'); if (!d.objectStoreNames.contains('thumbs')) d.createObjectStore('thumbs'); };
+      r.onsuccess = () => { this._db = r.result; res(this._db); }; r.onerror = () => rej(r.error); }); },
+  async tx(store, mode, fn) { const d = await this.open(); return new Promise((res, rej) => { const t = d.transaction(store, mode); const s = t.objectStore(store);
+    let out; const q = fn(s); if (q) q.onsuccess = () => { out = q.result; }; t.oncomplete = () => res(out); t.onerror = () => rej(t.error); t.onabort = () => rej(t.error); }); },
+  put(store, k, v) { return this.tx(store, 'readwrite', s => s.put(v, k)); },
+  get(store, k) { return this.tx(store, 'readonly', s => s.get(k)); },
+  del(store, k) { return this.tx(store, 'readwrite', s => s.delete(k)); },
+};
+const thumbCache = {};
+async function thumbUrl(id) { if (thumbCache[id]) return thumbCache[id]; const b = await DB.get('thumbs', id).catch(() => null); if (!b) return null; return thumbCache[id] = URL.createObjectURL(b); }
+async function makeThumb(blob, isVid) {
+  try {
+    let src;
+    if (isVid) src = await videoFrame(blob); else src = await createImageBitmap(blob, {resizeWidth:420, resizeQuality:'medium'});
+    if (!src) return null;
+    const w = isVid ? 420 : src.width, h = isVid ? Math.round(420 * src.videoHeight / src.videoWidth) || 315 : src.height;
+    const c = document.createElement('canvas'); c.width = w; c.height = h; c.getContext('2d').drawImage(src, 0, 0, w, h);
+    if (src.close) src.close(); if (isVid && src._u) URL.revokeObjectURL(src._u);
+    return await new Promise(r => c.toBlob(r, 'image/jpeg', 0.72));
+  } catch (e) { return null; }
+}
+function videoFrame(blob) { return new Promise(res => { const v = document.createElement('video'); v.muted = true; v.playsInline = true; v.preload = 'auto';
+  const u = URL.createObjectURL(blob); v._u = u; let done = false; const fin = x => { if (!done) { done = true; res(x); } };
+  setTimeout(() => fin(null), 4000); v.onloadeddata = () => { try { v.currentTime = Math.min(0.5, (v.duration || 1) / 2); } catch (e) { fin(null); } };
+  v.onseeked = () => fin(v); v.onerror = () => fin(null); v.src = u; }); }
+
+/* ---------- Persistance des fiches (localStorage) ---------- */
+let S = load();
+function load() { try { const s = JSON.parse(localStorage.getItem(STORE_KEY)); if (s && s.visites) return s; } catch (e) {}
+  return {visites:{}, current:null, recentEq:[], eqCustom:[], last:null, prefs:{dlCopy:true}}; }
+function save() { try { localStorage.setItem(STORE_KEY, JSON.stringify(S)); } catch (e) { toast('⚠ Sauvegarde locale impossible : exporte le relevé maintenant !', 'err'); } }
+if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
+const V = () => S.current ? S.visites[S.current] : null;
+const P = id => { for (const v of Object.values(S.visites)) { const p = v.photos.find(x => x.id === id); if (p) return p; } return null; };
+
+/* =====================================================================
+   PRISE DE VUE
+   ===================================================================== */
+function startVisite(gare, code, auteur) {
+  const id = uid();
+  S.visites[id] = {id, gare, code:(ascii(code).toUpperCase() || 'GARE'), auteur, debut:Date.now(), fin:null, seq:0, photos:[], lastExport:null};
+  S.current = id; S.last = null; save(); render();
+}
+let captureNext = false;
+async function onCapture(files, how) {
+  const v = V(); if (!v || !files.length) return;
+  const created = [];
+  for (const f of files) {
+    const isVid = /^video\//.test(f.type) || /\.(mp4|mov|3gp|webm)$/i.test(f.name);
+    v.seq++; const id = v.code + '_' + pad(v.seq, 4);
+    const L = (how === 'import' ? null : S.last) || {};
+    const p = {id, n:v.seq, t:Date.now(), type:isVid ? 'video' : 'photo', how, name:f.name, size:f.size, mime:f.type,
+      niv:L.niv || 'N0', zone:L.zone || '', pt:L.pt ? {n:L.pt.n, x:L.pt.x, y:L.pt.y} : null, eqs:[...(L.eqs || [])],
+      al:[], ef:'', star:false, note:'', done:false, dl:null, gps:null, exT:null, exGps:null, stored:false};
+    v.photos.push(p); save();
+    try { await DB.put('blobs', id, f); p.stored = true; }
+    catch (e) { toast('⚠ Mémoire pleine : copie de secours dans Téléchargements', 'err'); download(id + '_' + f.name, f); p.dl = Date.now(); }
+    if (!isVid && /jpe?g/i.test(f.type + f.name)) { try { const ex = parseExif(await f.slice(0, 262144).arrayBuffer());
+      if (ex && ex.dto) p.exT = exifTime(ex.dto, ex.off); if (ex && ex.gps) p.exGps = ex.gps; } catch (e) {} }
+    if (how === 'import' && p.exT) p.t = p.exT;
+    save(); created.push(p);
+    makeThumb(f, isVid).then(tb => tb && DB.put('thumbs', id, tb)).then(() => { if (!UI.ov) renderGal(); else if (UI.fiche === id) refreshPrev(); }).catch(() => {});
+    grabGps(id);
+  }
+  if (created.length === 1) openFiche(created[0].id);
+  else { UI.filtre = 'todo'; render(); toast(created.length + ' fichiers importés : à classer'); }
+}
+function grabGps(id) { if (!navigator.geolocation) return;
+  navigator.geolocation.getCurrentPosition(pos => { const p = P(id); if (!p) return;
+    p.gps = {lat:+pos.coords.latitude.toFixed(6), lon:+pos.coords.longitude.toFixed(6), acc:Math.round(pos.coords.accuracy)}; save(); },
+  () => {}, {enableHighAccuracy:true, timeout:10000, maximumAge:15000}); }
+function fileName(p, v) {
+  const d = new Date(p.t); const ext = ((p.name || '').match(/\.[A-Za-z0-9]+$/) || [p.type === 'video' ? '.mp4' : '.jpg'])[0].toLowerCase();
+  const eq = p.eqs.length ? short(p.eqs[0], 26) + (p.eqs.length > 1 ? '+' + (p.eqs.length - 1) : '') : 'vue-generale';
+  return [p.id, pad(d.getHours()) + pad(d.getMinutes()) + pad(d.getSeconds()), ascii(p.niv), short(p.zone || 'zone', 26), eq].join('_') + (p.star ? '_IMPORTANT' : '') + ext;
+}
+async function dlCopy(p) {
+  const v = V() || Object.values(S.visites).find(x => x.photos.includes(p));
+  const b = await DB.get('blobs', p.id).catch(() => null); if (!b) return false;
+  download(fileName(p, v), b); p.dl = Date.now(); p.dlName = fileName(p, v); save(); return true;
+}
+
+/* =====================================================================
+   RENDU
+   ===================================================================== */
+const UI = {mode: localStorage.getItem('gareoPhoto.mode') || (matchMedia('(min-width: 900px)').matches ? 'bureau' : 'terrain'),
+  ov:null, fiche:null, filtre:'all', eqQ:'', eqAll:false, dirMode:false, zoom:2.2, full:null};
+function render() {
+  document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('on', b.dataset.v === UI.mode));
+  $('#ver').textContent = VERSION; const v = V(); $('#hdrGare').textContent = v ? '· ' + v.code : '';
+  if (UI.mode === 'terrain') { $('#app').innerHTML = v ? viewTerrain(v) : viewAccueil(); if (v) fillThumbs(); }
+  else if (UI.mode === 'bureau') { $('#app').innerHTML = viewBureau(); fillThumbs(); }
+  else if (UI.mode === 'export') $('#app').innerHTML = viewExport();
+  else $('#app').innerHTML = viewAide();
+}
+function fillThumbs(root=document) { root.querySelectorAll('img[data-th]').forEach(async im => { const u = await thumbUrl(im.dataset.th); if (u) im.src = u; }); }
+
+function viewAccueil() {
+  const old = Object.values(S.visites).sort((a, b) => b.debut - a.debut);
+  return `<div class="card"><h2>Nouvelle visite</h2>
+    <label class="f">Gare</label><input type="text" id="iGare" value="Paris-Austerlitz">
+    <div class="grid2"><div><label class="f">Code (noms de fichiers)</label><input type="text" id="iCode" value="PAZ"></div>
+    <div><label class="f">Photographe</label><input type="text" id="iAut" value="${esc(localStorage.getItem('gareoPhoto.aut') || '')}" placeholder="Prénom Nom"></div></div>
+    <div style="margin-top:12px"><button class="btn big pri" style="width:100%" data-act="start">▶ Démarrer la visite</button></div></div>
+    ${old.length ? `<div class="card"><h2>Visites sur ce téléphone</h2>${old.map(o => `
+      <div class="row" style="border-top:1px solid var(--line);padding:8px 0">
+        <div style="flex:1"><b>${esc(o.gare)}</b> · ${ymd(o.debut)} ${hm(o.debut)}${o.fin ? '–' + hm(o.fin) : ' <span class="mute">(en cours)</span>'}<br>
+        <span class="small mute">${o.photos.length} photos/vidéos · ${o.photos.filter(p => !p.done).length} à classer</span></div>
+        <button class="btn" data-act="resume" data-id="${o.id}">${o.fin ? 'Rouvrir' : 'Reprendre'}</button>
+      </div>`).join('')}</div>` : ''}`;
+}
+function viewTerrain(v) {
+  const todo = v.photos.filter(p => !p.done).length;
+  const notDl = S.prefs.dlCopy ? v.photos.filter(p => p.done && !p.dl).length : 0;
+  const L = S.last;
+  return `
+  <div class="grid3" style="grid-template-columns:2fr 1fr 1fr">
+    <button class="btn huge yel" data-act="capP">📷 Photo</button>
+    <button class="btn huge pri" data-act="capV">🎥<br><span style="font-size:15px">Vidéo</span></button>
+    <button class="btn huge" data-act="imp" style="font-size:15px">🖼<br>Galerie</button>
+  </div>
+  <div class="small mute" style="margin:7px 2px 10px">${L && L.zone ? `Lieu repris pour la prochaine photo : <b>${esc(nivOf(L.niv).id)} · ${esc(L.zone)}</b>${L.pt ? ' · 📍' : ''}${L.eqs && L.eqs.length ? ' · ' + esc(L.eqs.join(', ')) : ''}` : 'Prends une photo : tu la pointes ensuite sur le plan.'}</div>
+  ${notDl ? `<div class="banner">${notDl} photo(s) classée(s) pas encore copiée(s) dans Téléchargements. <a href="#" data-act="dlMissing">Copier maintenant</a></div>` : ''}
+  <div class="card">
+    <div class="row" style="margin-bottom:8px"><b style="margin-right:auto">${v.photos.length} prises</b>
+      <button class="chip ${UI.filtre === 'all' ? 'on' : ''}" data-act="filtre" data-v="all">Toutes</button>
+      <button class="chip ${UI.filtre === 'todo' ? 'on' : ''}" data-act="filtre" data-v="todo">À classer (${todo})</button></div>
+    <div id="gal">${galHtml(v)}</div>
+  </div>
+  <div class="grid3">
+    <button class="btn" data-act="exportRel">💾 Exporter le relevé</button>
+    <button class="btn" data-act="shareRel">📤 Envoyer</button>
+    <button class="btn red" data-act="end">■ Fin de visite</button>
+  </div>
+  <div class="small mute" id="quota" style="margin-top:8px"></div>`;
+}
+function galHtml(v) {
+  const list = [...v.photos].reverse().filter(p => UI.filtre !== 'todo' || !p.done);
+  if (!list.length) return `<div class="mute small">${UI.filtre === 'todo' ? 'Tout est classé 👍' : 'Aucune photo pour l\'instant.'}</div>`;
+  return `<div class="gal">${list.map(p => `<div class="it" data-act="openFiche" data-id="${p.id}">
+    <img data-th="${p.id}" alt="" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=">
+    <span class="bd">${p.type === 'video' ? '🎬 ' : ''}${p.n}</span>${p.done ? '' : '<span class="todo">à classer</span>'}
+    <div class="lb">${esc(p.zone || '—')}${p.eqs.length ? '<br>🔧 ' + esc(p.eqs[0]) + (p.eqs.length > 1 ? ' +' + (p.eqs.length - 1) : '') : ''}</div></div>`).join('')}</div>`;
+}
+function renderGal() { const v = V(); const g = $('#gal'); if (g && v) { g.innerHTML = galHtml(v); fillThumbs(g); } }
+async function showQuota() { const q = $('#quota'); if (!q || !navigator.storage || !navigator.storage.estimate) return;
+  const e = await navigator.storage.estimate(); q.textContent = `Stockage appli : ${(e.usage / 1e9).toFixed(2)} Go utilisés · ${((e.quota - e.usage) / 1e9).toFixed(1)} Go dispo`; }
+
+/* ---------- FICHE PHOTO ---------- */
+function openFiche(id) { UI.ov = 'fiche'; UI.fiche = id; UI.eqQ = ''; UI.eqAll = false; UI.dirMode = false; renderOv(); }
+function closeOv() { UI.ov = null; UI.fiche = null; $('#ov').innerHTML = ''; render(); }
+function renderOv() {
+  const o = $('#ov'); if (UI.ov !== 'fiche') { o.innerHTML = ''; return; }
+  const p = P(UI.fiche); if (!p) { closeOv(); return; }
+  const v = Object.values(S.visites).find(x => x.photos.includes(p));
+  o.innerHTML = `<div class="ov"><div class="top"><b>${esc(p.id)} · ${hms(p.t)}</b><button data-act="delPhoto">🗑</button><button data-act="closeFiche">Fermer</button></div>
+  <div class="body">
+    <div class="prev"><span id="prevBox">${p.type === 'video' ? '<div class="ph0">🎬</div>' : `<img data-th="${p.id}" alt="" data-act="full">`}</span>
+      <div class="small"><b>${p.type === 'video' ? 'Vidéo' : 'Photo'} n°${p.n}</b><br>${p.done ? '✔ classée' : '<span style="color:var(--org)">à classer</span>'}
+      ${p.gps ? `<br>GPS ±${p.gps.acc} m` : ''}${p.stored ? '' : '<br><span style="color:var(--red)">non stockée dans l\'appli</span>'}
+      <br><a href="#" data-act="full">voir en grand</a> · <a href="#" data-act="clearAll">tout effacer</a></div></div>
+    <div class="sec"><h3>1 · Où ?</h3>
+      <div class="nivtabs" id="fNiv">${nivTabs(p)}</div>
+      <div id="fPlan"></div>
+      <label class="f">Zone (texte libre)</label>
+      <input type="text" id="fZone" value="${esc(p.zone)}" placeholder="ex. GHV quai 18-19, local CTA n°3…" autocomplete="off">
+      <div class="row" id="fZoneSug" style="margin-top:6px"></div>
+    </div>
+    <div class="sec"><h3>2 · Quoi ? <span class="small mute">(plusieurs possibles)</span></h3>
+      <div class="row" id="fEqSel"></div>
+      <input type="search" id="fEqQ" placeholder="Ajouter un équipement (tgbt, pompe, marquise…)" autocomplete="off" style="margin-top:8px">
+      <div class="row" id="fEqSug" style="margin-top:8px"></div>
+    </div>
+    <div class="sec"><h3>3 · Constat</h3><div id="fTags"></div>
+      <label class="f">Note (texte libre, dictée 🎤 possible)</label><textarea id="fNote" placeholder="ce qu'on voit, ce qu'a dit l'exploitant…">${esc(p.note)}</textarea>
+    </div>
+  </div>
+  <div class="foot"><button class="btn big" data-act="saveFiche">✓ Enregistrer</button><button class="btn big yel" data-act="saveNext">✓ + 📷 suivante</button></div></div>`;
+  fillThumbs(o); renderPlan(p); renderZoneSug(p); renderEq(p); renderTags(p);
+}
+function refreshPrev() { const p = P(UI.fiche); const b = $('#prevBox'); if (p && b && p.type !== 'video') { b.innerHTML = `<img data-th="${p.id}" alt="" data-act="full">`; fillThumbs(b); } }
+function nivTabs(p) { return NIVEAUX.map(x => `<button class="chip ${x.id === p.niv ? 'on' : ''}" data-act="fNiv" data-v="${x.id}">${esc(x.label)}</button>`).join(''); }
+function renderPlan(p) {
+  const box = $('#fPlan'); const n = nivOf(p.niv);
+  if (!n.plan) { box.innerHTML = `<div class="small mute" style="padding:6px 2px">Pas de plan pour ce niveau : décris la zone en texte.</div>`; return; }
+  box.innerHTML = `<div class="planbox"><div class="planwrap" id="pw"><div id="pin" style="position:relative;display:inline-block"><img id="pimg" src="${PLANS[n.plan].f}" alt=""></div></div>
+    <div class="pctl"><button class="chip" data-act="zoom" data-v="-1">−</button><button class="chip" data-act="zoom" data-v="1">+</button>
+    <button class="chip ${UI.dirMode ? 'on' : ''}" data-act="dirMode" ${p.pt && p.pt.n === n.plan ? '' : 'disabled'}>🧭 direction seule</button>
+    <button class="chip" data-act="clearPt" ${p.pt ? '' : 'disabled'}>✕ point</button>
+    <span class="small mute" id="ptHint">${ptHint(p, n)}</span></div></div>`;
+  const img = $('#pimg'), wrap = $('#pw'), inn = $('#pin');
+  const draw = () => {
+    img.style.width = Math.round(wrap.clientWidth * UI.zoom) + 'px';
+    inn.querySelectorAll('.pin,.dot').forEach(x => x.remove());
+    const v = V(); if (v) v.photos.filter(q => q !== p && q.pt && q.pt.n === n.plan).slice(-150).forEach(q => { const d = document.createElement('div'); d.className = 'dot'; d.style.left = q.pt.x * 100 + '%'; d.style.top = q.pt.y * 100 + '%'; inn.appendChild(d); });
+    if (p.pt && p.pt.n === n.plan) { const d = document.createElement('div'); d.className = 'pin'; d.style.left = p.pt.x * 100 + '%'; d.style.top = p.pt.y * 100 + '%';
+      d.innerHTML = (p.pt.dir != null ? `<b style="transform:rotate(${p.pt.dir}deg)"></b>` : '') + '<i></i>'; inn.appendChild(d); }
+  };
+  const center = () => { const t = (p.pt && p.pt.n === n.plan) ? p.pt : {x:.5, y:.45}; wrap.scrollLeft = t.x * img.clientWidth - wrap.clientWidth / 2; wrap.scrollTop = t.y * img.clientHeight - wrap.clientHeight / 2; };
+  UI.planDraw = draw; UI.planCenter = center;
+  const go = () => { draw(); center(); }; if (img.complete && img.naturalWidth) go(); else img.onload = go;
+  let down = null;
+  img.addEventListener('pointerdown', e => { down = {x:e.clientX, y:e.clientY}; });
+  img.addEventListener('pointerup', e => {
+    if (!down || Math.hypot(e.clientX - down.x, e.clientY - down.y) > 10) { down = null; return; } down = null;
+    const r = img.getBoundingClientRect(); const x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+    if (UI.dirMode && p.pt && p.pt.n === n.plan) {
+      p.pt.dir = Math.round(Math.atan2((y - p.pt.y) * PLAN_H, (x - p.pt.x) * PLAN_W) * 180 / Math.PI); UI.dirMode = false;
+    } else { p.pt = {n:n.plan, x:+x.toFixed(4), y:+y.toFixed(4)}; UI.dirMode = true; }
+    save(); const ctl = box.querySelector('.pctl'); renderPlanCtl(p, n); draw();
+  });
+}
+function ptHint(p, n) { const here = p.pt && p.pt.n === n.plan;
+  if (!here) return '1er appui : où tu es · 2e appui : vers où tu regardes';
+  if (UI.dirMode) return '📍 placé · 2e appui : vers où regarde la photo (facultatif)';
+  return '📍' + (p.pt.dir != null ? ' + 🧭 ok' : ' repris / placé') + ' · un nouvel appui replace le point'; }
+function renderPlanCtl(p, n) { const c = $('#fPlan .pctl'); if (!c) return;
+  c.querySelector('[data-act=dirMode]').disabled = !(p.pt && p.pt.n === n.plan); c.querySelector('[data-act=dirMode]').classList.toggle('on', UI.dirMode);
+  c.querySelector('[data-act=clearPt]').disabled = !p.pt;
+  $('#ptHint').textContent = ptHint(p, n); }
+function zonesFor(p) {
+  const n = nivOf(p.niv); const used = []; const v = V();
+  if (v) for (const q of [...v.photos].reverse()) if (q.zone && q.niv === p.niv && !used.includes(q.zone)) used.push(q.zone);
+  return [...used, ...n.zones.filter(z => !used.includes(z))];
+}
+function renderZoneSug(p) {
+  const q = norm($('#fZone') ? $('#fZone').value : p.zone);
+  const list = zonesFor(p).filter(z => !q || norm(z).includes(q)).filter(z => z !== p.zone).slice(0, q ? 14 : 30);
+  $('#fZoneSug').innerHTML = list.map(z => `<button class="chip" data-act="pickZone" data-v="${esc(z)}">${esc(z)}</button>`).join('');
+}
+function renderEq(p) {
+  $('#fEqSel').innerHTML = p.eqs.length ? p.eqs.map(e => `<button class="chip sel" data-act="rmEq" data-v="${esc(e)}">🔧 ${esc(e)} ${impBadge(e)}<span class="x">✕</span></button>`).join('')
+    : '<span class="small mute">Aucun → rangée en « vue générale »</span>';
+  const q = norm(UI.eqQ);
+  const all = [...EQUIP.map(e => e.n), ...EQUIP_HORS, ...S.eqCustom];
+  const chip = n => `<button class="chip" data-act="addEq" data-v="${esc(n)}">${esc(n)} ${impBadge(n)}</button>`;
+  let h = '';
+  if (q) {
+    const res = all.filter(n => norm(n).includes(q) && !p.eqs.includes(n));
+    h = res.slice(0, 30).map(chip).join('') || '<span class="small mute">Aucun résultat.</span>';
+    if (!all.some(n => norm(n) === q)) h += `<button class="chip star on" data-act="addEqNew">+ Créer « ${esc(UI.eqQ)} »</button>`;
+  } else {
+    const rec = S.recentEq.filter(n => !p.eqs.includes(n));
+    if (rec.length) h += `<div class="small mute" style="width:100%">Récents</div>` + rec.map(chip).join('');
+    const fr = EQUIP_FREQ.filter(n => !p.eqs.includes(n) && !rec.includes(n));
+    h += `<div class="small mute" style="width:100%;margin-top:4px">Fréquents en ACC</div>` + (UI.eqAll ? fr : fr.slice(0, 10)).map(chip).join('');
+    if (UI.eqAll) h += `<div class="small mute" style="width:100%;margin-top:4px">Constats hors matrice</div>` + EQUIP_HORS.filter(n => !p.eqs.includes(n)).map(chip).join('');
+    h += UI.eqAll ? `<div class="small mute" style="width:100%;margin-top:4px">Matrice G&C complète</div>` + EQUIP.map(e => e.n).sort((a, b) => a.localeCompare(b, 'fr')).filter(n => !p.eqs.includes(n)).map(chip).join('')
+      : `<button class="chip" data-act="eqAll">Plus… (matrice complète + constats)</button>`;
+  }
+  $('#fEqSug').innerHTML = h;
+}
+function renderTags(p) {
+  $('#fTags').innerHTML = `<div class="row">${ALEAS.map(([k, l]) => `<button class="chip ${p.al.includes(k) ? 'on' : ''}" data-act="al" data-v="${k}">${esc(l)}</button>`).join('')}</div>
+    <div class="row" style="margin-top:7px">${EFFETS.map(([k, l]) => `<button class="chip ${k} ${p.ef === k ? 'on' : ''}" data-act="ef" data-v="${k}">${esc(l)}</button>`).join('')}
+    <button class="chip star ${p.star ? 'on' : ''}" data-act="star">★ Important</button></div>`;
+}
+function commitFiche(p) {
+  const z = $('#fZone'); if (z) p.zone = z.value.trim(); const n = $('#fNote'); if (n) p.note = n.value.trim();
+  p.done = true; p.mod = Date.now();
+  S.last = {niv:p.niv, zone:p.zone, pt:p.pt ? {n:p.pt.n, x:p.pt.x, y:p.pt.y} : null, eqs:[...p.eqs], al:[...p.al], ef:p.ef};
+  save();
+}
+
+/* =====================================================================
+   EXPORT DU RELEVÉ (fiches, sans les fichiers)
+   ===================================================================== */
+function relevePayload(v) { return {app:'GAREo-photo', format:2, version:VERSION, exported:new Date().toISOString(),
+  visite:{id:v.id, gare:v.gare, code:v.code, auteur:v.auteur, debut:v.debut, fin:v.fin}, photos:v.photos}; }
+function releveName(v) { return `${v.code}_releve_${ymd(v.debut)}_${hm(Date.now()).replace(':', 'h')}.json`; }
+function exportReleve(v = V()) { download(releveName(v), JSON.stringify(relevePayload(v), null, 1), 'application/json');
+  download(`${v.code}_inventaire_${ymd(v.debut)}.csv`, csv(v.photos.map(p => rowOf(p, v, null))), 'text/csv'); v.lastExport = Date.now(); save(); }
+async function shareReleve(v = V()) { const f = new File([JSON.stringify(relevePayload(v), null, 1)], releveName(v), {type:'application/json'});
+  if (navigator.canShare && navigator.canShare({files:[f]})) { try { await navigator.share({files:[f], title:'Relevé ' + v.gare}); } catch (e) {} } else exportReleve(v); }
+const CSV_COLS = ['n', 'id', 'fichier', 'dossier', 'origine', 'type', 'date', 'heure', 'niveau', 'zone', 'equipements', 'nb_equipements', 'aleas', 'effet', 'important', 'note',
+  'plan', 'plan_x', 'plan_y', 'direction_deg', 'lat', 'lon', 'gps_precision_m', 'gps_source', 'classee'];
+function rowOf(p, v, ex) { const gps = p.exGps || p.gps;
+  return {n:p.n, id:p.id, fichier:ex ? ex.fname : fileName(p, v), dossier:ex ? ex.dir : '', origine:p.name, type:p.type, date:ymd(p.t), heure:hms(p.t),
+    niveau:nivOf(p.niv).label, niv:p.niv, zone:p.zone, equipements:p.eqs.join(' | '), nb_equipements:p.eqs.length, aleas:p.al.map(alLabel).join(', '), effet:p.ef ? efLabel(p.ef) : '',
+    important:p.star ? 'oui' : '', note:p.note, plan:p.pt ? p.pt.n : '', plan_x:p.pt ? p.pt.x : '', plan_y:p.pt ? p.pt.y : '', direction_deg:p.pt && p.pt.dir != null ? p.pt.dir : '',
+    lat:gps ? gps.lat : '', lon:gps ? gps.lon : '', gps_precision_m:!p.exGps && p.gps ? p.gps.acc : '', gps_source:p.exGps ? 'photo' : (p.gps ? 'navigateur' : ''), classee:p.done ? 'oui' : 'non'}; }
+function csv(rows) { const q = x => { const s = String(x ?? ''); return /[;"\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+  return '﻿' + [CSV_COLS.join(';'), ...rows.map(r => CSV_COLS.map(c => q(r[c])).join(';'))].join('\r\n'); }
+
+/* =====================================================================
+   BUREAU : relevé + fichiers → dossier trié, inventaire, planche
+   ===================================================================== */
+const B = {rel:null, local:false, files:{}, loading:null, unknown:[], log:null};
+function viewBureau() {
+  const r = B.rel; const locals = Object.values(S.visites).filter(v => v.photos.length).sort((a, b) => b.debut - a.debut);
+  let h = `<div class="card"><h2>1 · Relevé</h2>${r ? `<div class="banner ok">✔ ${esc(r.visite.gare)} · ${ymd(r.visite.debut)} · ${r.photos.length} photos/vidéos${B.local ? ' · <b>fichiers de ce navigateur</b>' : ''} <a href="#" data-act="bReset">changer</a></div>`
+    : `<div class="row"><button class="btn pri" data-act="pickJson">📄 Charger le relevé (.json)</button>
+       ${locals.map(v => `<button class="btn" data-act="bLocal" data-id="${v.id}">Visite ${esc(v.code)} ${ymd(v.debut)} de ce navigateur (${v.photos.length})</button>`).join('')}</div>
+       <p class="small mute">Le fichier <code>PAZ_releve_….json</code> est dans les Téléchargements du téléphone.</p>`}</div>`;
+  if (r && !B.local) {
+    const found = r.photos.filter(p => B.files[p.id]).length;
+    h += `<div class="card"><h2>2 · Fichiers photo/vidéo</h2><div class="row"><button class="btn pri" data-act="pickMedia">🖼 Choisir les fichiers</button>
+      <button class="btn" data-act="pickDir">📁 Choisir un dossier</button></div>
+      ${B.loading ? `<div class="small" style="margin-top:8px">Lecture… ${B.loading.done} / ${B.loading.total}</div><div class="prog"><div style="width:${100 * B.loading.done / Math.max(1, B.loading.total)}%"></div></div>` : ''}
+      <p class="small mute">Câble USB → copie le dossier <code>Download</code> du téléphone (copies <code>PAZ_0001_…</code>). Les photos importées depuis la galerie sont aussi retrouvées dans <code>DCIM/Camera</code>.</p>
+      ${found || B.unknown.length ? `<div><span class="stat"><b>${found}</b> / ${r.photos.length} retrouvées</span>${B.unknown.length ? `<span class="stat mute"><b>${B.unknown.length}</b> fichiers ignorés (hors relevé)</span>` : ''}</div>` : ''}
+      ${found && found < r.photos.length ? `<div class="small" style="color:var(--red)">Manquantes : ${r.photos.filter(p => !B.files[p.id]).map(p => p.id).join(', ')}</div>` : ''}</div>`;
+  }
+  if (r && (B.local || Object.keys(B.files).length)) h += viewSynth(r);
+  return h;
+}
+function viewSynth(r) {
+  const groups = groupByZone(r.photos);
+  let h = `<div class="card"><h2>3 · Rangement</h2><div class="row"><span class="stat"><b>${groups.length}</b> zones</span>
+    <span class="stat"><b>${r.photos.filter(p => p.pt).length}</b> pointées sur plan</span><span class="stat"><b>${r.photos.filter(p => !p.done).length}</b> non classées</span>
+    <span style="margin-left:auto"></span><button class="btn yel" data-act="export">📁 Exporter le dossier trié</button></div>
+    ${B.log ? `<div class="banner ${B.log.err ? 'err' : 'ok'}" style="margin-top:8px">${B.log.html}</div>` : ''}</div>`;
+  groups.forEach((g, i) => { h += `<div class="card zgrp"><h3>${pad(i + 1)} · ${esc(g.zone || 'Sans zone')} <span class="small mute">${esc(nivOf(g.niv).label)} · ${g.items.length}</span></h3>
+    <div class="gal">${g.items.map(p => `<div class="it"><img ${B.local ? `data-th="${p.id}"` : `src="${B.files[p.id] ? B.files[p.id].thumb || B.files[p.id].url() : ''}"`} loading="lazy" alt="">
+      <span class="bd">${p.type === 'video' ? '🎬 ' : ''}${p.n}</span>${B.local || B.files[p.id] ? '' : '<span class="todo">manquante</span>'}
+      <div class="lb">${p.eqs.length ? esc(p.eqs.join(', ')) : 'vue générale'}</div></div>`).join('')}</div></div>`; });
+  return h;
+}
+function groupByZone(photos) {
+  const map = new Map();
+  [...photos].sort((a, b) => a.n - b.n).forEach(p => { const k = (p.done ? p.niv + '|' + (p.zone || '') : '~todo'); if (!map.has(k)) map.set(k, {k, niv:p.done ? p.niv : '', zone:p.done ? p.zone : 'Non classées', items:[]}); map.get(k).items.push(p); });
+  const arr = [...map.values()]; const todo = arr.findIndex(g => g.k === '~todo'); if (todo >= 0) arr.push(arr.splice(todo, 1)[0]); return arr;
+}
+async function addFiles(files) {
+  const r = B.rel; const list = [...files].filter(f => /^(image|video)\//.test(f.type) || /\.(jpe?g|heic|png|mp4|mov|3gp|webm)$/i.test(f.name));
+  B.loading = {done:0, total:list.length}; render();
+  const byName = {}; r.photos.forEach(p => byName[p.name + '|' + p.size] = p);
+  const re = new RegExp('^(' + r.visite.code.replace(/[^A-Z0-9-]/gi, '') + '_\\d{4})(_|\\.|$)', 'i');
+  for (const f of list) {
+    const m = f.name.match(re); let p = m ? r.photos.find(x => x.id.toUpperCase() === m[1].toUpperCase()) : null;
+    if (!p) p = byName[f.name + '|' + f.size] || null;
+    if (p && !B.files[p.id]) { const e = {file:f, thumb:null, url() { return this._u || (this._u = URL.createObjectURL(this.file)); }};
+      if (/jpe?g/i.test(f.type + f.name)) { try { const ex = parseExif(await f.slice(0, 262144).arrayBuffer()); if (ex && ex.thumb) e.thumb = URL.createObjectURL(new Blob([ex.thumb], {type:'image/jpeg'})); } catch (er) {} }
+      B.files[p.id] = e; }
+    else if (!p) B.unknown.push(f.name);
+    B.loading.done++; if (B.loading.done % 25 === 0) render();
+  }
+  B.loading = null; render();
+}
+async function getFileFor(p) { if (B.local) { const b = await DB.get('blobs', p.id).catch(() => null); return b ? new File([b], p.name || p.id, {type:b.type}) : null; }
+  return B.files[p.id] ? B.files[p.id].file : null; }
+async function doExport() {
+  const r = B.rel, v = r.visite;
+  if (!window.showDirectoryPicker) { B.log = {err:true, html:'Ouvre cette page dans <b>Chrome</b> ou <b>Edge</b> sur PC pour écrire le dossier trié.'}; render(); return; }
+  let parent; try { parent = await window.showDirectoryPicker({mode:'readwrite', id:'gareo-export'}); } catch (e) { return; }
+  const rootName = `${v.code}_${ymd(v.debut)}_releve-photo`; const root = await parent.getDirectoryHandle(rootName, {create:true});
+  const dirCache = {}; const getDir = async path => { if (dirCache[path]) return dirCache[path]; let d = root; for (const s of path.split('/').filter(Boolean)) d = await d.getDirectoryHandle(s, {create:true}); return dirCache[path] = d; };
+  const groups = groupByZone(r.photos); const rows = []; let i = 0, miss = 0;
+  const thDir = await getDir('_planche/vignettes');
+  for (const [gi, g] of groups.entries()) {
+    const zdir = g.k === '~todo' ? '99_Non-classees' : pad(gi + 1) + '_' + ascii(g.niv) + '_' + short(g.zone || 'sans-zone', 48);
+    for (const p of g.items) {
+      const f = await getFileFor(p); const sub = p.eqs.length ? short(p.eqs[0], 48) : '_Vues-generales';
+      const dir = zdir + '/' + sub; const fname = fileName(p, v);
+      let thumb = '';
+      if (f) { const fh = await (await getDir(dir)).getFileHandle(fname, {create:true}); const w = await fh.createWritable(); await f.stream().pipeTo(w);
+        const tb = (B.local ? await DB.get('thumbs', p.id).catch(() => null) : null) || await makeThumb(f, p.type === 'video');
+        if (tb) { const th = await thDir.getFileHandle(p.id + '.jpg', {create:true}); const tw = await th.createWritable(); await tw.write(tb); await tw.close(); thumb = 'vignettes/' + p.id + '.jpg'; } }
+      else miss++;
+      rows.push(Object.assign(rowOf(p, v, {fname: f ? fname : '(manquant)', dir}), {thumb, zdir, chemin: f ? dir + '/' + fname : ''}));
+      i++; if (i % 10 === 0) { B.log = {html:`Export… ${i} / ${r.photos.length}`}; render(); }
+    }
+  }
+  await writeText(root, `${v.code}_inventaire_photos.csv`, csv(rows), 'text/csv');
+  await writeText(root, `${v.code}_releve.json`, JSON.stringify(r, null, 1), 'application/json');
+  const feats = rows.filter(x => x.lat !== '').map(x => ({type:'Feature', geometry:{type:'Point', coordinates:[x.lon, x.lat]}, properties:Object.fromEntries(CSV_COLS.map(c => [c, x[c]]))}));
+  await writeText(root, `${v.code}_photos_gps.geojson`, JSON.stringify({type:'FeatureCollection', features:feats}), 'application/geo+json');
+  const plansUsed = [...new Set(r.photos.filter(p => p.pt).map(p => p.pt.n))]; const pd = await getDir('_planche/plans');
+  for (const pl of plansUsed) { try { const res = await fetch(PLANS[pl].f); if (res.ok) { const fh = await pd.getFileHandle(pl + '.jpg', {create:true}); const w = await fh.createWritable(); await w.write(await res.blob()); await w.close(); } } catch (e) {} }
+  await writeText(await getDir('_planche'), 'planche.html', planche(rows, groups, plansUsed, r), 'text/html');
+  B.log = {html:`✔ ${rows.length - miss} fichiers copiés dans <b>${esc(rootName)}</b>${miss ? ` (<b style="color:var(--red)">${miss} manquants</b>)` : ''} : un dossier par zone puis par équipement, <code>${esc(v.code)}_inventaire_photos.csv</code> (Excel), <code>_planche/planche.html</code> à ouvrir, GeoJSON. Originaux intacts.`};
+  render();
+}
+async function writeText(dir, name, txt, type) { const fh = await dir.getFileHandle(name, {create:true}); const w = await fh.createWritable(); await w.write(new Blob([txt], {type})); await w.close(); }
+function planche(rows, groups, plansUsed, r) {
+  const v = r.visite; const byZ = new Map(); rows.forEach(x => { if (!byZ.has(x.zdir)) byZ.set(x.zdir, []); byZ.get(x.zdir).push(x); });
+  const zNum = {}; [...byZ.keys()].forEach(k => zNum[k] = k.slice(0, 2));
+  const plans = plansUsed.map(pl => { const pts = rows.filter(x => x.plan === pl);
+    const grp = new Map(); pts.forEach(x => { const k = (+x.plan_x).toFixed(3) + '|' + (+x.plan_y).toFixed(3); if (!grp.has(k)) grp.set(k, []); grp.get(k).push(x); });
+    const marks = [...grp.values()].map(xs => { const x = xs[0]; const cx = x.plan_x * PLAN_W, cy = x.plan_y * PLAN_H;
+      const lab = xs.length === 1 ? String(x.n) : xs[0].n + '–' + xs[xs.length - 1].n; const w = Math.max(44, lab.length * 15 + 16);
+      const arrows = xs.filter(y => y.direction_deg !== '').map(y => { const d = +y.direction_deg * Math.PI / 180;
+        return `<line x1="${cx}" y1="${cy}" x2="${(cx + 80 * Math.cos(d)).toFixed(1)}" y2="${(cy + 80 * Math.sin(d)).toFixed(1)}" stroke="#C8102E" stroke-width="7" marker-end="url(#ar)"/>`; }).join('');
+      return `<a href="#p${x.n}"><g>${arrows}<rect x="${cx - w / 2}" y="${cy - 22}" width="${w}" height="44" rx="22" fill="#C8102E" stroke="#fff" stroke-width="5"/>
+        <text x="${cx}" y="${cy + 9}" text-anchor="middle" font-size="25" font-weight="700" fill="#fff">${lab}</text><title>${xs.map(y => 'n°' + y.n + ' ' + esc(y.equipements || 'vue générale')).join('\n')}</title></g></a>`; }).join('');
+    return `<section><h2>${esc(PLANS[pl].t)} <small>${pts.length} prises pointées</small></h2><div class="pw"><img src="plans/${pl}.jpg"><svg viewBox="0 0 ${PLAN_W} ${PLAN_H}" preserveAspectRatio="none">
+      <defs><marker id="ar" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path d="M0,0L10,5L0,10z" fill="#C8102E"/></marker></defs>${marks}</svg></div></section>`; }).join('');
+  const card = x => { const src = x.chemin ? '../' + x.chemin.split('/').map(encodeURIComponent).join('/') : '';
+    return `<figure id="p${x.n}">${!src ? '<div class="miss">manquant</div>' : x.type === 'video' ? `<video src="${src}" controls preload="none" ${x.thumb ? `poster="${encodeURI(x.thumb)}"` : ''}></video>` : `<a href="${src}" target="_blank"><img loading="lazy" src="${x.thumb ? encodeURI(x.thumb) : src}"></a>`}
+      <figcaption><b>n°${x.n}</b> · ${x.heure}${x.important ? ' · ★' : ''}${x.plan ? ' · 📍' : ''}<br>${esc(x.equipements || 'Vue générale')}${x.aleas ? '<br><i>' + esc(x.aleas) + '</i>' : ''}${x.effet ? ' · ' + esc(x.effet) : ''}${x.note ? '<br>📝 ' + esc(x.note) : ''}</figcaption></figure>`; };
+  const body = [...byZ].map(([k, xs]) => `<section id="z${esc(k)}"><h2>${esc(k.slice(0, 2))} · ${esc(xs[0].zone || 'Non classées')} <small>${esc(xs[0].niveau)} · ${xs.length}</small></h2><div class="g">${xs.map(card).join('')}</div></section>`).join('');
+  return `<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(v.gare)} – photos ${ymd(v.debut)}</title>
+<style>body{font:14px Manrope,system-ui,sans-serif;margin:0;color:#1A1A1A;background:#F5F2EB}header{background:#1A1A1A;color:#FAF8F3;padding:14px 20px;border-bottom:4px solid #C8102E}main{max-width:1300px;margin:auto;padding:16px}
+nav a{display:inline-block;margin:3px 6px 3px 0;padding:3px 8px;background:#fff;border:1px solid #D9D3C4;border-radius:12px;color:inherit;text-decoration:none;font-size:13px}
+section{background:#fff;border:1px solid #D9D3C4;border-radius:10px;padding:12px 14px;margin:14px 0}h2{margin:0 0 8px;font-size:18px}small{color:#6b7682;font-weight:400}
+.g{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}figure{margin:0}figure img,figure video,.miss{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:6px;background:#dde2e8;display:block}
+.miss{display:flex;align-items:center;justify-content:center;color:#C8102E}figure:target{outline:3px solid #C8102E;outline-offset:3px;border-radius:6px}figcaption{font-size:12px;margin-top:3px}
+.pw{position:relative}.pw img{width:100%;display:block}.pw svg{position:absolute;inset:0;width:100%;height:100%}@media print{section{break-inside:avoid-page}}</style></head><body>
+<header><b>${esc(v.gare)}</b> · visite du ${ymd(v.debut)}${v.auteur ? ' · photos ' + esc(v.auteur) : ''} · ${rows.length} prises</header>
+<main><nav>${[...byZ].map(([k, xs]) => `<a href="#z${esc(k)}">${esc(k.slice(0, 2))} ${esc(xs[0].zone || 'Non classées')} (${xs.length})</a>`).join('')}</nav>
+${plans}${body}<p style="color:#6b7682;font-size:12px">GARÉo Photo ${esc(VERSION)} — les numéros sur le plan sont les n° de photo (clic = aller à la photo).</p></main></body></html>`;
+}
+
+/* =====================================================================
+   EXPORT : synthèse HTML autonome, prête à imprimer / partager
+   ===================================================================== */
+const AL_COL = {CHA:'#D9480F', PLU:'#1C7ED6', FLU:'#1864AB', NAP:'#0B7285', VEN:'#6741D9', SEC:'#B08900', RGA:'#8B5E34', GEL:'#4DABF7'};
+const EF_COL = {agg:'#C8102E', att:'#1D5E3A', eva:'#C77800'};
+const X = {src:null, all:true, busy:null, last:null};
+function viewExport() {
+  const locals = Object.values(S.visites).filter(v => v.photos.length).sort((a, b) => b.debut - a.debut);
+  const srcs = locals.map(v => ({k:v.id, lb:`${v.gare} · ${ymd(v.debut)} · ${v.photos.length} prises (ce téléphone/navigateur)`}));
+  if (B.rel && !B.local && Object.keys(B.files).length) srcs.push({k:'bureau', lb:`Relevé chargé dans Bureau · ${B.rel.visite.gare} · ${Object.keys(B.files).length} fichiers`});
+  if (!X.src || !srcs.some(s => s.k === X.src)) X.src = srcs.length ? srcs[0].k : null;
+  const v = X.src && X.src !== 'bureau' ? S.visites[X.src] : null;
+  return `<div class="card"><h2>Synthèse de visite</h2>
+    <p class="small mute" style="margin-top:0">Un document prêt à l'emploi : couverture, aléas surlignés, tableau zones × aléas, points d'attention, plans avec les photos numérotées et leur direction, puis une fiche par zone. Fichier HTML autonome (s'ouvre partout), à imprimer en PDF.</p>
+    ${srcs.length ? `<label class="f">Visite</label><select id="xSrc">${srcs.map(s => `<option value="${s.k}" ${s.k === X.src ? 'selected' : ''}>${esc(s.lb)}</option>`).join('')}</select>
+    <label class="row small" style="margin-top:10px"><input type="checkbox" id="xAll" ${X.all ? 'checked' : ''}> Toutes les photos dans les fiches de zone (sinon : ★, aggravant et notes d'abord, 8 max par zone)</label>
+    <div style="margin-top:12px"><button class="btn big yel" style="width:100%" data-act="synth" ${X.busy ? 'disabled' : ''}>✨ Générer la synthèse</button></div>
+    ${X.busy ? `<div class="small" style="margin-top:8px">${esc(X.busy.lb)} ${X.busy.done} / ${X.busy.total}</div><div class="prog"><div style="width:${100 * X.busy.done / Math.max(1, X.busy.total)}%"></div></div>` : ''}
+    ${X.last ? `<div class="banner ok" style="margin-top:10px">✔ <b>${esc(X.last.name)}</b> téléchargé (${(X.last.size / 1e6).toFixed(1)} Mo). <a href="${X.last.url}" target="_blank">Ouvrir l'aperçu</a> · pour un PDF : menu ⋮ → Partager → Imprimer (téléphone) ou Ctrl+P (PC).</div>` : ''}`
+    : '<div class="mute">Aucune visite avec des photos sur cet appareil. Sur PC : charge d\'abord le relevé et les fichiers dans l\'onglet Bureau.</div>'}
+  </div>
+  ${v ? `<div class="card"><h2>Données de la visite</h2><div class="grid2">
+    <button class="btn" data-act="xRel">💾 Relevé .json + tableau .csv</button>
+    <button class="btn" data-act="xDl">⬇ Copier les photos manquantes dans Téléchargements (${v.photos.filter(q => !q.dl).length})</button></div>
+    <p class="small mute">Le relevé .json sert à l'onglet Bureau (dossier trié). Le .csv s'ouvre dans Excel.</p></div>` : ''}`;
+}
+const toDataUrl = b => new Promise(res => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = () => res(''); r.readAsDataURL(b); });
+async function genSynthese() {
+  let r, getThumb;
+  if (X.src === 'bureau') { r = B.rel; getThumb = async p => { const e = B.files[p.id]; if (!e) return null; if (e.thumb) return await (await fetch(e.thumb)).blob(); return await makeThumb(e.file, p.type === 'video'); }; }
+  else { const v = S.visites[X.src]; r = JSON.parse(JSON.stringify(relevePayload(v))); getThumb = p => DB.get('thumbs', p.id).catch(() => null); }
+  const photos = [...r.photos].sort((a, b) => a.n - b.n);
+  X.busy = {lb:'Préparation des vignettes…', done:0, total:photos.length}; render();
+  const th = {};
+  for (const p of photos) { try { const b = await getThumb(p); if (b) th[p.id] = await toDataUrl(b); } catch (e) {} X.busy.done++; if (X.busy.done % 10 === 0) render(); }
+  const plansUsed = [...new Set(photos.filter(p => p.pt).map(p => p.pt.n))]; const planData = {};
+  for (const pl of plansUsed) { try { const res = await fetch(PLANS[pl].f); if (res.ok) planData[pl] = await toDataUrl(await res.blob()); } catch (e) {} }
+  const html = syntheseHtml(r, photos, th, planData);
+  const name = `${r.visite.code}_synthese_${ymd(r.visite.debut)}.html`;
+  const blob = new Blob([html], {type:'text/html'}); download(name, blob);
+  if (X.last && X.last.url) URL.revokeObjectURL(X.last.url);
+  X.last = {name, size:blob.size, url:URL.createObjectURL(blob)}; X.busy = null; render();
+}
+function syntheseHtml(r, photos, th, planData) {
+  const v = r.visite; const groups = groupByZone(photos);
+  const zg = groups.filter(g => g.k !== '~todo'); const todo = groups.find(g => g.k === '~todo');
+  const alUsed = ALEAS.filter(([k]) => photos.some(p => p.al.includes(k)));
+  const eqAll = new Map(); photos.forEach(p => p.eqs.forEach(e => eqAll.set(e, (eqAll.get(e) || 0) + 1)));
+  const attention = photos.filter(p => p.star || p.ef === 'agg');
+  const pill = k => `<span class="al" style="--c:${AL_COL[k] || '#555'}">${esc(alLabel(k))}</span>`;
+  const efPill = k => k ? `<span class="ef" style="--c:${EF_COL[k]}">${k === 'agg' ? '▲ ' : k === 'att' ? '▼ ' : '? '}${esc(efLabel(k))}</span>` : '';
+  const imp = n => { const e = eqInfo(n); if (!e) return '<span class="imp imp1">hors matrice</span>'; const m = Math.max(...e.l), nTE = e.l.filter(x => x === 4).length;
+    return `<span class="imp imp${Math.max(1, m)}" title="Impact max matrice G&C">${m === 4 ? 'Très élevé' + (nTE > 1 ? ' ×' + nTE : '') : m === 3 ? 'Élevé' : m === 2 ? 'Modéré' : 'Faible'}</span>`; };
+  const img = p => th[p.id] ? `<img src="${th[p.id]}" alt="">` : `<div class="noimg">${p.type === 'video' ? '🎬' : '—'}</div>`;
+  const zNum = g => pad(zg.indexOf(g) + 1);
+  /* carte (plan) : SVG qui réutilise l'image du plan, recadrée sur les points */
+  const mapSvg = (pl, pts, crop) => {
+    if (!planData[pl]) return '';
+    let vb = `0 0 ${PLAN_W} ${PLAN_H}`;
+    if (crop && pts.length) { const xs = pts.map(p => p.pt.x * PLAN_W), ys = pts.map(p => p.pt.y * PLAN_H);
+      let x0 = Math.min(...xs) - 260, x1 = Math.max(...xs) + 260, y0 = Math.min(...ys) - 200, y1 = Math.max(...ys) + 200;
+      let w = Math.max(x1 - x0, 1100), h = Math.max(y1 - y0, 700); if (w / h > 1.75) h = w / 1.75; else w = h * 1.75;
+      const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2; x0 = Math.max(0, Math.min(PLAN_W - w, cx - w / 2)); y0 = Math.max(0, Math.min(PLAN_H - h, cy - h / 2));
+      vb = `${x0.toFixed(0)} ${y0.toFixed(0)} ${Math.min(w, PLAN_W).toFixed(0)} ${Math.min(h, PLAN_H).toFixed(0)}`; }
+    const grp = new Map(); pts.forEach(p => { const k = p.pt.x.toFixed(3) + '|' + p.pt.y.toFixed(3); if (!grp.has(k)) grp.set(k, []); grp.get(k).push(p); });
+    const sc = crop ? 0.75 : 1.25;
+    const marks = [...grp.values()].map(xs => { const p0 = xs[0]; const cx = p0.pt.x * PLAN_W, cy = p0.pt.y * PLAN_H;
+      const lab = xs.length === 1 ? String(p0.n) : xs[0].n + '–' + xs[xs.length - 1].n; const w = Math.max(46, lab.length * 15 + 18) * sc, h = 46 * sc;
+      const hot = xs.some(p => p.ef === 'agg' || p.star);
+      const arrows = xs.filter(p => p.pt.dir != null).map(p => { const d = p.pt.dir * Math.PI / 180, L = 95 * sc;
+        return `<line x1="${cx}" y1="${cy}" x2="${(cx + L * Math.cos(d)).toFixed(1)}" y2="${(cy + L * Math.sin(d)).toFixed(1)}" stroke="#C8102E" stroke-width="${8 * sc}" marker-end="url(#ar)"/>`; }).join('');
+      return `<a href="#p${p0.n}"><g>${arrows}<rect x="${cx - w / 2}" y="${cy - h / 2}" width="${w}" height="${h}" rx="${h / 2}" fill="${hot ? '#C8102E' : '#1A1A1A'}" stroke="#fff" stroke-width="${5 * sc}"/>
+        <text x="${cx}" y="${cy + 9 * sc}" text-anchor="middle" font-size="${26 * sc}" font-weight="800" fill="#fff">${lab}</text></g></a>`; }).join('');
+    return `<svg class="map" viewBox="${vb}" preserveAspectRatio="xMidYMid meet"><use href="#plan-${pl}"/>${marks}</svg>`;
+  };
+  const card = p => `<figure id="p${p.n}" class="${p.star || p.ef === 'agg' ? 'hot' : ''}">${img(p)}
+    <figcaption><div class="cap1"><b>n°${p.n}</b><span>${hm(p.t)}</span>${p.type === 'video' ? '<span>🎬 vidéo</span>' : ''}${p.star ? '<span class="star">★</span>' : ''}${p.pt ? '<span>📍</span>' : ''}</div>
+    <div class="eqs">${p.eqs.length ? p.eqs.map(esc).join(' · ') : '<i>Vue générale</i>'}</div>
+    ${p.al.length || p.ef ? `<div class="tags">${p.al.map(pill).join('')}${efPill(p.ef)}</div>` : ''}${p.note ? `<div class="note">${esc(p.note)}</div>` : ''}</figcaption></figure>`;
+  const pick = items => { if (X.all) return items; const pri = items.filter(p => p.star || p.ef === 'agg' || p.note); const rest = items.filter(p => !pri.includes(p)); return [...pri, ...rest].slice(0, Math.max(8, pri.length)).sort((a, b) => a.n - b.n); };
+  /* --- matrice zones × aléas --- */
+  const matrix = alUsed.length ? `<table class="mx"><thead><tr><th>Zone</th>${alUsed.map(([k]) => `<th>${pill(k)}</th>`).join('')}</tr></thead><tbody>
+    ${zg.map(g => `<tr><td><a href="#z${zNum(g)}"><b>${zNum(g)}</b> ${esc(g.zone || 'Sans zone')}</a></td>${alUsed.map(([k]) => { const ps = g.items.filter(p => p.al.includes(k));
+      if (!ps.length) return '<td></td>'; const ef = ps.some(p => p.ef === 'agg') ? 'agg' : ps.some(p => p.ef === 'eva') ? 'eva' : ps.some(p => p.ef === 'att') ? 'att' : '';
+      return `<td class="c" style="--c:${AL_COL[k]}">${ps.length}${ef ? `<span class="mk" style="color:${EF_COL[ef]}">${ef === 'agg' ? '▲' : ef === 'att' ? '▼' : '?'}</span>` : ''}</td>`; }).join('')}</tr>`).join('')}
+    </tbody></table><p class="leg">Chiffre = nombre de photos. <span style="color:#C8102E">▲ aggravant</span> · <span style="color:#1D5E3A">▼ atténuant</span> · <span style="color:#C77800">? à évaluer</span></p>`
+    : '<p class="mute">Aucun aléa renseigné sur les photos.</p>';
+  const zoneSec = g => { const n = zNum(g); const items = g.items; const pts = items.filter(p => p.pt);
+    const eqs = new Map(); items.forEach(p => p.eqs.forEach(e => eqs.set(e, (eqs.get(e) || 0) + 1)));
+    const als = ALEAS.filter(([k]) => items.some(p => p.al.includes(k)));
+    const notes = items.filter(p => p.note);
+    const pls = [...new Set(pts.map(p => p.pt.n))];
+    return `<section class="zone" id="z${n}"><div class="zh"><span class="zn">${n}</span><div><h2>${esc(g.zone || 'Sans zone')}</h2><div class="sub">${esc(nivOf(g.niv).label)} · ${items.length} prise${items.length > 1 ? 's' : ''} · n° ${items[0].n}${items.length > 1 ? '–' + items[items.length - 1].n : ''}</div></div>
+      ${als.length ? `<div class="zal">${als.map(([k]) => pill(k)).join('')}</div>` : ''}</div>
+      <div class="zgrid">${pls.length ? `<div class="zmap">${pls.map(pl => mapSvg(pl, pts.filter(p => p.pt.n === pl), true)).join('')}<div class="cap">${esc(pls.map(pl => PLANS[pl].t).join(' · '))} — n° des photos, flèche = direction de prise de vue</div></div>` : ''}
+      <div class="zinfo">${eqs.size ? `<h3>Équipements photographiés</h3><ul class="eql">${[...eqs].map(([e, c]) => `<li><span>${esc(e)}</span>${imp(e)}<em>${c}</em></li>`).join('')}</ul>` : '<h3>Équipements</h3><p class="mute">Vues générales uniquement.</p>'}
+      ${notes.length ? `<h3>Constats</h3><ul class="nl">${notes.map(p => `<li><a href="#p${p.n}">n°${p.n}</a> ${p.ef ? efPill(p.ef) : ''}${esc(p.note)}</li>`).join('')}</ul>` : ''}</div></div>
+      <div class="g">${pick(items).map(card).join('')}</div>${!X.all && pick(items).length < items.length ? `<p class="mute small">+ ${items.length - pick(items).length} autres photos dans le dossier trié.</p>` : ''}</section>`; };
+  const logo = `<svg class="lg" viewBox="0 28 352 130"><polyline points="-12,152 249.54,152 275.54,92.6" fill="none" stroke="#C8102E" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round"/><g stroke-width="6" stroke-linecap="round"><line x1="261.64" y1="68.52" x2="244.64" y2="39.08" stroke="#FF2A43"/><line x1="279.41" y1="65.07" x2="282.19" y2="45.27" stroke="#268A52"/><line x1="295.54" y1="73.29" x2="316.40" y2="53.14" stroke="#2C7E9C"/><line x1="303.07" y1="88.73" x2="342.68" y2="83.16" stroke="#FF2A43"/><line x1="299.62" y1="106.50" x2="319.53" y2="118.00" stroke="#268A52"/><line x1="285.05" y1="118.72" x2="296.33" y2="149.73" stroke="#2C7E9C"/></g><text x="8" y="122" font-family="Manrope,system-ui,sans-serif" font-weight="800" font-size="96" letter-spacing="-4.5" fill="#1A1A1A">GARÉ</text><circle cx="275.54" cy="92.6" r="23.8" fill="#C8102E"/><circle cx="275.54" cy="92.6" r="8.57" fill="#FAF8F3"/><circle cx="244.64" cy="39.08" r="4.5" fill="#FF2A43"/><circle cx="282.19" cy="45.27" r="4.5" fill="#268A52"/><circle cx="316.40" cy="53.14" r="4.5" fill="#2C7E9C"/><circle cx="342.68" cy="83.16" r="4.5" fill="#FF2A43"/><circle cx="319.53" cy="118.00" r="4.5" fill="#268A52"/><circle cx="296.33" cy="149.73" r="4.5" fill="#2C7E9C"/></svg>`;
+  const t0 = photos.length ? Math.min(...photos.map(p => p.t)) : v.debut, t1 = photos.length ? Math.max(...photos.map(p => p.t)) : (v.fin || v.debut);
+  const defs = `<svg width="0" height="0" style="position:absolute"><defs>${Object.entries(planData).map(([pl, d]) => `<image id="plan-${pl}" href="${d}" x="0" y="0" width="${PLAN_W}" height="${PLAN_H}"/>`).join('')}
+    <marker id="ar" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="3.2" markerHeight="3.2" orient="auto"><path d="M0,0L10,5L0,10z" fill="#C8102E"/></marker></defs></svg>`;
+  return `<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${esc(v.gare)} — synthèse photo ${ymd(v.debut)}</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--red:#C8102E;--ink:#1A1A1A;--paper:#F5F2EB;--pl:#FAF8F3;--bd:#D9D3C4;--taupe:#8B8680;--tint:#FBEAEC}
+*{box-sizing:border-box}body{margin:0;font:13.5px/1.45 Manrope,-apple-system,"Segoe UI",system-ui,sans-serif;color:var(--ink);background:var(--paper);-webkit-font-smoothing:antialiased}
+a{color:inherit}.wrap{max-width:1180px;margin:auto;padding:18px}
+.cover{background:var(--pl);border:1px solid var(--bd);border-top:6px solid var(--red);border-radius:12px;padding:26px 28px;margin-bottom:18px}
+.cover .lg{height:46px;width:auto;display:block;margin-bottom:18px}.kick{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--red);font-weight:800}
+.cover h1{font-size:30px;line-height:1.1;margin:6px 0 4px;font-weight:800;letter-spacing:-.01em}.cover .meta{color:var(--taupe);font-size:14px}
+.kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-top:20px}.kpi div{background:#fff;border:1px solid var(--bd);border-radius:10px;padding:10px 12px}
+.kpi b{display:block;font-size:26px;font-weight:800;line-height:1}.kpi span{font-size:11.5px;color:var(--taupe);text-transform:uppercase;letter-spacing:.06em}.kpi .r b{color:var(--red)}
+.block{background:var(--pl);border:1px solid var(--bd);border-radius:12px;padding:16px 18px;margin-bottom:18px}
+h2{font-size:19px;margin:0 0 10px;font-weight:800}h3{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--taupe);margin:12px 0 6px}
+.al{display:inline-block;background:color-mix(in srgb,var(--c) 15%,#fff);color:var(--c);border:1px solid color-mix(in srgb,var(--c) 45%,#fff);border-radius:999px;padding:1px 8px;font-size:11.5px;font-weight:700;margin:2px 3px 2px 0;white-space:nowrap}
+.ef{display:inline-block;background:var(--c);color:#fff;border-radius:999px;padding:1px 8px;font-size:11.5px;font-weight:700;margin:2px 3px 2px 0;white-space:nowrap}
+.imp{font-size:10.5px;font-weight:700;border-radius:5px;padding:1px 6px;white-space:nowrap}.imp4{background:#FBEAEC;color:#9E0B24}.imp3{background:#FDEBD7;color:#A5591A}.imp2{background:#EEF0D6;color:#6A6A1D}.imp1{background:#EEF1F4;color:#55606B}
+.mx{border-collapse:collapse;width:100%;background:#fff;font-size:12.5px}.mx th,.mx td{border:1px solid var(--bd);padding:6px 8px;text-align:center}.mx td:first-child,.mx th:first-child{text-align:left}
+.mx td.c{background:color-mix(in srgb,var(--c) 18%,#fff);font-weight:800;color:var(--c)}.mx .mk{margin-left:4px;font-size:11px}.mx a{text-decoration:none}.leg{font-size:11.5px;color:var(--taupe)}
+.att{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}.att a{display:flex;gap:10px;background:#fff;border:1px solid var(--bd);border-left:4px solid var(--red);border-radius:9px;padding:8px;text-decoration:none}
+.att img,.att .noimg{width:86px;height:64px;object-fit:cover;border-radius:6px;flex:0 0 auto}.att .t{font-size:12px}
+.map{width:100%;height:auto;display:block;background:#fff;border:1px solid var(--bd);border-radius:8px}.cap{font-size:11px;color:var(--taupe);margin-top:4px}
+.zone{background:var(--pl);border:1px solid var(--bd);border-radius:12px;padding:16px 18px;margin-bottom:18px}
+.zh{display:flex;gap:12px;align-items:center;border-bottom:2px solid var(--ink);padding-bottom:10px;margin-bottom:12px}.zh h2{margin:0}.zh .sub{color:var(--taupe);font-size:12.5px}
+.zn{background:var(--red);color:#fff;font-weight:800;font-size:18px;border-radius:9px;min-width:44px;height:44px;display:flex;align-items:center;justify-content:center}.zal{margin-left:auto;text-align:right}
+.zgrid{display:grid;grid-template-columns:1.5fr 1fr;gap:16px;margin-bottom:12px}.zgrid>:only-child{grid-column:1/-1}
+.eql{list-style:none;margin:0;padding:0}.eql li{display:flex;gap:8px;align-items:center;padding:5px 0;border-bottom:1px solid var(--bd)}.eql li span:first-child{flex:1;font-weight:600}.eql em{font-style:normal;color:var(--taupe);font-size:12px}
+.nl{margin:0;padding-left:18px}.nl li{margin:4px 0}
+.g{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}
+figure{margin:0;background:#fff;border:1px solid var(--bd);border-radius:9px;overflow:hidden}figure.hot{border:2px solid var(--red)}figure:target{outline:3px solid var(--red);outline-offset:2px}
+figure img,.noimg{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:#E6E0CF}.noimg{display:flex;align-items:center;justify-content:center;font-size:26px;color:var(--taupe)}
+figcaption{padding:6px 8px 8px;font-size:12px}.cap1{display:flex;gap:7px;color:var(--taupe)}.cap1 b{color:var(--ink)}.cap1 .star{color:#C77800}.eqs{font-weight:700;margin-top:2px}.tags{margin-top:3px}.note{margin-top:4px;color:var(--ink-soft,#3D3D3D)}
+.mute{color:var(--taupe)}.small{font-size:12px}.foot{color:var(--taupe);font-size:11px;text-align:center;padding:14px}
+@media (max-width:760px){.zgrid{grid-template-columns:1fr}.cover h1{font-size:24px}}
+@media print{@page{size:A4;margin:11mm}body{background:#fff;font-size:11.5px}.wrap{padding:0;max-width:none}.cover,.block,.zone{border-radius:0;break-inside:auto}.zone{break-before:page}.block.pl{break-before:page;break-inside:avoid}.att{grid-template-columns:repeat(3,1fr)}.att a,figure{break-inside:avoid}.g{grid-template-columns:repeat(4,1fr)}}
+</style></head><body>${defs}<div class="wrap">
+<div class="cover">${logo}<div class="kick">Relevé photo de visite</div><h1>${esc(v.gare)}</h1>
+<div class="meta">Visite du ${new Date(v.debut).toLocaleDateString('fr-FR', {weekday:'long', day:'numeric', month:'long', year:'numeric'})} · ${hm(t0)}–${hm(t1)}${v.auteur ? ' · photos : ' + esc(v.auteur) : ''}</div>
+<div class="kpi"><div><b>${photos.length}</b><span>prises</span></div><div><b>${zg.length}</b><span>zones</span></div><div><b>${eqAll.size}</b><span>équipements distincts</span></div>
+<div><b>${photos.filter(p => p.pt).length}</b><span>pointées sur plan</span></div><div class="r"><b>${attention.length}</b><span>points d'attention</span></div>${todo ? `<div><b>${todo.items.length}</b><span>non classées</span></div>` : ''}</div>
+${alUsed.length ? `<h3 style="margin-top:18px">Aléas relevés</h3><div>${alUsed.map(([k]) => `${pill(k)}<span class="small mute" style="margin-right:10px">${photos.filter(p => p.al.includes(k)).length}</span>`).join('')}</div>` : ''}</div>
+<div class="block"><h2>Aléas par zone</h2>${matrix}</div>
+${attention.length ? `<div class="block"><h2>Points d'attention <span class="small mute">(★ important ou aggravant)</span></h2><div class="att">${attention.map(p => `<a href="#p${p.n}">${img(p)}<div class="t"><b>n°${p.n}</b> · ${esc(p.zone || '—')}<br><b>${esc(p.eqs.join(' · ') || 'Vue générale')}</b><br>${p.al.map(pill).join('')}${efPill(p.ef)}${p.note ? '<br>' + esc(p.note) : ''}</div></a>`).join('')}</div></div>` : ''}
+${Object.keys(planData).map(pl => `<div class="block pl"><h2>${esc(PLANS[pl].t)} <span class="small mute">— ${photos.filter(p => p.pt && p.pt.n === pl).length} prises pointées</span></h2>${mapSvg(pl, photos.filter(p => p.pt && p.pt.n === pl), false)}<div class="cap">Numéro = n° de photo (clic = aller à la photo) · rouge = point d'attention · flèche = direction de prise de vue</div></div>`).join('')}
+${zg.map(zoneSec).join('')}
+${todo ? `<section class="zone" id="ztodo"><div class="zh"><span class="zn" style="background:#8B8680">?</span><div><h2>Non classées</h2><div class="sub">${todo.items.length} prises à ranger</div></div></div><div class="g">${todo.items.map(card).join('')}</div></section>` : ''}
+<div class="foot">Généré par GARÉo Photo ${esc(VERSION)} le ${new Date().toLocaleString('fr-FR')} · nomenclature équipements : matrice de risques SNCF G&C</div>
+</div></body></html>`;
+}
+
+/* ---------- Lecture EXIF / vidéo ---------- */
+function exifTime(dto, off) {
+  const p = dto.match(/(\d{4}):(\d\d):(\d\d) (\d\d):(\d\d):(\d\d)/); if (!p) return null;
+  if (off && /^[+-]\d\d:\d\d$/.test(off)) return Date.parse(`${p[1]}-${p[2]}-${p[3]}T${p[4]}:${p[5]}:${p[6]}${off}`);
+  return new Date(+p[1], +p[2] - 1, +p[3], +p[4], +p[5], +p[6]).getTime();
+}
+function parseExif(buf) {
+  const dv = new DataView(buf); if (dv.byteLength < 4 || dv.getUint16(0) !== 0xFFD8) return null;
+  let o = 2;
+  while (o + 4 < dv.byteLength) {
+    if (dv.getUint8(o) !== 0xFF) return null;
+    const mk = dv.getUint8(o + 1), len = dv.getUint16(o + 2);
+    if (mk === 0xE1 && dv.getUint32(o + 4) === 0x45786966) return parseTiff(dv, o + 10, Math.min(dv.byteLength, o + 2 + len));
+    if (mk === 0xDA) return null;
+    o += 2 + len;
+  }
+  return null;
+}
+function parseTiff(dv, T, end) {
+  const le = dv.getUint16(T) === 0x4949;
+  const u16 = p => dv.getUint16(p, le), u32 = p => dv.getUint32(p, le);
+  const ascii_ = (p, n) => { let s = ''; for (let i = 0; i < n && p + i < end; i++) { const c = dv.getUint8(p + i); if (!c) break; s += String.fromCharCode(c); } return s; };
+  const readIfd = p => { const out = {}; if (p + 2 > end) return {out, next:0}; const n = u16(p);
+    for (let i = 0; i < n; i++) { const e = p + 2 + i * 12; if (e + 12 > end) break;
+      const tag = u16(e), type = u16(e + 2), cnt = u32(e + 4); const sz = ({1:1, 2:1, 3:2, 4:4, 5:8, 7:1, 9:4, 10:8})[type] || 1;
+      const vp = cnt * sz <= 4 ? e + 8 : T + u32(e + 8);
+      out[tag] = {type, cnt, vp}; }
+    const np = p + 2 + n * 12; return {out, next: np + 4 <= end ? u32(np) : 0}; };
+  const val = en => { if (!en) return null; const {type, cnt, vp} = en;
+    if (type === 2) return ascii_(vp, cnt);
+    if (type === 3) return u16(vp); if (type === 4) return u32(vp);
+    if (type === 5) { const r = []; for (let i = 0; i < cnt; i++) { const d = u32(vp + i * 8 + 4); r.push(d ? u32(vp + i * 8) / d : 0); } return r; }
+    return null; };
+  const res = {dto:null, off:null, gps:null, thumb:null};
+  const i0 = readIfd(T + u32(T + 4));
+  if (i0.out[0x8769]) { const ex = readIfd(T + val(i0.out[0x8769])).out;
+    res.dto = val(ex[0x9003]) || null; res.off = val(ex[0x9011]) || null; }
+  if (!res.dto && i0.out[0x0132]) res.dto = val(i0.out[0x0132]);
+  if (i0.out[0x8825]) { const g = readIfd(T + val(i0.out[0x8825])).out;
+    const la = val(g[2]), lo = val(g[4]);
+    if (la && lo && la.length === 3) { let lat = la[0] + la[1] / 60 + la[2] / 3600, lon = lo[0] + lo[1] / 60 + lo[2] / 3600;
+      if (val(g[1]) === 'S') lat = -lat; if (val(g[3]) === 'W') lon = -lon;
+      if (lat || lon) res.gps = {lat:+lat.toFixed(6), lon:+lon.toFixed(6)}; } }
+  if (i0.next) { const i1 = readIfd(T + i0.next).out; const to = val(i1[0x0201]), tl = val(i1[0x0202]);
+    if (to && tl && T + to + tl <= end) res.thumb = new Uint8Array(dv.buffer, dv.byteOffset + T + to, tl).slice(); }
+  return res;
+}
+async function mp4Time(f) {
+  const scan = async (start, len) => { const b = new Uint8Array(await f.slice(start, start + len).arrayBuffer());
+    for (let i = 4; i < b.length - 24; i++) if (b[i] === 0x6D && b[i + 1] === 0x76 && b[i + 2] === 0x68 && b[i + 3] === 0x64) {
+      const dv = new DataView(b.buffer, i + 4); const ver = dv.getUint8(0);
+      const s = ver === 1 ? Number(dv.getBigUint64(4)) : dv.getUint32(4);
+      if (s > 3000000000) return (s - 2082844800) * 1000; }
+    return null; };
+  return (await scan(0, 2 * 1048576)) || (f.size > 2 * 1048576 ? await scan(Math.max(0, f.size - 8 * 1048576), 8 * 1048576) : null);
+}
+
+
+
+/* ---------- Aide ---------- */
+function viewAide() {
+  return `<div class="card help"><h2>Comment ça marche</h2>
+  <ol><li><b>📷 Photo</b> ouvre l'appareil photo. Après la prise, la <b>fiche</b> s'ouvre : tu touches le plan où tu es (1er appui) puis vers où tu regardes (2e appui ; un 3e appui replace le point), tu tapes la zone, tu ajoutes un ou plusieurs équipements, aléas, note.</li>
+  <li>La fiche reprend le lieu et les équipements de la photo précédente : souvent il suffit d'appuyer sur <b>✓ + 📷 suivante</b>.</li>
+  <li>Pressé ? Enregistre sans rien remplir, la photo reste « à classer » et tu la ranges plus tard (filtre « À classer »).</li>
+  <li>Chaque photo est gardée <b>dans l'appli</b> et, à l'enregistrement, une <b>copie nommée</b> part dans <b>Téléchargements</b> (ex. <code>PAZ_0012_094210_N0_GHV_Abris-de-quais.jpg</code>).</li>
+  <li>Fin de visite : <b>💾 Exporter le relevé</b> → un .json + un .csv dans Téléchargements. Onglet <b>Export</b> : la <b>synthèse</b> prête à l'emploi (aléas, plans, fiches par zone), à imprimer en PDF.</li>
+  <li>Au bureau : câble USB, copie le dossier <code>Download</code> du téléphone, ouvre cette page sur PC (Chrome/Edge), onglet <b>Bureau</b> : relevé .json + fichiers → <b>Exporter le dossier trié</b> (dossiers par zone/équipement, Excel, planche avec les photos numérotées sur le plan).</li></ol>
+  <h3>Ce soir</h3><ul><li>Ouvrir la page avec du réseau, menu ⋮ → <b>Ajouter à l'écran d'accueil</b>.</li>
+  <li>Autoriser la localisation et l'appareil photo quand c'est demandé.</li>
+  <li>Test : 3 photos + 1 vidéo, les classer, vérifier les copies dans Téléchargements (appli Fichiers), Exporter le relevé.</li>
+  <li>Batterie externe, 10 Go libres minimum (les vidéos prennent ~100 Mo/min, et elles sont stockées 2 fois : appli + Téléchargements).</li></ul>
+  <h3>Les photos utiles (ACC)</h3><ul>
+  <li>En entrant dans un espace : la porte / plaque du local ou le <b>plan d'évacuation « vous êtes ici »</b>.</li>
+  <li>Vues générales : 2 à 4 depuis les angles, sol et plafond visibles.</li>
+  <li>Équipement : plan large + serré + <b>plaque constructeur</b> (marque, modèle, année).</li>
+  <li>Inondation : hauteur de pose par rapport au sol (objet pour l'échelle), seuils, avaloirs, regards, pompes, traces d'eau, batardeaux, sorties inondables.</li>
+  <li>Chaleur : verrières, vitrages, protections solaires, ventilation, clim (intérieur et toiture), locaux techniques non climatisés.</li>
+  <li>Toitures / vent : éléments en toiture, fixations, marquises, chéneaux, descentes EP.</li>
+  <li>Désordres : fissures, infiltrations, corrosion — 1 large + 1 serrée.</li>
+  <li>Demande avant de photographier un agent, un écran de supervision ou un document.</li></ul>
+  <h3>Réglages</h3><label class="row"><input type="checkbox" id="cDl" ${S.prefs.dlCopy ? 'checked' : ''}> Copier chaque photo enregistrée dans Téléchargements (recommandé)</label>
+  <p class="small mute">Version ${esc(VERSION)}</p></div>`;
+}
+
+/* =====================================================================
+   ÉVÉNEMENTS
+   ===================================================================== */
+document.addEventListener('click', async ev => {
+  const el = ev.target.closest('[data-act]'); if (!el) return; const a = el.dataset.act;
+  if (el.tagName === 'A') ev.preventDefault();
+  const p = UI.fiche ? P(UI.fiche) : null;
+  switch (a) {
+    case 'mode': UI.mode = el.dataset.v; localStorage.setItem('gareoPhoto.mode', UI.mode); render(); showQuota(); break;
+    case 'start': { const g = $('#iGare').value.trim() || 'Gare', c = $('#iCode').value.trim() || 'GARE', au = $('#iAut').value.trim(); localStorage.setItem('gareoPhoto.aut', au); startVisite(g, c, au); break; }
+    case 'resume': { const o = S.visites[el.dataset.id]; o.fin = null; S.current = o.id; save(); render(); showQuota(); break; }
+    case 'capP': $('#capP').click(); break;
+    case 'capV': $('#capV').click(); break;
+    case 'imp': $('#imp').click(); break;
+    case 'filtre': UI.filtre = el.dataset.v; render(); break;
+    case 'openFiche': openFiche(el.dataset.id); break;
+    case 'closeFiche': { if (p) { const z = $('#fZone'), n = $('#fNote'); if (z) p.zone = z.value.trim(); if (n) p.note = n.value.trim(); save(); } closeOv(); break; }
+    case 'full': { if (!p) break; const b = await DB.get('blobs', p.id).catch(() => null); if (!b) { toast('Fichier non disponible'); break; }
+      const u = URL.createObjectURL(b); const d = document.createElement('div'); d.className = 'full';
+      d.innerHTML = (p.type === 'video' ? `<video src="${u}" controls autoplay playsinline></video>` : `<img src="${u}">`) + '<button>Fermer</button>';
+      d.querySelector('button').onclick = () => { URL.revokeObjectURL(u); d.remove(); }; document.body.appendChild(d); break; }
+    case 'fNiv': p.niv = el.dataset.v; if (p.pt && p.pt.n !== nivOf(p.niv).plan) p.pt = null; save(); $('#fNiv').innerHTML = nivTabs(p); UI.dirMode = false; renderPlan(p); renderZoneSug(p); break;
+    case 'zoom': { const w = $('#pw'), img = $('#pimg'); if (!w) break; const cx = (w.scrollLeft + w.clientWidth / 2) / img.clientWidth, cy = (w.scrollTop + w.clientHeight / 2) / img.clientHeight;
+      UI.zoom = Math.max(1, Math.min(8, UI.zoom * (el.dataset.v === '1' ? 1.5 : 1 / 1.5))); UI.planDraw();
+      w.scrollLeft = cx * img.clientWidth - w.clientWidth / 2; w.scrollTop = cy * img.clientHeight - w.clientHeight / 2; break; }
+    case 'dirMode': UI.dirMode = !UI.dirMode; renderPlanCtl(p, nivOf(p.niv)); break;
+    case 'clearPt': p.pt = null; save(); UI.dirMode = false; renderPlanCtl(p, nivOf(p.niv)); UI.planDraw(); break;
+    case 'pickZone': p.zone = el.dataset.v; $('#fZone').value = p.zone; save(); renderZoneSug(p); break;
+    case 'addEq': case 'addEqNew': { const n = a === 'addEq' ? el.dataset.v : UI.eqQ.trim(); if (!n) break;
+      if (a === 'addEqNew' && !S.eqCustom.includes(n)) S.eqCustom.push(n);
+      if (!p.eqs.includes(n)) p.eqs.push(n); S.recentEq = [n, ...S.recentEq.filter(x => x !== n)].slice(0, 10);
+      UI.eqQ = ''; $('#fEqQ').value = ''; save(); renderEq(p); break; }
+    case 'rmEq': p.eqs = p.eqs.filter(x => x !== el.dataset.v); save(); renderEq(p); break;
+    case 'eqAll': UI.eqAll = true; renderEq(p); break;
+    case 'al': { const k = el.dataset.v; p.al = p.al.includes(k) ? p.al.filter(x => x !== k) : [...p.al, k]; save(); renderTags(p); break; }
+    case 'ef': p.ef = p.ef === el.dataset.v ? '' : el.dataset.v; save(); renderTags(p); break;
+    case 'star': p.star = !p.star; save(); renderTags(p); break;
+    case 'clearAll': p.zone = ''; p.pt = null; p.eqs = []; p.al = []; p.ef = ''; p.star = false; save(); renderOv(); break;
+    case 'saveFiche': case 'saveNext': { commitFiche(p); if (S.prefs.dlCopy) await dlCopy(p); closeOv(); if (a === 'saveNext') $('#capP').click(); else toast('✔ ' + p.id + ' enregistrée'); break; }
+    case 'delPhoto': { if (!confirm('Supprimer ' + p.id + ' de l\'appli ?')) break; const v = V(); v.photos = v.photos.filter(x => x.id !== p.id); save(); DB.del('blobs', p.id).catch(() => {}); DB.del('thumbs', p.id).catch(() => {}); closeOv(); break; }
+    case 'dlMissing': { const v = V(); for (const q of v.photos.filter(x => x.done && !x.dl)) { await dlCopy(q); await new Promise(r => setTimeout(r, 400)); } render(); break; }
+    case 'exportRel': exportReleve(); toast('Relevé exporté dans Téléchargements'); break;
+    case 'shareRel': shareReleve(); break;
+    case 'end': { const v = V(); const todo = v.photos.filter(x => !x.done).length;
+      if (!confirm((todo ? todo + ' photo(s) encore à classer (tu pourras les classer plus tard).\n' : '') + 'Terminer la visite ? Le relevé sera exporté dans Téléchargements.')) break;
+      v.fin = Date.now(); exportReleve(v); S.current = null; save(); render(); break; }
+    case 'synth': try { await genSynthese(); } catch (e) { console.error(e); X.busy = null; toast('Erreur : ' + e.message, 'err'); render(); } break;
+    case 'xRel': exportReleve(S.visites[X.src]); toast('Relevé exporté dans Téléchargements'); break;
+    case 'xDl': { const v = S.visites[X.src]; for (const q of v.photos.filter(x => !x.dl)) { await dlCopy(q); await new Promise(r => setTimeout(r, 400)); } render(); break; }
+    // Bureau
+    case 'pickJson': $('#fJson').click(); break;
+    case 'bLocal': { const v = S.visites[el.dataset.id]; B.rel = JSON.parse(JSON.stringify(relevePayload(v))); B.local = true; B.log = null; render(); break; }
+    case 'bReset': Object.assign(B, {rel:null, local:false, files:{}, unknown:[], log:null}); render(); break;
+    case 'pickMedia': $('#fMedia').click(); break;
+    case 'pickDir': $('#fDir').click(); break;
+    case 'export': try { await doExport(); } catch (e) { console.error(e); B.log = {err:true, html:'Erreur pendant l\'export : ' + esc(e.message)}; render(); } break;
+  }
+});
+document.addEventListener('input', ev => {
+  const t = ev.target; const p = UI.fiche ? P(UI.fiche) : null;
+  if (t.id === 'fEqQ' && p) { UI.eqQ = t.value; renderEq(p); }
+  if (t.id === 'fZone' && p) { p.zone = t.value; save(); renderZoneSug(p); }
+  if (t.id === 'fNote' && p) { p.note = t.value; save(); }
+});
+document.addEventListener('keydown', ev => { if (ev.key === 'Enter' && ev.target.id === 'fEqQ') { ev.preventDefault(); const b = $('#fEqSug [data-act=addEq]') || $('#fEqSug [data-act=addEqNew]'); if (b) b.click(); } });
+document.addEventListener('change', ev => {
+  const t = ev.target;
+  if (t.id === 'capP' || t.id === 'capV' || t.id === 'imp') { const fs = [...t.files]; t.value = ''; onCapture(fs, t.id === 'imp' ? 'import' : t.id === 'capV' ? 'video' : 'camera'); }
+  if (t.id === 'cDl') { S.prefs.dlCopy = t.checked; save(); }
+  if (t.id === 'xSrc') { X.src = t.value; X.last = null; render(); }
+  if (t.id === 'xAll') { X.all = t.checked; }
+  if (t.id === 'fJson' && t.files[0]) { t.files[0].text().then(txt => { try { const j = JSON.parse(txt); if (!j.photos || !j.visite) throw 0; Object.assign(B, {rel:j, local:false, files:{}, unknown:[], log:null}); render(); }
+    catch (e) { alert('Ce fichier n\'est pas un relevé GARÉo Photo.'); } t.value = ''; }); }
+  if ((t.id === 'fMedia' || t.id === 'fDir') && t.files.length) { const fs = [...t.files]; t.value = ''; addFiles(fs); }
+});
+window.addEventListener('beforeunload', e => { if (UI.mode === 'bureau' && Object.keys(B.files).length) { e.preventDefault(); e.returnValue = ''; } });
+if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
+render(); showQuota();
+</script>
+</body>
+</html>
