@@ -120,6 +120,7 @@ label.f{display:block;font-size:12.5px;color:var(--mute);margin:10px 0 4px}
 <input type="file" id="capV" accept="video/*" capture="environment" hidden>
 <input type="file" id="imp" accept="image/*,video/*" multiple hidden>
 <input type="file" id="fJson" accept=".json,application/json" hidden>
+<input type="file" id="fZip" accept=".zip,application/zip" hidden>
 <input type="file" id="fMedia" accept="image/*,video/*" multiple hidden>
 <input type="file" id="fDir" webkitdirectory multiple hidden>
 
@@ -130,7 +131,7 @@ label.f{display:block;font-size:12.5px;color:var(--mute);margin:10px 0 4px}
    plan, on la range (zone libre, équipements, aléas, note).
    Fichier unique, aucune dépendance externe, fonctionne hors-ligne.
    ===================================================================== */
-const VERSION = 'v2026-11-05 · 7';
+const VERSION = 'v2026-11-07 · 8';
 const STORE_KEY = 'gareoPhoto.v2';
 
 const EQUIP = [{"n": "Abri vélo", "l": [1, 2, 1, 3, 2], "d": "Abri / structure légère de stationnement et protection des vélos"}, {"n": "Abris de quais/marquise", "l": [3, 3, 2, 4, 1], "d": "Abris ou marquises protégeant les voyageurs sur les quais"}, {"n": "AEP (Adduction eau potable)", "l": [2, 2, 2, 4, 4], "d": "Réseau d’alimentation en eau potable de la gare (sanitaires, robinets, usages courants)"}, {"n": "Alimentation SNCF Réseau", "l": [3, 3, 4, 4, 3], "d": "Alimentation électrique dédiée aux équipements ferroviaires de SNCF Réseau en gare (signalisation, aiguillages, postes, etc.)"}, {"n": "Armoire de climatisation", "l": [1, 2, 3, 1, 1], "d": "Armoire de traitement d’air / climatisation alimentant principalement des locaux techniques ou équipements sensibles"}, {"n": "Armoire élévatique", "l": [3, 2, 2, 4, 1], "d": "Armoire de commande et de puissance des ascenseurs et escaliers mécaniques"}, {"n": "ART PMR", "l": [0, 2, 2, 4, 4], "d": "Dispositif d’aide et d’information dédié aux PMR"}, {"n": "ART/AMT/BLS (Automate de vente)", "l": [0, 2, 2, 4, 0], "d": "Automates de vente de titres de transport"}, {"n": "Ascenseur de service / Monte charge", "l": [1, 2, 3, 1, 1], "d": "Ascenseur dédié aux flux logistiques et manutention"}, {"n": "Ascenseur non secouru", "l": [3, 2, 1, 4, 1], "d": "Ascenseur voyageurs non intégré au dispositif d'évacuation"}, {"n": "Ascenseur secouru", "l": [4, 2, 1, 4, 1], "d": "Ascenseur intégré au dispositif d'évacuation de sécurité"}, {"n": "Assise quais", "l": [2, 1, 0, 4, 1], "d": "Sièges ou bancs installés sur les quais"}, {"n": "BAES", "l": [4, 0, 1, 1, 1], "d": "Blocs autonomes d'éclairage de sécurité"}, {"n": "Baie CFA", "l": [4, 3, 4, 1, 1], "d": "Baie courants faibles pour réseaux et systèmes numériques"}, {"n": "Baie Sono", "l": [4, 1, 2, 3, 1], "d": "Baie de diffusion sonore de sécurité et d'exploitation"}, {"n": "Baie Sono commerciale", "l": [0, 2, 2, 2, 0], "d": "Baie de diffusion sonore à usage commercial/confort"}, {"n": "Balise sonore", "l": [2, 0, 1, 2, 1], "d": "Balise d'orientation sonore pour déficients visuels"}, {"n": "Bandes détection à la canne", "l": [4, 0, 1, 3, 3], "d": "Bandes au sol détectables à la canne des malvoyants"}, {"n": "Bandes pododactiles", "l": [4, 0, 1, 3, 1], "d": "Bandes en relief d'alerte au sol (ex. bord de quai)"}, {"n": "Barrières et clôtures fixes", "l": [4, 2, 3, 1, 1], "d": "Clôtures rigides séparant zones publiques et zones dangereuses"}, {"n": "Barrières extérieurs levantes", "l": [4, 2, 3, 1, 1], "d": "Barrières motorisées de contrôle d'accès véhicules"}, {"n": "Borne d'appel d'urgence", "l": [4, 2, 1, 1, 1], "d": "Borne permettant aux usagers d'alerter en cas d'urgence"}, {"n": "Bureaux", "l": [1, 3, 4, 1, 4], "d": "Locaux administratifs et de travail"}, {"n": "Caméras", "l": [1, 1, 3, 1, 1], "d": "Caméras de vidéosurveillance générales"}, {"n": "Caméras ascenseurs", "l": [4, 1, 1, 3, 1], "d": "Caméras dédiées à la surveillance des cabines d'ascenseurs"}, {"n": "Caméras pour téléopération", "l": [1, 1, 3, 1, 1], "d": "Caméras nécessaires au pilotage à distance d'équipements"}, {"n": "Caméras vente billetterie", "l": [1, 1, 1, 3, 1], "d": "Caméras de surveillance zones de vente/guichets"}, {"n": "Centrale GTC/GTB", "l": [4, 4, 4, 4, 4], "d": "Système centralisé de gestion technique/énergétique du bâtiment"}, {"n": "Centrale SSI", "l": [4, 4, 1, 1, 1], "d": "Unité centrale du Système de Sécurité Incendie"}, {"n": "Chambre froide", "l": [1, 3, 3, 2, 1], "d": "Chambre à froid pour usages commerciaux/restauration"}, {"n": "Château d’eau", "l": [4, 3, 3, 3, 3], "d": "Ouvrage de stockage et de mise en pression de l'eau du site"}, {"n": "Chaudière et circuit d'eau chaude", "l": [1, 4, 1, 3, 3], "d": "Production et distribution d'eau chaude de chauffage"}, {"n": "Clim locaux techniques", "l": [1, 2, 4, 1, 1], "d": "Climatisation des locaux abritant des équipements sensibles"}, {"n": "Cœur de réseau télécoms", "l": [4, 4, 4, 4, 2], "d": "Noyau des infrastructures réseau et télécoms de la gare"}, {"n": "Désenfumage mécanique", "l": [4, 2, 1, 1, 1], "d": "Système motorisé d'extraction des fumées en cas d'incendie"}, {"n": "Désenfumage naturel", "l": [4, 2, 1, 1, 1], "d": "Trappes ou ouvrants pour évacuation naturelle des fumées"}, {"n": "Détecteur incendie", "l": [4, 1, 4, 1, 1], "d": "Capteurs de détection précoce de départ de feu"}, {"n": "Eau chaude sanitaire", "l": [1, 2, 1, 3, 3], "d": "Production d'ECS pour sanitaires et usages courants"}, {"n": "Eclairage", "l": [3, 1, 2, 4, 2], "d": "Éclairage général des espaces gare et accès"}, {"n": "Eclairage de sécurité sur source centrale", "l": [4, 1, 1, 1, 1], "d": "Éclairage de sécurité alimenté par une source centralisée"}, {"n": "Eclairage indispensable à l'ouverture d'un espace", "l": [1, 1, 4, 1, 1], "d": "Éclairage minimal réglementaire conditionnant l'ouverture au public"}, {"n": "Ecran TFT PMR", "l": [1, 2, 2, 3, 4], "d": "Écran d'information adapté aux besoins des PMR"}, {"n": "Ecrans TFT/TIM", "l": [1, 2, 2, 4, 1], "d": "Écrans d'information voyageurs (horaires, voies, messages)"}, {"n": "Emetteur de chaleur ERP", "l": [1, 2, 1, 3, 2], "d": "Radiateurs ou terminaux de chauffage en zones voyageurs"}, {"n": "Emetteur de chaleur ERT", "l": [1, 2, 1, 1, 4], "d": "Radiateurs ou terminaux de chauffage en zones techniques"}, {"n": "Ensemble local technique Transformateur", "l": [4, 4, 4, 4, 4], "d": "Local abritant le transformateur principal d'alimentation de la gare"}, {"n": "Ensemble local technique Transformateur de secours avec Source secours BT/HT", "l": [4, 4, 4, 4, 2], "d": "Local abritant transformateur et source électrique de secours"}, {"n": "Enveloppe", "l": [4, 4, 4, 3, 3], "d": "Façades, toitures, menuiseries, étanchéité du bâtiment"}, {"n": "Equipement ferroviaire réseau", "l": [4, 4, 4, 1, 1], "d": "Équipements d'infrastructure ferroviaire (signalisation, voie, aiguillage…)"}, {"n": "Equipement médical de premiers secours", "l": [4, 1, 1, 1, 1], "d": "\""}, {"n": "Escalier Mécanique", "l": [1, 4, 1, 3, 1], "d": "Escalier motorisé pour le transport de voyageurs"}, {"n": "Escalier Mécanique secouru", "l": [4, 4, 1, 3, 1], "d": "Escalier mécanique intégré aux cheminements de sécurité"}, {"n": "Espace commercial", "l": [1, 4, 3, 3, 1], "d": "Locaux dédiés aux commerces et services en gare"}, {"n": "Espace d'attente", "l": [1, 4, 3, 4, 1], "d": "Zones de salle d'attente et assises voyageurs"}, {"n": "Espace de circulation", "l": [2, 4, 3, 4, 1], "d": "Couloirs, halls et zones de déplacement voyageurs"}, {"n": "Extinction incendie par gaz argon", "l": [4, 3, 4, 1, 1], "d": "Système d'extinction automatisé par gaz en locaux sensibles"}, {"n": "Extinction incendie par sprinklage", "l": [4, 3, 4, 1, 1], "d": "Réseau de sprinklers automatiques contre l'incendie"}, {"n": "Fondation", "l": [4, 4, 4, 1, 1], "d": "Ouvrages de fondation du bâtiment ou de l'ouvrage"}, {"n": "Fontaine à eau", "l": [0, 2, 0, 4, 3], "d": "Fontaines de distribution d'eau potable aux usagers"}, {"n": "Groupe de production de froid", "l": [1, 3, 3, 1, 2], "d": "Production centralisée de froid pour la climatisation"}, {"n": "Haut-parleur", "l": [4, 2, 3, 3, 0], "d": "Diffuseurs sonores dans les espaces voyageurs et techniques"}, {"n": "Interphonie Ascenseur", "l": [4, 2, 1, 3, 1], "d": "Système d'appel et de communication en cabine d'ascenseur"}, {"n": "Interphonie CAB", "l": [1, 1, 2, 2, 1], "d": "Système d'interphonie intégré aux portillons automatiques de contrôle d'accès et de billettique"}, {"n": "Ligne CAB/PEC", "l": [1, 3, 4, 3, 1], "d": "Ligne de portillons de contrôle d'accès ou billettique"}, {"n": "Lignes de vie ou autres dispositifs fixes pour l'entretien", "l": [4, 1, 3, 1, 4], "d": "Dispositifs de protection contre les chutes pour interventions en hauteur"}, {"n": "Local technique", "l": [1, 4, 4, 1, 2], "d": "Local abritant des équipements techniques (élec, CVC, IT…)"}, {"n": "Ouvrage d'assainissement ou technique", "l": [2, 4, 2, 1, 4], "d": "Ouvrages de collecte et gestion des eaux usées/pluviales"}, {"n": "Panneaux photovoltaïques", "l": [1, 3, 3, 1, 4], "d": "Installation de production d'électricité solaire"}, {"n": "Panneaux solaires thermiques", "l": [1, 3, 3, 1, 4], "d": "Capteurs solaires pour production de chaleur ou d'ECS"}, {"n": "Paratonnerre", "l": [4, 3, 2, 1, 1], "d": "Dispositif de protection contre la foudre"}, {"n": "Parking", "l": [1, 3, 1, 4, 1], "d": "Parking voyageurs accolé à la gare"}, {"n": "Parking exploitants", "l": [1, 3, 4, 1, 3], "d": "Parking réservé aux personnels et prestataires"}, {"n": "Passage souterrain", "l": [1, 4, 4, 4, 0], "d": "Ouvrage souterrain pour accéder aux quais et aux espaces"}, {"n": "Passerelle", "l": [4, 4, 4, 4, 0], "d": "Ouvrage aérien piéton pour franchir les voies"}, {"n": "Petit ouvrage sous voie", "l": [1, 4, 2, 1, 1], "d": "Petit ouvrage (buse, dalot) traversant sous la voie ferrée"}, {"n": "Pneumatique", "l": [1, 3, 2, 1, 1], "d": "Réseau d'air comprimé pour automatismes et équipements"}, {"n": "Pompe de relevage", "l": [1, 3, 4, 1, 3], "d": "Pompe évacuant les eaux de locaux bas ou souterrains"}, {"n": "Ponts rails", "l": [4, 4, 4, 1, 1], "d": "Ponts supportant les voies ferrées"}, {"n": "Ponts route", "l": [4, 4, 4, 1, 1], "d": "Ponts routiers associés à la gare ou franchissant la voie"}, {"n": "Portail mécanique de secours téléopéré", "l": [4, 3, 3, 1, 1], "d": "Portail motorisé de secours commandable à distance"}, {"n": "Portes auto", "l": [1, 3, 3, 3, 1], "d": "Portes automatiques d'accès aux bâtiments et espaces"}, {"n": "Pupitre téléopération", "l": [4, 4, 4, 1, 2], "d": "Poste de commande et de supervision centralisé permettant à un opérateur (agent ou centre de téléopération) de contrôler et piloter à distan"}, {"n": "Quai", "l": [1, 4, 4, 4, 2], "d": "Plateforme voyageurs au bord des voies"}, {"n": "Réseaux de plomberies", "l": [1, 3, 4, 3, 3], "d": "Réseaux d'eau, évacuation et raccordements sanitaires"}, {"n": "Rideau mécanique", "l": [4, 2, 3, 1, 1], "d": "Rideau de fermeture manuel ou localement motorisé"}, {"n": "Rideau métallique téléopéré", "l": [4, 2, 3, 1, 1], "d": "Rideau métallique motorisé commandable à distance"}, {"n": "Sanitaire ERP", "l": [1, 3, 1, 4, 2], "d": "Sanitaires accessibles au public voyageurs"}, {"n": "Sanitaires ERT", "l": [1, 3, 1, 1, 4], "d": "Sanitaires pour personnels et zones techniques"}, {"n": "Sirène d'évacuation et diffuseur lumineux", "l": [4, 1, 1, 1, 1], "d": "Dispositifs sonores et visuels d'alarme générale"}, {"n": "Sirène évacuation", "l": [4, 1, 1, 1, 1], "d": "Dispositifs sonores d'alarme incendie et d'évacuation"}, {"n": "Source centrale de secours", "l": [4, 3, 4, 4, 1], "d": "Source électrique centralisée pour circuits de secours"}, {"n": "SSI - Diffuseurs lumineux", "l": [4, 1, 1, 1, 1], "d": "Diffuseurs lumineux contrôlés par le SSI"}, {"n": "Structure", "l": [4, 4, 4, 1, 1], "d": "Ossature porteuse du bâtiment ou de l'ouvrage"}, {"n": "Tableau Divisionnaire", "l": [4, 2, 3, 3, 1], "d": "Tableau électrique distribuant l'électricité à une zone ou un usage"}, {"n": "Tableau divisionnaire de bâtiment", "l": [4, 2, 4, 4, 2], "d": "Tableau électrique dédié à un bâtiment ou une entité"}, {"n": "Tableau Général Secouru", "l": [4, 2, 4, 4, 2], "d": "Tableau alimentant les circuits électriques secourus"}, {"n": "Tarif Jaune/bleu", "l": [4, 3, 4, 4, 1], "d": "Point de livraison électrique du réseau public (comptage HTA/BT)"}, {"n": "téléphone", "l": [1, 1, 2, 1, 1], "d": "Téléphonie fixe interne et externe de la gare"}, {"n": "Terrains nus G&C", "l": [1, 1, 2, 0, 2], "d": "Terrains nus de gestion et construction liés à la gare"}, {"n": "Terrains nus non G&C", "l": [1, 1, 2, 0, 2], "d": "Terrains nus hors périmètre gare ou centre"}, {"n": "TGBT / TGBTR", "l": [4, 4, 4, 4, 2], "d": "Tableau Général Basse Tension (et secouru réseau)"}, {"n": "Traversée de voie piétonne (TVP)", "l": [4, 3, 3, 4, 1], "d": "Passage piéton traversant les voies au niveau du sol"}, {"n": "Ventilation", "l": [2, 2, 1, 4, 1], "d": "Ventilation des locaux, halls et passages"}];
@@ -242,8 +243,32 @@ function load() { try { const s = JSON.parse(localStorage.getItem(STORE_KEY)); i
   return {visites:{}, current:null, recentEq:[], eqCustom:[], last:null, prefs:{dlCopy:true}}; }
 function save() { try { localStorage.setItem(STORE_KEY, JSON.stringify(S)); } catch (e) { toast('⚠ Sauvegarde locale impossible : exporte le relevé maintenant !', 'err'); } }
 if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
+/* Avant la v8, deux visites du même téléphone avaient les mêmes n° (PAZ_0001…) : la fiche ouverte
+   pouvait être celle de l'autre visite et le fichier était écrasé par la dernière prise.
+   Réparation : chaque modification faite APRÈS la prise d'une photo plus récente de même n° lui revient. */
+function repairCollisions() {
+  if (S.repairV8) return 0;
+  const byId = {}; Object.values(S.visites).forEach(v => v.photos.forEach(p => { if (!p.bk) (byId[p.id] = byId[p.id] || []).push(p); }));
+  const dup = Object.values(byId).filter(l => l.length > 1);
+  if (dup.length) { try { localStorage.setItem(STORE_KEY + '.avant-reparation', JSON.stringify(S)); } catch (e) {} }
+  let fixed = 0; const F = ['niv', 'zone', 'pt', 'eqs', 'al', 'ef', 'star', 'note'];
+  for (const l of dup) {
+    l.sort((a, b) => a.t - b.t); const newest = l[l.length - 1];
+    for (const q of l.slice(0, -1)) {
+      const p = q.mod ? l.filter(x => x.t > q.t && x.t < q.mod).pop() : null;   /* la photo la plus récente prise avant la modification */
+      if (p && (!p.mod || q.mod > p.mod)) { F.forEach(k => p[k] = JSON.parse(JSON.stringify(q[k] ?? null)) ?? (k === 'eqs' || k === 'al' ? [] : k === 'star' ? false : '')); p.mod = q.mod; delete q.mod; fixed++; }
+      q.bk = q.id + '#ecrase'; q.stored = false;   /* son fichier a été remplacé par la photo plus récente */
+    }
+    newest.bk = newest.id;
+  }
+  S.repairV8 = {at:Date.now(), fixed, dup:dup.length}; save(); return fixed;
+}
+const REPAIRED = repairCollisions();
 const V = () => S.current ? S.visites[S.current] : null;
-const P = id => { for (const v of Object.values(S.visites)) { const p = v.photos.find(x => x.id === id); if (p) return p; } return null; };
+const bk = p => p.bk || p.id;   /* clé du fichier dans IndexedDB (unique par visite depuis la v8) */
+const P = id => { const cv = V(); const c = cv && cv.photos.find(x => x.id === id); if (c) return c;
+  for (const v of Object.values(S.visites)) { const p = v.photos.find(x => x.id === id); if (p) return p; } return null; };
+const visitOf = p => Object.values(S.visites).find(x => x.photos.includes(p));
 
 /* =====================================================================
    PRISE DE VUE
@@ -261,18 +286,18 @@ async function onCapture(files, how) {
     const isVid = /^video\//.test(f.type) || /\.(mp4|mov|3gp|webm)$/i.test(f.name);
     v.seq++; const id = v.code + '_' + pad(v.seq, 4);
     const L = (how === 'import' ? null : S.last) || {};
-    const p = {id, n:v.seq, t:Date.now(), type:isVid ? 'video' : 'photo', how, name:f.name, size:f.size, mime:f.type,
+    const p = {id, bk:v.id + '/' + id, n:v.seq, t:Date.now(), type:isVid ? 'video' : 'photo', how, name:f.name, size:f.size, mime:f.type,
       niv:L.niv || 'N0', zone:L.zone || '', pt:L.pt ? {n:L.pt.n, x:L.pt.x, y:L.pt.y} : null, eqs:[...(L.eqs || [])],
       al:[], ef:'', star:false, note:'', dl:null, gps:null, exT:null, exGps:null, stored:false};
     v.photos.push(p); save();
-    try { await DB.put('blobs', id, f); p.stored = true; }
+    try { await DB.put('blobs', p.bk, f); p.stored = true; }
     catch (e) { toast('⚠ Mémoire pleine : copie de secours dans Téléchargements', 'err'); download(id + '_' + f.name, f); p.dl = Date.now(); }
     if (!isVid && /jpe?g/i.test(f.type + f.name)) { try { const ex = parseExif(await f.slice(0, 262144).arrayBuffer());
       if (ex && ex.dto) p.exT = exifTime(ex.dto, ex.off); if (ex && ex.gps) p.exGps = ex.gps; } catch (e) {} }
     if (how === 'import' && p.exT) p.t = p.exT;
     save(); created.push(p);
     if (S.prefs.dlCopy && p.stored && how !== 'import') { try { download(rawName(p), f); p.dl = Date.now(); save(); } catch (e) {} }
-    makeThumb(f, isVid).then(tb => tb && DB.put('thumbs', id, tb)).then(() => { if (!UI.ov) renderGal(); else if (UI.fiche === id) refreshPrev(); }).catch(() => {});
+    makeThumb(f, isVid).then(tb => tb && DB.put('thumbs', p.bk, tb)).then(() => { if (!UI.ov) renderGal(); else if (UI.fiche === id) refreshPrev(); }).catch(() => {});
     grabGps(id);
   }
   if (created.length === 1) openFiche(created[0].id);
@@ -291,7 +316,7 @@ function rawName(p) { const d = new Date(p.t); const ext = ((p.name || '').match
   return p.id + '_' + pad(d.getHours()) + pad(d.getMinutes()) + pad(d.getSeconds()) + ext; }
 async function dlCopy(p) {
   const v = V() || Object.values(S.visites).find(x => x.photos.includes(p));
-  const b = await DB.get('blobs', p.id).catch(() => null); if (!b) return false;
+  const b = await DB.get('blobs', bk(p)).catch(() => null); if (!b) return false;
   download(rawName(p), b); p.dl = Date.now(); save(); return true;
 }
 
@@ -321,13 +346,14 @@ function viewAccueil() {
       <div class="row" style="border-top:1px solid var(--line);padding:8px 0">
         <div style="flex:1"><b>${esc(o.gare)}</b> · ${ymd(o.debut)} ${hm(o.debut)}${o.fin ? '–' + hm(o.fin) : ' <span class="mute">(en cours)</span>'}<br>
         <span class="small mute">${o.photos.length} photos/vidéos</span></div>
-        <button class="btn" data-act="resume" data-id="${o.id}">${o.fin ? 'Rouvrir' : 'Reprendre'}</button>
+        <button class="btn" data-act="resume" data-id="${o.id}">${o.fin ? 'Ouvrir' : 'Reprendre'}</button>
+        <button class="btn red" data-act="delVisite" data-id="${o.id}" title="Supprimer cette visite">🗑</button>
       </div>`).join('')}</div>` : ''}`;
 }
 function viewTerrain(v) {
   const notDl = S.prefs.dlCopy ? v.photos.filter(p => !p.dl).length : 0;
   const L = S.last;
-  return `
+  return `${S.repairV8 && S.repairV8.dup && !S.repairV8.seen ? `<div class="banner ok">🔧 Réparation faite : ${S.repairV8.fixed} fiche(s) qui s'étaient enregistrées dans une autre visite (mêmes n° de photo) ont été remises dans la bonne. Vérifie quelques fiches. <a href="#" data-act="repSeen">OK</a></div>` : ''}
   <div class="grid3" style="grid-template-columns:2fr 1fr 1fr">
     <button class="btn huge yel" data-act="capP">📷 Photo</button>
     <button class="btn huge pri" data-act="capV">🎥<br><span style="font-size:15px">Vidéo</span></button>
@@ -350,7 +376,7 @@ function galHtml(v) {
   const list = [...v.photos].reverse();
   if (!list.length) return `<div class="mute small">Aucune photo pour l'instant.</div>`;
   return `<div class="gal">${list.map(p => `<div class="it" data-act="openFiche" data-id="${p.id}">
-    <img data-th="${p.id}" alt="" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=">
+    <img data-th="${bk(p)}" alt="" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=">
     <span class="bd">${p.type === 'video' ? '🎬 ' : ''}${p.n}</span>${p.ef ? `<span class="todo" style="background:${EF_COL[p.ef]}">${p.ef === 'agg' ? '▲' : p.ef === 'att' ? '▼' : '?'}</span>` : ''}
     <div class="lb">${esc(p.zone || '—')}${p.eqs.length ? '<br>🔧 ' + esc(p.eqs[0]) + (p.eqs.length > 1 ? ' +' + (p.eqs.length - 1) : '') : ''}</div></div>`).join('')}</div>`;
 }
@@ -367,7 +393,7 @@ function renderOv() {
   const v = Object.values(S.visites).find(x => x.photos.includes(p));
   o.innerHTML = `<div class="ov"><div class="top"><b>${esc(p.id)} · ${hms(p.t)}</b><button data-act="delPhoto">🗑</button><button data-act="closeFiche">Fermer</button></div>
   <div class="body">
-    <div class="prev"><span id="prevBox">${p.type === 'video' ? '<div class="ph0">🎬</div>' : `<img data-th="${p.id}" alt="" data-act="full">`}</span>
+    <div class="prev"><span id="prevBox">${p.type === 'video' ? '<div class="ph0">🎬</div>' : `<img data-th="${bk(p)}" alt="" data-act="full">`}</span>
       <div class="small"><b>${p.type === 'video' ? 'Vidéo' : 'Photo'} n°${p.n}</b><br>${hms(p.t)}
       ${p.gps ? `<br>GPS ±${p.gps.acc} m` : ''}${p.stored ? '' : '<br><span style="color:var(--red)">non stockée dans l\'appli</span>'}
       <br><a href="#" data-act="full">voir en grand</a> · <a href="#" data-act="clearAll">tout effacer</a></div></div>
@@ -390,7 +416,7 @@ function renderOv() {
   <div class="foot"><button class="btn big" data-act="saveFiche">✓ Enregistrer</button><button class="btn big yel" data-act="saveNext">✓ + 📷 suivante</button></div></div>`;
   fillThumbs(o); renderPlan(p); renderZoneSug(p); renderEq(p); renderTags(p);
 }
-function refreshPrev() { const p = P(UI.fiche); const b = $('#prevBox'); if (p && b && p.type !== 'video') { b.innerHTML = `<img data-th="${p.id}" alt="" data-act="full">`; fillThumbs(b); } }
+function refreshPrev() { const p = P(UI.fiche); const b = $('#prevBox'); if (p && b && p.type !== 'video') { b.innerHTML = `<img data-th="${bk(p)}" alt="" data-act="full">`; fillThumbs(b); } }
 function nivTabs(p) { return NIVEAUX.map(x => `<button class="chip ${x.id === p.niv ? 'on' : ''}" data-act="fNiv" data-v="${x.id}">${esc(x.label)}</button>`).join(''); }
 function renderPlan(p) {
   const box = $('#fPlan'); const n = nivOf(p.niv);
@@ -505,13 +531,20 @@ const B = {rel:null, local:false, files:{}, loading:null, unknown:[], log:null};
 function viewBureau() {
   const r = B.rel; const locals = Object.values(S.visites).filter(v => v.photos.length).sort((a, b) => b.debut - a.debut);
   let h = `<div class="card"><h2>1 · Relevé</h2>${r ? `<div class="banner ok">✔ ${esc(r.visite.gare)} · ${ymd(r.visite.debut)} · ${r.photos.length} photos/vidéos${B.local ? ' · <b>fichiers de ce navigateur</b>' : ''} <a href="#" data-act="bReset">changer</a></div>`
-    : `<div class="row"><button class="btn pri" data-act="pickJson">📄 Charger le relevé (.json)</button>
-       ${locals.map(v => `<button class="btn" data-act="bLocal" data-id="${v.id}">Visite ${esc(v.code)} ${ymd(v.debut)} de ce navigateur (${v.photos.length})</button>`).join('')}</div>
-       <p class="small mute">Le fichier <code>PAZ_releve_….json</code> est dans les Téléchargements du téléphone.</p>`}</div>`;
+    : `<div class="row"><button class="btn big yel" data-act="pickZip">📦 Ouvrir le ZIP de la visite</button>
+       <button class="btn" data-act="pickDir">📁 Dossier décompressé</button><button class="btn" data-act="pickJson">📄 Relevé .json seul</button></div>
+       ${B.loading ? `<div class="small" style="margin-top:8px">Lecture…</div>` : ''}
+       <p class="small mute">Sur le téléphone : onglet Export → 📦 ZIP classé, puis copie le ZIP sur le PC (câble USB → dossier Download, ou OneDrive / Teams). Pas besoin de le décompresser.</p>
+       ${locals.length ? `<div class="row" style="margin-top:6px">${locals.map(v => `<button class="btn" data-act="bLocal" data-id="${v.id}">Visite ${esc(v.code)} ${ymd(v.debut)} déjà dans ce navigateur (${v.photos.length})</button>`).join('')}</div>` : ''}`}</div>`;
   if (r && !B.local) {
     const found = r.photos.filter(p => B.files[p.id]).length;
+    if (found) h += `<div class="card" style="border:2px solid var(--red)"><h2>✏️ Modifier sur ce PC</h2>
+      <p class="small" style="margin-top:0">Importe la visite dans ce navigateur : tu retrouves la liste des photos et les fiches (plan, zone, équipements, aléas, note) comme sur le téléphone, tu modifies, puis tu refais le ZIP ou la synthèse depuis l'onglet Export.</p>
+      <button class="btn big yel" data-act="importLocal" ${B.loading ? 'disabled' : ''}>✏️ Importer ${found} fichier(s) et modifier</button>
+      ${B.loading && B.loading.total > 1 ? `<div class="small" style="margin-top:8px">Import… ${B.loading.done} / ${B.loading.total}</div><div class="prog"><div style="width:${100 * B.loading.done / Math.max(1, B.loading.total)}%"></div></div>` : ''}
+      <p class="small mute">Les modifications restent sur ce PC (elles ne reviennent pas sur le téléphone).</p></div>`;
     h += `<div class="card"><h2>2 · Fichiers photo/vidéo</h2><div class="row"><button class="btn pri" data-act="pickMedia">🖼 Choisir les fichiers</button>
-      <button class="btn" data-act="pickDir">📁 Choisir un dossier</button></div>
+      <button class="btn" data-act="pickDir2">📁 Choisir un dossier</button></div>
       ${B.loading ? `<div class="small" style="margin-top:8px">Lecture… ${B.loading.done} / ${B.loading.total}</div><div class="prog"><div style="width:${100 * B.loading.done / Math.max(1, B.loading.total)}%"></div></div>` : ''}
       <p class="small mute">Câble USB → copie le dossier <code>Download</code> du téléphone (copies <code>PAZ_0001_…</code>). Les photos importées depuis la galerie sont aussi retrouvées dans <code>DCIM/Camera</code>.</p>
       ${found || B.unknown.length ? `<div><span class="stat"><b>${found}</b> / ${r.photos.length} retrouvées</span>${B.unknown.length ? `<span class="stat mute"><b>${B.unknown.length}</b> fichiers ignorés (hors relevé)</span>` : ''}</div>` : ''}
@@ -527,7 +560,7 @@ function viewSynth(r) {
     <span style="margin-left:auto"></span><button class="btn" data-act="export">📁 Écrire dans un dossier</button><button class="btn yel" data-act="goZip">📦 ZIP classé…</button></div>
     ${B.log ? `<div class="banner ${B.log.err ? 'err' : 'ok'}" style="margin-top:8px">${B.log.html}</div>` : ''}</div>`;
   groups.forEach((g, i) => { h += `<div class="card zgrp"><h3>${pad(i + 1)} · ${esc(g.zone || 'Sans zone')} <span class="small mute">${esc(nivOf(g.niv).label)} · ${g.items.length}</span></h3>
-    <div class="gal">${g.items.map(p => `<div class="it"><img ${B.local ? `data-th="${p.id}"` : `src="${B.files[p.id] ? B.files[p.id].thumb || B.files[p.id].url() : ''}"`} loading="lazy" alt="">
+    <div class="gal">${g.items.map(p => `<div class="it"><img ${B.local ? `data-th="${bk(p)}"` : `src="${B.files[p.id] ? B.files[p.id].thumb || B.files[p.id].url() : ''}"`} loading="lazy" alt="">
       <span class="bd">${p.type === 'video' ? '🎬 ' : ''}${p.n}</span>${B.local || B.files[p.id] ? '' : '<span class="todo">manquante</span>'}
       <div class="lb">${p.eqs.length ? esc(p.eqs.join(', ')) : 'vue générale'}</div></div>`).join('')}</div></div>`; });
   return h;
@@ -553,7 +586,7 @@ async function addFiles(files) {
   }
   B.loading = null; render();
 }
-async function getFileFor(p) { if (B.local) { const b = await DB.get('blobs', p.id).catch(() => null); return b ? new File([b], p.name || p.id, {type:b.type}) : null; }
+async function getFileFor(p) { if (B.local) { const b = await DB.get('blobs', bk(p)).catch(() => null); return b ? new File([b], p.name || p.id, {type:b.type}) : null; }
   return B.files[p.id] ? B.files[p.id].file : null; }
 async function doExport() {
   const r = B.rel, v = r.visite;
@@ -570,7 +603,7 @@ async function doExport() {
       const dir = zdir + '/' + sub; const fname = fileName(p, v);
       let thumb = '';
       if (f) { const fh = await (await getDir(dir)).getFileHandle(fname, {create:true}); const w = await fh.createWritable(); await f.stream().pipeTo(w);
-        const tb = (B.local ? await DB.get('thumbs', p.id).catch(() => null) : null) || await makeThumb(f, p.type === 'video');
+        const tb = (B.local ? await DB.get('thumbs', bk(p)).catch(() => null) : null) || await makeThumb(f, p.type === 'video');
         if (tb) { const th = await thDir.getFileHandle(p.id + '.jpg', {create:true}); const tw = await th.createWritable(); await tw.write(tb); await tw.close(); thumb = 'vignettes/' + p.id + '.jpg'; } }
       else miss++;
       rows.push(Object.assign(rowOf(p, v, {fname: f ? fname : '(manquant)', dir}), {thumb, zdir, chemin: f ? dir + '/' + fname : ''}));
@@ -652,7 +685,7 @@ function viewExport() {
 const toDataUrl = b => new Promise(res => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = () => res(''); r.readAsDataURL(b); });
 async function synthHtmlFor(r, fromBureau) {
   const getThumb = fromBureau ? async p => { const e = B.files[p.id]; if (!e) return null; if (e.thumb) return await (await fetch(e.thumb)).blob(); return await makeThumb(e.file, p.type === 'video'); }
-    : p => DB.get('thumbs', p.id).catch(() => null);
+    : p => DB.get('thumbs', bk(p)).catch(() => null);
   const photos = [...r.photos].sort((a, b) => a.n - b.n); const th = {};
   for (const p of photos) { try { const b = await getThumb(p); if (b) th[p.id] = await toDataUrl(b); } catch (e) {} }
   const planData = {}; for (const pl of [...new Set(photos.filter(p => p.pt).map(p => p.pt.n))]) { try { const res = await fetch(PLANS[pl].f); if (res.ok) planData[pl] = await toDataUrl(await res.blob()); } catch (e) {} }
@@ -661,7 +694,7 @@ async function synthHtmlFor(r, fromBureau) {
 async function genSynthese() {
   let r, getThumb;
   if (X.src === 'bureau') { r = B.rel; getThumb = async p => { const e = B.files[p.id]; if (!e) return null; if (e.thumb) return await (await fetch(e.thumb)).blob(); return await makeThumb(e.file, p.type === 'video'); }; }
-  else { const v = S.visites[X.src]; r = JSON.parse(JSON.stringify(relevePayload(v))); getThumb = p => DB.get('thumbs', p.id).catch(() => null); }
+  else { const v = S.visites[X.src]; r = JSON.parse(JSON.stringify(relevePayload(v))); getThumb = p => DB.get('thumbs', bk(p)).catch(() => null); }
   const photos = [...r.photos].sort((a, b) => a.n - b.n);
   X.busy = {lb:'Préparation des vignettes…', done:0, total:photos.length}; render();
   const th = {};
@@ -830,7 +863,7 @@ function plan_rangement(r) {
 async function zipExport() {
   let r, getFile;
   if (X.src === 'bureau') { r = B.rel; getFile = async p => B.files[p.id] ? B.files[p.id].file : null; }
-  else { r = JSON.parse(JSON.stringify(relevePayload(S.visites[X.src]))); getFile = async p => { const b = await DB.get('blobs', p.id).catch(() => null); return b || null; }; }
+  else { r = JSON.parse(JSON.stringify(relevePayload(S.visites[X.src]))); getFile = async p => { const b = await DB.get('blobs', bk(p)).catch(() => null); return b || null; }; }
   const v = r.visite; const root = `${v.code}_${ymd(v.debut)}_releve-photo`; const {out} = plan_rangement(r);
   const LIM = 3.5e9; let part = 1, zw = zipWriter(), miss = 0; const made = [];
   const flush = last => { const b = zw.finish(); const nm = `${root}${part > 1 || !last ? '_partie' + part : ''}.zip`; download(nm, b); made.push({nm, size:b.size}); part++; zw = zipWriter(); };
@@ -850,6 +883,67 @@ async function zipExport() {
   flush(true); X.busy = null;
   X.zipLog = `✔ ${made.map(m => `<b>${esc(m.nm)}</b> (${(m.size / 1e6).toFixed(0)} Mo)`).join(', ')} téléchargé${made.length > 1 ? 's' : ''} : un dossier par zone puis par équipement, inventaire Excel, relevé${X.zipSyn ? ', synthèse' : ''}.${miss ? ` <b style="color:var(--red)">${miss} fichier(s) introuvable(s)</b>.` : ''}`;
   render();
+}
+/* =====================================================================
+   PC : ouvrir le ZIP GARÉo (lu directement, sans décompresser) et
+   importer la visite dans ce navigateur pour modifier les fiches.
+   ===================================================================== */
+async function readZip(file) {
+  const tl = Math.min(file.size, 65557 + 22); const tail = new DataView(await file.slice(file.size - tl).arrayBuffer());
+  let e = -1; for (let i = tail.byteLength - 22; i >= 0; i--) if (tail.getUint32(i, true) === 0x06054b50) { e = i; break; }
+  if (e < 0) throw new Error('fichier ZIP illisible');
+  const n = tail.getUint16(e + 10, true), cdSize = tail.getUint32(e + 12, true), cdOff = tail.getUint32(e + 16, true);
+  const cd = new DataView(await file.slice(cdOff, cdOff + cdSize).arrayBuffer()); const dec = new TextDecoder(); const out = []; let o = 0;
+  for (let k = 0; k < n && o + 46 <= cd.byteLength; k++) { if (cd.getUint32(o, true) !== 0x02014b50) break;
+    const method = cd.getUint16(o + 10, true), cs = cd.getUint32(o + 20, true), nl = cd.getUint16(o + 28, true), xl = cd.getUint16(o + 30, true), cl = cd.getUint16(o + 32, true), lho = cd.getUint32(o + 42, true);
+    out.push({name:dec.decode(new Uint8Array(cd.buffer, o + 46, nl)), method, cs, lho}); o += 46 + nl + xl + cl; }
+  if (out.some(x => x.method !== 0 && !x.name.endsWith('/'))) throw new Error('ce ZIP a été recompressé par un autre logiciel : décompresse-le et choisis plutôt le dossier');
+  for (const en of out) { if (en.name.endsWith('/')) continue; const lh = new DataView(await file.slice(en.lho, en.lho + 30).arrayBuffer());
+    const st = en.lho + 30 + lh.getUint16(26, true) + lh.getUint16(28, true); en.blob = file.slice(st, st + en.cs); }
+  return out.filter(x => x.blob);
+}
+const MIME = {jpg:'image/jpeg', jpeg:'image/jpeg', png:'image/png', heic:'image/heic', mp4:'video/mp4', mov:'video/quicktime', '3gp':'video/3gpp', webm:'video/webm'};
+function attachFiles(files) {   /* files : [{name, blob|file}] — rattache au relevé chargé par le n° en début de nom */
+  const r = B.rel; const re = new RegExp('^(' + r.visite.code.replace(/[^A-Z0-9-]/gi, '') + '_\\d{4})(_|\\.|$)', 'i');
+  const byName = {}; r.photos.forEach(p => byName[p.name + '|' + p.size] = p);
+  for (const x of files) { const base = x.name.split('/').pop(); const ext = (base.split('.').pop() || '').toLowerCase(); if (!MIME[ext]) continue;
+    const f = x.file || new File([x.blob], base, {type:MIME[ext]});
+    const m = base.match(re); const p = m ? r.photos.find(q => q.id.toUpperCase() === m[1].toUpperCase()) : byName[base + '|' + f.size];
+    if (p && !B.files[p.id]) B.files[p.id] = {file:f, thumb:null, url() { return this._u || (this._u = URL.createObjectURL(this.file)); }};
+    else if (!p) B.unknown.push(base); }
+}
+async function openZip(file) {
+  B.loading = {done:0, total:1}; render();
+  try {
+    const ents = await readZip(file);
+    const rj = ents.find(x => /_releve(_[^/]*)?\.json$/i.test(x.name)); if (!rj) throw new Error('pas de relevé (.json) dans ce ZIP');
+    const j = JSON.parse(await rj.blob.text()); if (!j.photos || !j.visite) throw new Error('relevé illisible');
+    Object.assign(B, {rel:j, local:false, files:{}, unknown:[], log:null, fromZip:file.name}); attachFiles(ents);
+  } catch (e) { alert('Impossible d\'ouvrir ce ZIP : ' + e.message); }
+  B.loading = null; render();
+}
+async function openFolder(files) {
+  const js = files.filter(f => /_releve[^/]*\.json$/i.test(f.name)).sort((a, b) => b.lastModified - a.lastModified);
+  if (!B.rel && js.length) { try { const j = JSON.parse(await js[0].text()); if (j.photos && j.visite) Object.assign(B, {rel:j, local:false, files:{}, unknown:[], log:null}); } catch (e) {} }
+  if (!B.rel) { alert('Aucun relevé (.json) trouvé dans ce dossier. Charge d\'abord le relevé.'); return; }
+  attachFiles(files.map(f => ({name:f.name, file:f}))); render();
+}
+async function importLocal() {
+  const r = B.rel; const vid = r.visite.id || uid();
+  if (S.visites[vid] && !confirm('Cette visite existe déjà dans ce navigateur. La remplacer par celle du ZIP ?')) return;
+  const v = {id:vid, gare:r.visite.gare, code:r.visite.code, auteur:r.visite.auteur, debut:r.visite.debut, fin:r.visite.fin || Date.now(),
+    seq:Math.max(0, ...r.photos.map(p => p.n || 0)), photos:[], lastExport:null};
+  B.loading = {done:0, total:r.photos.length}; render();
+  for (const p0 of r.photos) {
+    const p = JSON.parse(JSON.stringify(p0)); p.bk = vid + '/' + p.id; p.dl = Date.now(); p.stored = false;
+    const e = B.files[p.id];
+    if (e) { try { await DB.put('blobs', p.bk, e.file); p.stored = true; const tb = await makeThumb(e.file, p.type === 'video'); if (tb) await DB.put('thumbs', p.bk, tb); } catch (er) { console.warn(er); } }
+    v.photos.push(p); B.loading.done++; if (B.loading.done % 5 === 0) render();
+  }
+  S.visites[vid] = v; S.current = vid; save(); B.loading = null;
+  const miss = v.photos.filter(p => !p.stored).length;
+  UI.mode = 'terrain'; localStorage.setItem('gareoPhoto.mode', 'terrain'); render();
+  toast(`✔ Visite importée (${v.photos.length - miss} fichiers${miss ? ', ' + miss + ' manquants' : ''}) : touche une photo pour modifier sa fiche`);
 }
 /* ---------- Lecture EXIF / vidéo ---------- */
 function exifTime(dto, off) {
@@ -950,10 +1044,16 @@ document.addEventListener('click', async ev => {
     case 'capP': $('#capP').click(); break;
     case 'capV': $('#capV').click(); break;
     case 'imp': $('#imp').click(); break;
+    case 'repSeen': S.repairV8.seen = true; save(); render(); break;
+    case 'delVisite': { const o = S.visites[el.dataset.id]; if (!o) break;
+      if (!confirm(`Supprimer définitivement la visite « ${o.gare} ${ymd(o.debut)} » (${o.photos.length} photos) de cet appareil ?\nLes copies dans Téléchargements et les ZIP déjà faits ne sont pas touchés.`)) break;
+      const others = new Set(); Object.values(S.visites).filter(w => w !== o).forEach(w => w.photos.forEach(x => others.add(bk(x))));
+      for (const x of o.photos) if (!others.has(bk(x))) { await DB.del('blobs', bk(x)).catch(() => {}); await DB.del('thumbs', bk(x)).catch(() => {}); }
+      delete S.visites[o.id]; if (S.current === o.id) S.current = null; save(); render(); break; }
     case 'filtre': UI.filtre = el.dataset.v; render(); break;
     case 'openFiche': openFiche(el.dataset.id); break;
     case 'closeFiche': { if (p) commitFiche(p); closeOv(); break; }
-    case 'full': { if (!p) break; const b = await DB.get('blobs', p.id).catch(() => null); if (!b) { toast('Fichier non disponible'); break; }
+    case 'full': { if (!p) break; const b = await DB.get('blobs', bk(p)).catch(() => null); if (!b) { toast('Fichier non disponible'); break; }
       const u = URL.createObjectURL(b); const d = document.createElement('div'); d.className = 'full';
       d.innerHTML = (p.type === 'video' ? `<video src="${u}" controls autoplay playsinline></video>` : `<img src="${u}">`) + '<button>Fermer</button>';
       d.querySelector('button').onclick = () => { URL.revokeObjectURL(u); d.remove(); }; document.body.appendChild(d); break; }
@@ -975,7 +1075,8 @@ document.addEventListener('click', async ev => {
     case 'star': p.star = !p.star; save(); renderTags(p); break;
     case 'clearAll': p.zone = ''; p.pt = null; p.eqs = []; p.al = []; p.ef = ''; p.star = false; save(); renderOv(); break;
     case 'saveFiche': case 'saveNext': { commitFiche(p); closeOv(); if (a === 'saveNext') $('#capP').click(); else toast('✔ ' + p.id + ' enregistrée'); break; }
-    case 'delPhoto': { if (!confirm('Supprimer ' + p.id + ' de l\'appli ?')) break; const v = V(); v.photos = v.photos.filter(x => x.id !== p.id); save(); DB.del('blobs', p.id).catch(() => {}); DB.del('thumbs', p.id).catch(() => {}); closeOv(); break; }
+    case 'delPhoto': { if (!confirm('Supprimer ' + p.id + ' de l\'appli ?')) break; const v = visitOf(p) || V(); v.photos = v.photos.filter(x => x !== p); save();
+      if (!Object.values(S.visites).some(w => w.photos.some(x => bk(x) === bk(p)))) { DB.del('blobs', bk(p)).catch(() => {}); DB.del('thumbs', bk(p)).catch(() => {}); } closeOv(); break; }
     case 'dlMissing': { const v = V(); for (const q of v.photos.filter(x => !x.dl)) { await dlCopy(q); await new Promise(r => setTimeout(r, 400)); } render(); break; }
     case 'exportRel': exportReleve(); toast('Relevé exporté dans Téléchargements'); break;
     case 'shareRel': shareReleve(); break;
@@ -988,8 +1089,11 @@ document.addEventListener('click', async ev => {
     case 'xDl': { const v = S.visites[X.src]; for (const q of v.photos.filter(x => !x.dl)) { await dlCopy(q); await new Promise(r => setTimeout(r, 400)); } render(); break; }
     // Bureau
     case 'pickJson': $('#fJson').click(); break;
+    case 'pickZip': $('#fZip').click(); break;
+    case 'pickDir2': $('#fDir').click(); break;
+    case 'importLocal': try { await importLocal(); } catch (e) { console.error(e); B.loading = null; alert('Import impossible : ' + e.message); render(); } break;
     case 'bLocal': { const v = S.visites[el.dataset.id]; B.rel = JSON.parse(JSON.stringify(relevePayload(v))); B.local = true; B.log = null; render(); break; }
-    case 'bReset': Object.assign(B, {rel:null, local:false, files:{}, unknown:[], log:null}); render(); break;
+    case 'bReset': Object.assign(B, {rel:null, local:false, files:{}, unknown:[], log:null, fromZip:null}); render(); break;
     case 'pickMedia': $('#fMedia').click(); break;
     case 'pickDir': $('#fDir').click(); break;
     case 'goZip': UI.mode = 'export'; X.src = 'bureau'; localStorage.setItem('gareoPhoto.mode', 'export'); render(); break;
@@ -1012,7 +1116,9 @@ document.addEventListener('change', ev => {
   if (t.id === 'xZipSyn') { X.zipSyn = t.checked; }
   if (t.id === 'fJson' && t.files[0]) { t.files[0].text().then(txt => { try { const j = JSON.parse(txt); if (!j.photos || !j.visite) throw 0; Object.assign(B, {rel:j, local:false, files:{}, unknown:[], log:null}); render(); }
     catch (e) { alert('Ce fichier n\'est pas un relevé GARÉo Photo.'); } t.value = ''; }); }
-  if ((t.id === 'fMedia' || t.id === 'fDir') && t.files.length) { const fs = [...t.files]; t.value = ''; addFiles(fs); }
+  if (t.id === 'fZip' && t.files[0]) { const f = t.files[0]; t.value = ''; openZip(f); }
+  if (t.id === 'fDir' && t.files.length) { const fs = [...t.files]; t.value = ''; openFolder(fs); }
+  if (t.id === 'fMedia' && t.files.length) { const fs = [...t.files]; t.value = ''; addFiles(fs); }
 });
 window.addEventListener('beforeunload', e => { if (UI.mode === 'bureau' && Object.keys(B.files).length) { e.preventDefault(); e.returnValue = ''; } });
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
