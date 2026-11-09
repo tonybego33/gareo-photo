@@ -121,6 +121,7 @@ label.f{display:block;font-size:12.5px;color:var(--mute);margin:10px 0 4px}
 <input type="file" id="imp" accept="image/*,video/*" multiple hidden>
 <input type="file" id="fJson" accept=".json,application/json" hidden>
 <input type="file" id="fZip" accept=".zip,application/zip" hidden>
+<input type="file" id="fApply" accept=".json,application/json" hidden>
 <input type="file" id="fMedia" accept="image/*,video/*" multiple hidden>
 <input type="file" id="fDir" webkitdirectory multiple hidden>
 
@@ -131,7 +132,7 @@ label.f{display:block;font-size:12.5px;color:var(--mute);margin:10px 0 4px}
    plan, on la range (zone libre, équipements, aléas, note).
    Fichier unique, aucune dépendance externe, fonctionne hors-ligne.
    ===================================================================== */
-const VERSION = 'v2026-11-07 · 8';
+const VERSION = 'v2026-11-09 · 9';
 const STORE_KEY = 'gareoPhoto.v2';
 
 const EQUIP = [{"n": "Abri vélo", "l": [1, 2, 1, 3, 2], "d": "Abri / structure légère de stationnement et protection des vélos"}, {"n": "Abris de quais/marquise", "l": [3, 3, 2, 4, 1], "d": "Abris ou marquises protégeant les voyageurs sur les quais"}, {"n": "AEP (Adduction eau potable)", "l": [2, 2, 2, 4, 4], "d": "Réseau d’alimentation en eau potable de la gare (sanitaires, robinets, usages courants)"}, {"n": "Alimentation SNCF Réseau", "l": [3, 3, 4, 4, 3], "d": "Alimentation électrique dédiée aux équipements ferroviaires de SNCF Réseau en gare (signalisation, aiguillages, postes, etc.)"}, {"n": "Armoire de climatisation", "l": [1, 2, 3, 1, 1], "d": "Armoire de traitement d’air / climatisation alimentant principalement des locaux techniques ou équipements sensibles"}, {"n": "Armoire élévatique", "l": [3, 2, 2, 4, 1], "d": "Armoire de commande et de puissance des ascenseurs et escaliers mécaniques"}, {"n": "ART PMR", "l": [0, 2, 2, 4, 4], "d": "Dispositif d’aide et d’information dédié aux PMR"}, {"n": "ART/AMT/BLS (Automate de vente)", "l": [0, 2, 2, 4, 0], "d": "Automates de vente de titres de transport"}, {"n": "Ascenseur de service / Monte charge", "l": [1, 2, 3, 1, 1], "d": "Ascenseur dédié aux flux logistiques et manutention"}, {"n": "Ascenseur non secouru", "l": [3, 2, 1, 4, 1], "d": "Ascenseur voyageurs non intégré au dispositif d'évacuation"}, {"n": "Ascenseur secouru", "l": [4, 2, 1, 4, 1], "d": "Ascenseur intégré au dispositif d'évacuation de sécurité"}, {"n": "Assise quais", "l": [2, 1, 0, 4, 1], "d": "Sièges ou bancs installés sur les quais"}, {"n": "BAES", "l": [4, 0, 1, 1, 1], "d": "Blocs autonomes d'éclairage de sécurité"}, {"n": "Baie CFA", "l": [4, 3, 4, 1, 1], "d": "Baie courants faibles pour réseaux et systèmes numériques"}, {"n": "Baie Sono", "l": [4, 1, 2, 3, 1], "d": "Baie de diffusion sonore de sécurité et d'exploitation"}, {"n": "Baie Sono commerciale", "l": [0, 2, 2, 2, 0], "d": "Baie de diffusion sonore à usage commercial/confort"}, {"n": "Balise sonore", "l": [2, 0, 1, 2, 1], "d": "Balise d'orientation sonore pour déficients visuels"}, {"n": "Bandes détection à la canne", "l": [4, 0, 1, 3, 3], "d": "Bandes au sol détectables à la canne des malvoyants"}, {"n": "Bandes pododactiles", "l": [4, 0, 1, 3, 1], "d": "Bandes en relief d'alerte au sol (ex. bord de quai)"}, {"n": "Barrières et clôtures fixes", "l": [4, 2, 3, 1, 1], "d": "Clôtures rigides séparant zones publiques et zones dangereuses"}, {"n": "Barrières extérieurs levantes", "l": [4, 2, 3, 1, 1], "d": "Barrières motorisées de contrôle d'accès véhicules"}, {"n": "Borne d'appel d'urgence", "l": [4, 2, 1, 1, 1], "d": "Borne permettant aux usagers d'alerter en cas d'urgence"}, {"n": "Bureaux", "l": [1, 3, 4, 1, 4], "d": "Locaux administratifs et de travail"}, {"n": "Caméras", "l": [1, 1, 3, 1, 1], "d": "Caméras de vidéosurveillance générales"}, {"n": "Caméras ascenseurs", "l": [4, 1, 1, 3, 1], "d": "Caméras dédiées à la surveillance des cabines d'ascenseurs"}, {"n": "Caméras pour téléopération", "l": [1, 1, 3, 1, 1], "d": "Caméras nécessaires au pilotage à distance d'équipements"}, {"n": "Caméras vente billetterie", "l": [1, 1, 1, 3, 1], "d": "Caméras de surveillance zones de vente/guichets"}, {"n": "Centrale GTC/GTB", "l": [4, 4, 4, 4, 4], "d": "Système centralisé de gestion technique/énergétique du bâtiment"}, {"n": "Centrale SSI", "l": [4, 4, 1, 1, 1], "d": "Unité centrale du Système de Sécurité Incendie"}, {"n": "Chambre froide", "l": [1, 3, 3, 2, 1], "d": "Chambre à froid pour usages commerciaux/restauration"}, {"n": "Château d’eau", "l": [4, 3, 3, 3, 3], "d": "Ouvrage de stockage et de mise en pression de l'eau du site"}, {"n": "Chaudière et circuit d'eau chaude", "l": [1, 4, 1, 3, 3], "d": "Production et distribution d'eau chaude de chauffage"}, {"n": "Clim locaux techniques", "l": [1, 2, 4, 1, 1], "d": "Climatisation des locaux abritant des équipements sensibles"}, {"n": "Cœur de réseau télécoms", "l": [4, 4, 4, 4, 2], "d": "Noyau des infrastructures réseau et télécoms de la gare"}, {"n": "Désenfumage mécanique", "l": [4, 2, 1, 1, 1], "d": "Système motorisé d'extraction des fumées en cas d'incendie"}, {"n": "Désenfumage naturel", "l": [4, 2, 1, 1, 1], "d": "Trappes ou ouvrants pour évacuation naturelle des fumées"}, {"n": "Détecteur incendie", "l": [4, 1, 4, 1, 1], "d": "Capteurs de détection précoce de départ de feu"}, {"n": "Eau chaude sanitaire", "l": [1, 2, 1, 3, 3], "d": "Production d'ECS pour sanitaires et usages courants"}, {"n": "Eclairage", "l": [3, 1, 2, 4, 2], "d": "Éclairage général des espaces gare et accès"}, {"n": "Eclairage de sécurité sur source centrale", "l": [4, 1, 1, 1, 1], "d": "Éclairage de sécurité alimenté par une source centralisée"}, {"n": "Eclairage indispensable à l'ouverture d'un espace", "l": [1, 1, 4, 1, 1], "d": "Éclairage minimal réglementaire conditionnant l'ouverture au public"}, {"n": "Ecran TFT PMR", "l": [1, 2, 2, 3, 4], "d": "Écran d'information adapté aux besoins des PMR"}, {"n": "Ecrans TFT/TIM", "l": [1, 2, 2, 4, 1], "d": "Écrans d'information voyageurs (horaires, voies, messages)"}, {"n": "Emetteur de chaleur ERP", "l": [1, 2, 1, 3, 2], "d": "Radiateurs ou terminaux de chauffage en zones voyageurs"}, {"n": "Emetteur de chaleur ERT", "l": [1, 2, 1, 1, 4], "d": "Radiateurs ou terminaux de chauffage en zones techniques"}, {"n": "Ensemble local technique Transformateur", "l": [4, 4, 4, 4, 4], "d": "Local abritant le transformateur principal d'alimentation de la gare"}, {"n": "Ensemble local technique Transformateur de secours avec Source secours BT/HT", "l": [4, 4, 4, 4, 2], "d": "Local abritant transformateur et source électrique de secours"}, {"n": "Enveloppe", "l": [4, 4, 4, 3, 3], "d": "Façades, toitures, menuiseries, étanchéité du bâtiment"}, {"n": "Equipement ferroviaire réseau", "l": [4, 4, 4, 1, 1], "d": "Équipements d'infrastructure ferroviaire (signalisation, voie, aiguillage…)"}, {"n": "Equipement médical de premiers secours", "l": [4, 1, 1, 1, 1], "d": "\""}, {"n": "Escalier Mécanique", "l": [1, 4, 1, 3, 1], "d": "Escalier motorisé pour le transport de voyageurs"}, {"n": "Escalier Mécanique secouru", "l": [4, 4, 1, 3, 1], "d": "Escalier mécanique intégré aux cheminements de sécurité"}, {"n": "Espace commercial", "l": [1, 4, 3, 3, 1], "d": "Locaux dédiés aux commerces et services en gare"}, {"n": "Espace d'attente", "l": [1, 4, 3, 4, 1], "d": "Zones de salle d'attente et assises voyageurs"}, {"n": "Espace de circulation", "l": [2, 4, 3, 4, 1], "d": "Couloirs, halls et zones de déplacement voyageurs"}, {"n": "Extinction incendie par gaz argon", "l": [4, 3, 4, 1, 1], "d": "Système d'extinction automatisé par gaz en locaux sensibles"}, {"n": "Extinction incendie par sprinklage", "l": [4, 3, 4, 1, 1], "d": "Réseau de sprinklers automatiques contre l'incendie"}, {"n": "Fondation", "l": [4, 4, 4, 1, 1], "d": "Ouvrages de fondation du bâtiment ou de l'ouvrage"}, {"n": "Fontaine à eau", "l": [0, 2, 0, 4, 3], "d": "Fontaines de distribution d'eau potable aux usagers"}, {"n": "Groupe de production de froid", "l": [1, 3, 3, 1, 2], "d": "Production centralisée de froid pour la climatisation"}, {"n": "Haut-parleur", "l": [4, 2, 3, 3, 0], "d": "Diffuseurs sonores dans les espaces voyageurs et techniques"}, {"n": "Interphonie Ascenseur", "l": [4, 2, 1, 3, 1], "d": "Système d'appel et de communication en cabine d'ascenseur"}, {"n": "Interphonie CAB", "l": [1, 1, 2, 2, 1], "d": "Système d'interphonie intégré aux portillons automatiques de contrôle d'accès et de billettique"}, {"n": "Ligne CAB/PEC", "l": [1, 3, 4, 3, 1], "d": "Ligne de portillons de contrôle d'accès ou billettique"}, {"n": "Lignes de vie ou autres dispositifs fixes pour l'entretien", "l": [4, 1, 3, 1, 4], "d": "Dispositifs de protection contre les chutes pour interventions en hauteur"}, {"n": "Local technique", "l": [1, 4, 4, 1, 2], "d": "Local abritant des équipements techniques (élec, CVC, IT…)"}, {"n": "Ouvrage d'assainissement ou technique", "l": [2, 4, 2, 1, 4], "d": "Ouvrages de collecte et gestion des eaux usées/pluviales"}, {"n": "Panneaux photovoltaïques", "l": [1, 3, 3, 1, 4], "d": "Installation de production d'électricité solaire"}, {"n": "Panneaux solaires thermiques", "l": [1, 3, 3, 1, 4], "d": "Capteurs solaires pour production de chaleur ou d'ECS"}, {"n": "Paratonnerre", "l": [4, 3, 2, 1, 1], "d": "Dispositif de protection contre la foudre"}, {"n": "Parking", "l": [1, 3, 1, 4, 1], "d": "Parking voyageurs accolé à la gare"}, {"n": "Parking exploitants", "l": [1, 3, 4, 1, 3], "d": "Parking réservé aux personnels et prestataires"}, {"n": "Passage souterrain", "l": [1, 4, 4, 4, 0], "d": "Ouvrage souterrain pour accéder aux quais et aux espaces"}, {"n": "Passerelle", "l": [4, 4, 4, 4, 0], "d": "Ouvrage aérien piéton pour franchir les voies"}, {"n": "Petit ouvrage sous voie", "l": [1, 4, 2, 1, 1], "d": "Petit ouvrage (buse, dalot) traversant sous la voie ferrée"}, {"n": "Pneumatique", "l": [1, 3, 2, 1, 1], "d": "Réseau d'air comprimé pour automatismes et équipements"}, {"n": "Pompe de relevage", "l": [1, 3, 4, 1, 3], "d": "Pompe évacuant les eaux de locaux bas ou souterrains"}, {"n": "Ponts rails", "l": [4, 4, 4, 1, 1], "d": "Ponts supportant les voies ferrées"}, {"n": "Ponts route", "l": [4, 4, 4, 1, 1], "d": "Ponts routiers associés à la gare ou franchissant la voie"}, {"n": "Portail mécanique de secours téléopéré", "l": [4, 3, 3, 1, 1], "d": "Portail motorisé de secours commandable à distance"}, {"n": "Portes auto", "l": [1, 3, 3, 3, 1], "d": "Portes automatiques d'accès aux bâtiments et espaces"}, {"n": "Pupitre téléopération", "l": [4, 4, 4, 1, 2], "d": "Poste de commande et de supervision centralisé permettant à un opérateur (agent ou centre de téléopération) de contrôler et piloter à distan"}, {"n": "Quai", "l": [1, 4, 4, 4, 2], "d": "Plateforme voyageurs au bord des voies"}, {"n": "Réseaux de plomberies", "l": [1, 3, 4, 3, 3], "d": "Réseaux d'eau, évacuation et raccordements sanitaires"}, {"n": "Rideau mécanique", "l": [4, 2, 3, 1, 1], "d": "Rideau de fermeture manuel ou localement motorisé"}, {"n": "Rideau métallique téléopéré", "l": [4, 2, 3, 1, 1], "d": "Rideau métallique motorisé commandable à distance"}, {"n": "Sanitaire ERP", "l": [1, 3, 1, 4, 2], "d": "Sanitaires accessibles au public voyageurs"}, {"n": "Sanitaires ERT", "l": [1, 3, 1, 1, 4], "d": "Sanitaires pour personnels et zones techniques"}, {"n": "Sirène d'évacuation et diffuseur lumineux", "l": [4, 1, 1, 1, 1], "d": "Dispositifs sonores et visuels d'alarme générale"}, {"n": "Sirène évacuation", "l": [4, 1, 1, 1, 1], "d": "Dispositifs sonores d'alarme incendie et d'évacuation"}, {"n": "Source centrale de secours", "l": [4, 3, 4, 4, 1], "d": "Source électrique centralisée pour circuits de secours"}, {"n": "SSI - Diffuseurs lumineux", "l": [4, 1, 1, 1, 1], "d": "Diffuseurs lumineux contrôlés par le SSI"}, {"n": "Structure", "l": [4, 4, 4, 1, 1], "d": "Ossature porteuse du bâtiment ou de l'ouvrage"}, {"n": "Tableau Divisionnaire", "l": [4, 2, 3, 3, 1], "d": "Tableau électrique distribuant l'électricité à une zone ou un usage"}, {"n": "Tableau divisionnaire de bâtiment", "l": [4, 2, 4, 4, 2], "d": "Tableau électrique dédié à un bâtiment ou une entité"}, {"n": "Tableau Général Secouru", "l": [4, 2, 4, 4, 2], "d": "Tableau alimentant les circuits électriques secourus"}, {"n": "Tarif Jaune/bleu", "l": [4, 3, 4, 4, 1], "d": "Point de livraison électrique du réseau public (comptage HTA/BT)"}, {"n": "téléphone", "l": [1, 1, 2, 1, 1], "d": "Téléphonie fixe interne et externe de la gare"}, {"n": "Terrains nus G&C", "l": [1, 1, 2, 0, 2], "d": "Terrains nus de gestion et construction liés à la gare"}, {"n": "Terrains nus non G&C", "l": [1, 1, 2, 0, 2], "d": "Terrains nus hors périmètre gare ou centre"}, {"n": "TGBT / TGBTR", "l": [4, 4, 4, 4, 2], "d": "Tableau Général Basse Tension (et secouru réseau)"}, {"n": "Traversée de voie piétonne (TVP)", "l": [4, 3, 3, 4, 1], "d": "Passage piéton traversant les voies au niveau du sol"}, {"n": "Ventilation", "l": [2, 2, 1, 4, 1], "d": "Ventilation des locaux, halls et passages"}];
@@ -210,8 +211,8 @@ function download(name, data, type='application/octet-stream') {
 const DB = {
   _db:null,
   open() { if (this._db) return Promise.resolve(this._db);
-    return new Promise((res, rej) => { const r = indexedDB.open('gareoPhoto', 1);
-      r.onupgradeneeded = () => { const d = r.result; if (!d.objectStoreNames.contains('blobs')) d.createObjectStore('blobs'); if (!d.objectStoreNames.contains('thumbs')) d.createObjectStore('thumbs'); };
+    return new Promise((res, rej) => { const r = indexedDB.open('gareoPhoto', 2);
+      r.onupgradeneeded = () => { const d = r.result; if (!d.objectStoreNames.contains('blobs')) d.createObjectStore('blobs'); if (!d.objectStoreNames.contains('thumbs')) d.createObjectStore('thumbs'); if (!d.objectStoreNames.contains('snaps')) d.createObjectStore('snaps'); };
       r.onsuccess = () => { this._db = r.result; res(this._db); }; r.onerror = () => rej(r.error); }); },
   async tx(store, mode, fn) { const d = await this.open(); return new Promise((res, rej) => { const t = d.transaction(store, mode); const s = t.objectStore(store);
     let out; const q = fn(s); if (q) q.onsuccess = () => { out = q.result; }; t.oncomplete = () => res(out); t.onerror = () => rej(t.error); t.onabort = () => rej(t.error); }); },
@@ -377,7 +378,7 @@ function galHtml(v) {
   if (!list.length) return `<div class="mute small">Aucune photo pour l'instant.</div>`;
   return `<div class="gal">${list.map(p => `<div class="it" data-act="openFiche" data-id="${p.id}">
     <img data-th="${bk(p)}" alt="" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=">
-    <span class="bd">${p.type === 'video' ? '🎬 ' : ''}${p.n}</span>${p.ef ? `<span class="todo" style="background:${EF_COL[p.ef]}">${p.ef === 'agg' ? '▲' : p.ef === 'att' ? '▼' : '?'}</span>` : ''}
+    <span class="bd">${p.type === 'video' ? '🎬 ' : ''}${p.n}${p.auto ? ' 🤖' : ''}</span>${p.ef ? `<span class="todo" style="background:${EF_COL[p.ef]}">${p.ef === 'agg' ? '▲' : p.ef === 'att' ? '▼' : '?'}</span>` : ''}
     <div class="lb">${esc(p.zone || '—')}${p.eqs.length ? '<br>🔧 ' + esc(p.eqs[0]) + (p.eqs.length > 1 ? ' +' + (p.eqs.length - 1) : '') : ''}</div></div>`).join('')}</div>`;
 }
 function renderGal() { const v = V(); const g = $('#gal'); if (g && v) { g.innerHTML = galHtml(v); fillThumbs(g); } }
@@ -393,6 +394,7 @@ function renderOv() {
   const v = Object.values(S.visites).find(x => x.photos.includes(p));
   o.innerHTML = `<div class="ov"><div class="top"><b>${esc(p.id)} · ${hms(p.t)}</b><button data-act="delPhoto">🗑</button><button data-act="closeFiche">Fermer</button></div>
   <div class="body">
+    ${p.auto ? '<div class="banner" style="margin-bottom:10px">🤖 Fiche remplie automatiquement : vérifie, corrige si besoin, puis Enregistrer.</div>' : ''}
     <div class="prev"><span id="prevBox">${p.type === 'video' ? '<div class="ph0">🎬</div>' : `<img data-th="${bk(p)}" alt="" data-act="full">`}</span>
       <div class="small"><b>${p.type === 'video' ? 'Vidéo' : 'Photo'} n°${p.n}</b><br>${hms(p.t)}
       ${p.gps ? `<br>GPS ±${p.gps.acc} m` : ''}${p.stored ? '' : '<br><span style="color:var(--red)">non stockée dans l\'appli</span>'}
@@ -499,7 +501,7 @@ function renderTags(p) {
 }
 function commitFiche(p) {
   const z = $('#fZone'); if (z) p.zone = z.value.trim(); const n = $('#fNote'); if (n) p.note = n.value.trim();
-  p.mod = Date.now();
+  p.mod = Date.now(); p.auto = false;
   S.last = {niv:p.niv, zone:p.zone, pt:p.pt ? {n:p.pt.n, x:p.pt.x, y:p.pt.y} : null, eqs:[...p.eqs], al:[...p.al], ef:p.ef};
   save();
 }
@@ -669,6 +671,7 @@ function viewExport() {
     <div style="margin-top:12px"><button class="btn big yel" style="width:100%" data-act="zip" ${X.busy ? 'disabled' : ''}>📦 Télécharger le ZIP classé</button></div>
     ${X.zipLog ? `<div class="banner ok" style="margin-top:10px">${X.zipLog}</div>` : ''}
     <p class="small mute">Sur le téléphone, le ZIP arrive dans Téléchargements : envoie-le sur ton PC (câble, OneDrive, Teams). Au-delà de 3,5 Go il est découpé en plusieurs parties.</p></div>` : ''}
+  ${autoCard(v)}
   <div class="card"><h2>Synthèse de visite</h2>
     <p class="small mute" style="margin-top:0">Un document prêt à l'emploi : couverture, aléas surlignés, tableau zones × aléas, points d'attention, plans avec les photos numérotées et leur direction, puis une fiche par zone. Fichier HTML autonome (s'ouvre partout), à imprimer en PDF.</p>
     ${srcs.length ? `<label class="row small" style="margin-top:4px"><input type="checkbox" id="xAll" ${X.all ? 'checked' : ''}> Toutes les photos dans les fiches de zone (sinon : ★, aggravant et notes d'abord, 8 max par zone)</label>
@@ -945,6 +948,49 @@ async function importLocal() {
   UI.mode = 'terrain'; localStorage.setItem('gareoPhoto.mode', 'terrain'); render();
   toast(`✔ Visite importée (${v.photos.length - miss} fichiers${miss ? ', ' + miss + ' manquants' : ''}) : touche une photo pour modifier sa fiche`);
 }
+/* =====================================================================
+   FICHES COMPLÉTÉES AUTOMATIQUEMENT : appliquer un relevé .json, avec
+   sauvegarde de l'état avant (IndexedDB + fichier) et annulation.
+   ===================================================================== */
+const AUTO_F = ['niv', 'zone', 'pt', 'eqs', 'al', 'ef', 'star', 'note'];
+const clone = x => JSON.parse(JSON.stringify(x ?? null));
+async function getSnaps(vid) { return (await DB.get('snaps', vid).catch(() => null)) || []; }
+async function snapshot(v, label) {
+  const s = {at:Date.now(), label, photos:v.photos.map(p => { const o = {id:p.id}; [...AUTO_F, 'auto'].forEach(k => o[k] = clone(p[k])); return o; })};
+  const list = await getSnaps(v.id); list.push(s); while (list.length > 10) list.shift(); await DB.put('snaps', v.id, list); X.snaps = list; return s;
+}
+async function applyReleve(j) {
+  const v = S.visites[j.visite.id] || Object.values(S.visites).find(w => w.code === j.visite.code && w.debut === j.visite.debut);
+  if (!v) { alert('Cette visite n\'est pas dans ce navigateur. Importe d\'abord le ZIP de la visite (onglet Bureau).'); return; }
+  const ch = []; const cnt = {};
+  for (const jp of j.photos || []) { const p = v.photos.find(x => x.id === jp.id); if (!p) continue;
+    const ks = AUTO_F.filter(k => k in jp && JSON.stringify(clone(jp[k])) !== JSON.stringify(clone(p[k])));
+    if (ks.length) { ch.push([p, jp, ks]); ks.forEach(k => cnt[k] = (cnt[k] || 0) + 1); } }
+  if (!ch.length) { alert('Ce relevé ne change aucune fiche.'); return; }
+  const lab = {niv:'étage', zone:'zone', pt:'point plan', eqs:'équipements', al:'aléas', ef:'effet', star:'★', note:'note'};
+  if (!confirm(`${ch.length} fiche(s) vont être mises à jour :\n${Object.entries(cnt).map(([k, n]) => `· ${lab[k]} : ${n}`).join('\n')}\n\nL'état actuel est sauvegardé : « ↩ Annuler » permettra de revenir en arrière.`)) return;
+  await snapshot(v, 'avant ' + (j.label || 'relevé complété'));
+  download(`${v.code}_releve_AVANT-mise-a-jour_${ymd(Date.now())}_${hm(Date.now()).replace(':', 'h')}.json`, JSON.stringify(relevePayload(v), null, 1), 'application/json');
+  for (const [p, jp, ks] of ch) { ks.forEach(k => p[k] = clone(jp[k])); if (p.eqs == null) p.eqs = []; if (p.al == null) p.al = []; p.auto = true; p.mod = Date.now(); }
+  save(); S.current = v.id; save(); X.applyLog = `✔ ${ch.length} fiche(s) mises à jour. Elles portent un 🤖 tant que tu ne les as pas relues (ouvrir la fiche puis Enregistrer enlève le 🤖).`; render();
+}
+async function undoLast() {
+  const v = S.visites[X.src]; if (!v) return; const list = await getSnaps(v.id); const s = list.pop(); if (!s) return;
+  if (!confirm(`Revenir à l'état du ${new Date(s.at).toLocaleString('fr-FR')} (${s.label}) ?`)) { list.push(s); return; }
+  let n = 0; for (const o of s.photos) { const p = v.photos.find(x => x.id === o.id); if (!p) continue; [...AUTO_F, 'auto'].forEach(k => p[k] = clone(o[k])); if (p.eqs == null) p.eqs = []; if (p.al == null) p.al = []; n++; }
+  await DB.put('snaps', v.id, list); X.snaps = list; save(); X.applyLog = `↩ ${n} fiches remises comme le ${new Date(s.at).toLocaleString('fr-FR')}.`; render();
+}
+function autoCard(v) {
+  if (!v) return '';
+  const nAuto = v.photos.filter(p => p.auto).length; const sn = X.snapsFor === v.id ? X.snaps : null;
+  if (X.snapsFor !== v.id) { X.snapsFor = v.id; getSnaps(v.id).then(l => { X.snaps = l; if (UI.mode === 'export') render(); }); }
+  return `<div class="card"><h2>🤖 Fiches complétées automatiquement</h2>
+    <p class="small mute" style="margin-top:0">Applique un relevé complété (.json) à cette visite. L'état actuel est sauvegardé avant chaque mise à jour.</p>
+    <div class="grid2"><button class="btn pri" data-act="applyRel">📥 Appliquer un relevé complété (.json)</button>
+    <button class="btn" data-act="undoRel" ${sn && sn.length ? '' : 'disabled'}>↩ Annuler la dernière mise à jour${sn && sn.length ? ` (${new Date(sn[sn.length - 1].at).toLocaleString('fr-FR', {day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit'})})` : ''}</button></div>
+    ${nAuto ? `<div class="small" style="margin-top:8px">🤖 ${nAuto} fiche(s) encore à relire (repérées par 🤖 dans la liste des photos).</div>` : ''}
+    ${X.applyLog ? `<div class="banner ok" style="margin-top:8px">${X.applyLog}</div>` : ''}</div>`;
+}
 /* ---------- Lecture EXIF / vidéo ---------- */
 function exifTime(dto, off) {
   const p = dto.match(/(\d{4}):(\d\d):(\d\d) (\d\d):(\d\d):(\d\d)/); if (!p) return null;
@@ -1084,6 +1130,8 @@ document.addEventListener('click', async ev => {
       if (!confirm('Terminer la visite ? Le relevé (.json + .csv) sera exporté dans Téléchargements. Tu pourras encore modifier les fiches et faire le ZIP depuis l\'onglet Export.')) break;
       v.fin = Date.now(); exportReleve(v); S.current = null; save(); render(); break; }
     case 'zip': try { await zipExport(); } catch (e) { console.error(e); X.busy = null; toast('Erreur ZIP : ' + e.message, 'err'); render(); } break;
+    case 'applyRel': $('#fApply').click(); break;
+    case 'undoRel': try { await undoLast(); } catch (e) { alert('Annulation impossible : ' + e.message); } break;
     case 'synth': try { await genSynthese(); } catch (e) { console.error(e); X.busy = null; toast('Erreur : ' + e.message, 'err'); render(); } break;
     case 'xRel': exportReleve(S.visites[X.src]); toast('Relevé exporté dans Téléchargements'); break;
     case 'xDl': { const v = S.visites[X.src]; for (const q of v.photos.filter(x => !x.dl)) { await dlCopy(q); await new Promise(r => setTimeout(r, 400)); } render(); break; }
@@ -1111,6 +1159,7 @@ document.addEventListener('change', ev => {
   const t = ev.target;
   if (t.id === 'capP' || t.id === 'capV' || t.id === 'imp') { const fs = [...t.files]; t.value = ''; onCapture(fs, t.id === 'imp' ? 'import' : t.id === 'capV' ? 'video' : 'camera'); }
   if (t.id === 'cDl') { S.prefs.dlCopy = t.checked; save(); }
+  if (t.id === 'fApply' && t.files[0]) { const f = t.files[0]; t.value = ''; f.text().then(async txt => { try { const j = JSON.parse(txt); if (!j.photos || !j.visite) throw new Error('pas un relevé'); await applyReleve(j); } catch (e) { alert('Relevé illisible : ' + e.message); } }); }
   if (t.id === 'xSrc') { X.src = t.value; X.last = null; X.zipLog = null; render(); }
   if (t.id === 'xAll') { X.all = t.checked; }
   if (t.id === 'xZipSyn') { X.zipSyn = t.checked; }
