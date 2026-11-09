@@ -110,7 +110,7 @@ label.f{display:block;font-size:12.5px;color:var(--mute);margin:10px 0 4px}
     <button data-act="mode" data-v="terrain">Terrain</button>
     <button data-act="mode" data-v="bureau">Bureau</button>
     <button data-act="mode" data-v="export">Export</button>
-    <button data-act="mode" data-v="aide">Aide</button>
+    <button data-act="mode" data-v="aide">À propos</button>
   </div>
 </header>
 <main id="app"></main>
@@ -132,7 +132,7 @@ label.f{display:block;font-size:12.5px;color:var(--mute);margin:10px 0 4px}
    plan, on la range (zone libre, équipements, aléas, note).
    Fichier unique, aucune dépendance externe, fonctionne hors-ligne.
    ===================================================================== */
-const VERSION = 'v2026-11-09 · 11';
+const VERSION = 'v2026-11-09 · 12';
 const STORE_KEY = 'gareoPhoto.v2';
 
 const EQUIP = [{"n": "Abri vélo", "l": [1, 2, 1, 3, 2], "d": "Abri / structure légère de stationnement et protection des vélos"}, {"n": "Abris de quais/marquise", "l": [3, 3, 2, 4, 1], "d": "Abris ou marquises protégeant les voyageurs sur les quais"}, {"n": "AEP (Adduction eau potable)", "l": [2, 2, 2, 4, 4], "d": "Réseau d’alimentation en eau potable de la gare (sanitaires, robinets, usages courants)"}, {"n": "Alimentation SNCF Réseau", "l": [3, 3, 4, 4, 3], "d": "Alimentation électrique dédiée aux équipements ferroviaires de SNCF Réseau en gare (signalisation, aiguillages, postes, etc.)"}, {"n": "Armoire de climatisation", "l": [1, 2, 3, 1, 1], "d": "Armoire de traitement d’air / climatisation alimentant principalement des locaux techniques ou équipements sensibles"}, {"n": "Armoire élévatique", "l": [3, 2, 2, 4, 1], "d": "Armoire de commande et de puissance des ascenseurs et escaliers mécaniques"}, {"n": "ART PMR", "l": [0, 2, 2, 4, 4], "d": "Dispositif d’aide et d’information dédié aux PMR"}, {"n": "ART/AMT/BLS (Automate de vente)", "l": [0, 2, 2, 4, 0], "d": "Automates de vente de titres de transport"}, {"n": "Ascenseur de service / Monte charge", "l": [1, 2, 3, 1, 1], "d": "Ascenseur dédié aux flux logistiques et manutention"}, {"n": "Ascenseur non secouru", "l": [3, 2, 1, 4, 1], "d": "Ascenseur voyageurs non intégré au dispositif d'évacuation"}, {"n": "Ascenseur secouru", "l": [4, 2, 1, 4, 1], "d": "Ascenseur intégré au dispositif d'évacuation de sécurité"}, {"n": "Assise quais", "l": [2, 1, 0, 4, 1], "d": "Sièges ou bancs installés sur les quais"}, {"n": "BAES", "l": [4, 0, 1, 1, 1], "d": "Blocs autonomes d'éclairage de sécurité"}, {"n": "Baie CFA", "l": [4, 3, 4, 1, 1], "d": "Baie courants faibles pour réseaux et systèmes numériques"}, {"n": "Baie Sono", "l": [4, 1, 2, 3, 1], "d": "Baie de diffusion sonore de sécurité et d'exploitation"}, {"n": "Baie Sono commerciale", "l": [0, 2, 2, 2, 0], "d": "Baie de diffusion sonore à usage commercial/confort"}, {"n": "Balise sonore", "l": [2, 0, 1, 2, 1], "d": "Balise d'orientation sonore pour déficients visuels"}, {"n": "Bandes détection à la canne", "l": [4, 0, 1, 3, 3], "d": "Bandes au sol détectables à la canne des malvoyants"}, {"n": "Bandes pododactiles", "l": [4, 0, 1, 3, 1], "d": "Bandes en relief d'alerte au sol (ex. bord de quai)"}, {"n": "Barrières et clôtures fixes", "l": [4, 2, 3, 1, 1], "d": "Clôtures rigides séparant zones publiques et zones dangereuses"}, {"n": "Barrières extérieurs levantes", "l": [4, 2, 3, 1, 1], "d": "Barrières motorisées de contrôle d'accès véhicules"}, {"n": "Borne d'appel d'urgence", "l": [4, 2, 1, 1, 1], "d": "Borne permettant aux usagers d'alerter en cas d'urgence"}, {"n": "Bureaux", "l": [1, 3, 4, 1, 4], "d": "Locaux administratifs et de travail"}, {"n": "Caméras", "l": [1, 1, 3, 1, 1], "d": "Caméras de vidéosurveillance générales"}, {"n": "Caméras ascenseurs", "l": [4, 1, 1, 3, 1], "d": "Caméras dédiées à la surveillance des cabines d'ascenseurs"}, {"n": "Caméras pour téléopération", "l": [1, 1, 3, 1, 1], "d": "Caméras nécessaires au pilotage à distance d'équipements"}, {"n": "Caméras vente billetterie", "l": [1, 1, 1, 3, 1], "d": "Caméras de surveillance zones de vente/guichets"}, {"n": "Centrale GTC/GTB", "l": [4, 4, 4, 4, 4], "d": "Système centralisé de gestion technique/énergétique du bâtiment"}, {"n": "Centrale SSI", "l": [4, 4, 1, 1, 1], "d": "Unité centrale du Système de Sécurité Incendie"}, {"n": "Chambre froide", "l": [1, 3, 3, 2, 1], "d": "Chambre à froid pour usages commerciaux/restauration"}, {"n": "Château d’eau", "l": [4, 3, 3, 3, 3], "d": "Ouvrage de stockage et de mise en pression de l'eau du site"}, {"n": "Chaudière et circuit d'eau chaude", "l": [1, 4, 1, 3, 3], "d": "Production et distribution d'eau chaude de chauffage"}, {"n": "Clim locaux techniques", "l": [1, 2, 4, 1, 1], "d": "Climatisation des locaux abritant des équipements sensibles"}, {"n": "Cœur de réseau télécoms", "l": [4, 4, 4, 4, 2], "d": "Noyau des infrastructures réseau et télécoms de la gare"}, {"n": "Désenfumage mécanique", "l": [4, 2, 1, 1, 1], "d": "Système motorisé d'extraction des fumées en cas d'incendie"}, {"n": "Désenfumage naturel", "l": [4, 2, 1, 1, 1], "d": "Trappes ou ouvrants pour évacuation naturelle des fumées"}, {"n": "Détecteur incendie", "l": [4, 1, 4, 1, 1], "d": "Capteurs de détection précoce de départ de feu"}, {"n": "Eau chaude sanitaire", "l": [1, 2, 1, 3, 3], "d": "Production d'ECS pour sanitaires et usages courants"}, {"n": "Eclairage", "l": [3, 1, 2, 4, 2], "d": "Éclairage général des espaces gare et accès"}, {"n": "Eclairage de sécurité sur source centrale", "l": [4, 1, 1, 1, 1], "d": "Éclairage de sécurité alimenté par une source centralisée"}, {"n": "Eclairage indispensable à l'ouverture d'un espace", "l": [1, 1, 4, 1, 1], "d": "Éclairage minimal réglementaire conditionnant l'ouverture au public"}, {"n": "Ecran TFT PMR", "l": [1, 2, 2, 3, 4], "d": "Écran d'information adapté aux besoins des PMR"}, {"n": "Ecrans TFT/TIM", "l": [1, 2, 2, 4, 1], "d": "Écrans d'information voyageurs (horaires, voies, messages)"}, {"n": "Emetteur de chaleur ERP", "l": [1, 2, 1, 3, 2], "d": "Radiateurs ou terminaux de chauffage en zones voyageurs"}, {"n": "Emetteur de chaleur ERT", "l": [1, 2, 1, 1, 4], "d": "Radiateurs ou terminaux de chauffage en zones techniques"}, {"n": "Ensemble local technique Transformateur", "l": [4, 4, 4, 4, 4], "d": "Local abritant le transformateur principal d'alimentation de la gare"}, {"n": "Ensemble local technique Transformateur de secours avec Source secours BT/HT", "l": [4, 4, 4, 4, 2], "d": "Local abritant transformateur et source électrique de secours"}, {"n": "Enveloppe", "l": [4, 4, 4, 3, 3], "d": "Façades, toitures, menuiseries, étanchéité du bâtiment"}, {"n": "Equipement ferroviaire réseau", "l": [4, 4, 4, 1, 1], "d": "Équipements d'infrastructure ferroviaire (signalisation, voie, aiguillage…)"}, {"n": "Equipement médical de premiers secours", "l": [4, 1, 1, 1, 1], "d": "\""}, {"n": "Escalier Mécanique", "l": [1, 4, 1, 3, 1], "d": "Escalier motorisé pour le transport de voyageurs"}, {"n": "Escalier Mécanique secouru", "l": [4, 4, 1, 3, 1], "d": "Escalier mécanique intégré aux cheminements de sécurité"}, {"n": "Espace commercial", "l": [1, 4, 3, 3, 1], "d": "Locaux dédiés aux commerces et services en gare"}, {"n": "Espace d'attente", "l": [1, 4, 3, 4, 1], "d": "Zones de salle d'attente et assises voyageurs"}, {"n": "Espace de circulation", "l": [2, 4, 3, 4, 1], "d": "Couloirs, halls et zones de déplacement voyageurs"}, {"n": "Extinction incendie par gaz argon", "l": [4, 3, 4, 1, 1], "d": "Système d'extinction automatisé par gaz en locaux sensibles"}, {"n": "Extinction incendie par sprinklage", "l": [4, 3, 4, 1, 1], "d": "Réseau de sprinklers automatiques contre l'incendie"}, {"n": "Fondation", "l": [4, 4, 4, 1, 1], "d": "Ouvrages de fondation du bâtiment ou de l'ouvrage"}, {"n": "Fontaine à eau", "l": [0, 2, 0, 4, 3], "d": "Fontaines de distribution d'eau potable aux usagers"}, {"n": "Groupe de production de froid", "l": [1, 3, 3, 1, 2], "d": "Production centralisée de froid pour la climatisation"}, {"n": "Haut-parleur", "l": [4, 2, 3, 3, 0], "d": "Diffuseurs sonores dans les espaces voyageurs et techniques"}, {"n": "Interphonie Ascenseur", "l": [4, 2, 1, 3, 1], "d": "Système d'appel et de communication en cabine d'ascenseur"}, {"n": "Interphonie CAB", "l": [1, 1, 2, 2, 1], "d": "Système d'interphonie intégré aux portillons automatiques de contrôle d'accès et de billettique"}, {"n": "Ligne CAB/PEC", "l": [1, 3, 4, 3, 1], "d": "Ligne de portillons de contrôle d'accès ou billettique"}, {"n": "Lignes de vie ou autres dispositifs fixes pour l'entretien", "l": [4, 1, 3, 1, 4], "d": "Dispositifs de protection contre les chutes pour interventions en hauteur"}, {"n": "Local technique", "l": [1, 4, 4, 1, 2], "d": "Local abritant des équipements techniques (élec, CVC, IT…)"}, {"n": "Ouvrage d'assainissement ou technique", "l": [2, 4, 2, 1, 4], "d": "Ouvrages de collecte et gestion des eaux usées/pluviales"}, {"n": "Panneaux photovoltaïques", "l": [1, 3, 3, 1, 4], "d": "Installation de production d'électricité solaire"}, {"n": "Panneaux solaires thermiques", "l": [1, 3, 3, 1, 4], "d": "Capteurs solaires pour production de chaleur ou d'ECS"}, {"n": "Paratonnerre", "l": [4, 3, 2, 1, 1], "d": "Dispositif de protection contre la foudre"}, {"n": "Parking", "l": [1, 3, 1, 4, 1], "d": "Parking voyageurs accolé à la gare"}, {"n": "Parking exploitants", "l": [1, 3, 4, 1, 3], "d": "Parking réservé aux personnels et prestataires"}, {"n": "Passage souterrain", "l": [1, 4, 4, 4, 0], "d": "Ouvrage souterrain pour accéder aux quais et aux espaces"}, {"n": "Passerelle", "l": [4, 4, 4, 4, 0], "d": "Ouvrage aérien piéton pour franchir les voies"}, {"n": "Petit ouvrage sous voie", "l": [1, 4, 2, 1, 1], "d": "Petit ouvrage (buse, dalot) traversant sous la voie ferrée"}, {"n": "Pneumatique", "l": [1, 3, 2, 1, 1], "d": "Réseau d'air comprimé pour automatismes et équipements"}, {"n": "Pompe de relevage", "l": [1, 3, 4, 1, 3], "d": "Pompe évacuant les eaux de locaux bas ou souterrains"}, {"n": "Ponts rails", "l": [4, 4, 4, 1, 1], "d": "Ponts supportant les voies ferrées"}, {"n": "Ponts route", "l": [4, 4, 4, 1, 1], "d": "Ponts routiers associés à la gare ou franchissant la voie"}, {"n": "Portail mécanique de secours téléopéré", "l": [4, 3, 3, 1, 1], "d": "Portail motorisé de secours commandable à distance"}, {"n": "Portes auto", "l": [1, 3, 3, 3, 1], "d": "Portes automatiques d'accès aux bâtiments et espaces"}, {"n": "Pupitre téléopération", "l": [4, 4, 4, 1, 2], "d": "Poste de commande et de supervision centralisé permettant à un opérateur (agent ou centre de téléopération) de contrôler et piloter à distan"}, {"n": "Quai", "l": [1, 4, 4, 4, 2], "d": "Plateforme voyageurs au bord des voies"}, {"n": "Réseaux de plomberies", "l": [1, 3, 4, 3, 3], "d": "Réseaux d'eau, évacuation et raccordements sanitaires"}, {"n": "Rideau mécanique", "l": [4, 2, 3, 1, 1], "d": "Rideau de fermeture manuel ou localement motorisé"}, {"n": "Rideau métallique téléopéré", "l": [4, 2, 3, 1, 1], "d": "Rideau métallique motorisé commandable à distance"}, {"n": "Sanitaire ERP", "l": [1, 3, 1, 4, 2], "d": "Sanitaires accessibles au public voyageurs"}, {"n": "Sanitaires ERT", "l": [1, 3, 1, 1, 4], "d": "Sanitaires pour personnels et zones techniques"}, {"n": "Sirène d'évacuation et diffuseur lumineux", "l": [4, 1, 1, 1, 1], "d": "Dispositifs sonores et visuels d'alarme générale"}, {"n": "Sirène évacuation", "l": [4, 1, 1, 1, 1], "d": "Dispositifs sonores d'alarme incendie et d'évacuation"}, {"n": "Source centrale de secours", "l": [4, 3, 4, 4, 1], "d": "Source électrique centralisée pour circuits de secours"}, {"n": "SSI - Diffuseurs lumineux", "l": [4, 1, 1, 1, 1], "d": "Diffuseurs lumineux contrôlés par le SSI"}, {"n": "Structure", "l": [4, 4, 4, 1, 1], "d": "Ossature porteuse du bâtiment ou de l'ouvrage"}, {"n": "Tableau Divisionnaire", "l": [4, 2, 3, 3, 1], "d": "Tableau électrique distribuant l'électricité à une zone ou un usage"}, {"n": "Tableau divisionnaire de bâtiment", "l": [4, 2, 4, 4, 2], "d": "Tableau électrique dédié à un bâtiment ou une entité"}, {"n": "Tableau Général Secouru", "l": [4, 2, 4, 4, 2], "d": "Tableau alimentant les circuits électriques secourus"}, {"n": "Tarif Jaune/bleu", "l": [4, 3, 4, 4, 1], "d": "Point de livraison électrique du réseau public (comptage HTA/BT)"}, {"n": "téléphone", "l": [1, 1, 2, 1, 1], "d": "Téléphonie fixe interne et externe de la gare"}, {"n": "Terrains nus G&C", "l": [1, 1, 2, 0, 2], "d": "Terrains nus de gestion et construction liés à la gare"}, {"n": "Terrains nus non G&C", "l": [1, 1, 2, 0, 2], "d": "Terrains nus hors périmètre gare ou centre"}, {"n": "TGBT / TGBTR", "l": [4, 4, 4, 4, 2], "d": "Tableau Général Basse Tension (et secouru réseau)"}, {"n": "Traversée de voie piétonne (TVP)", "l": [4, 3, 3, 4, 1], "d": "Passage piéton traversant les voies au niveau du sol"}, {"n": "Ventilation", "l": [2, 2, 1, 4, 1], "d": "Ventilation des locaux, halls et passages"}];
@@ -569,7 +569,8 @@ function viewSynth(r) {
 function groupByZone(photos) {
   const map = new Map();
   [...photos].sort((a, b) => a.n - b.n).forEach(p => { const k = p.niv + '|' + (p.zone || ''); if (!map.has(k)) map.set(k, {k, niv:p.niv, zone:p.zone || '', items:[]}); map.get(k).items.push(p); });
-  const arr = [...map.values()]; const todo = arr.findIndex(g => g.k === '~todo'); if (todo >= 0) arr.push(arr.splice(todo, 1)[0]); return arr;
+  const NO = ['EXT', 'N-1', 'N0', 'N1', 'N2', 'N3', 'TOIT']; const oi = n => { const i = NO.indexOf(n); return i < 0 ? 99 : i; };
+  return [...map.values()].sort((a, b) => oi(a.niv) - oi(b.niv) || a.items[0].n - b.items[0].n);
 }
 async function addFiles(files) {
   const r = B.rel; const list = [...files].filter(f => /^(image|video)\//.test(f.type) || /\.(jpe?g|heic|png|mp4|mov|3gp|webm)$/i.test(f.name));
@@ -691,7 +692,7 @@ async function synthHtmlFor(r, fromBureau) {
   const photos = [...r.photos].sort((a, b) => a.n - b.n); const th = {};
   for (const p of photos) { try { const b = await getThumb(p); if (b) th[p.id] = await toDataUrl(b); } catch (e) {} }
   const planData = {}; for (const pl of [...new Set(photos.filter(p => p.pt).map(p => p.pt.n))]) { try { const res = await fetch(PLANS[pl].f); if (res.ok) planData[pl] = await toDataUrl(await res.blob()); } catch (e) {} }
-  return syntheseHtml(r, photos, th, planData);
+  return syntheseHtml(r, photos, th, planData, arguments[2] || {});
 }
 async function genSynthese() {
   let r, getThumb;
@@ -709,7 +710,7 @@ async function genSynthese() {
   if (X.last && X.last.url) URL.revokeObjectURL(X.last.url);
   X.last = {name, size:blob.size, url:URL.createObjectURL(blob)}; X.busy = null; render();
 }
-function syntheseHtml(r, photos, th, planData) {
+function syntheseHtml(r, photos, th, planData, full = {}) {
   const v = r.visite; const groups = groupByZone(photos);
   const zg = groups; const todo = null;
   const alUsed = ALEAS.filter(([k]) => photos.some(p => p.al.includes(k)));
@@ -720,7 +721,7 @@ function syntheseHtml(r, photos, th, planData) {
   const efPill = k => k ? `<span class="ef" style="--c:${EF_COL[k]}">${k === 'agg' ? '▲ ' : k === 'att' ? '▼ ' : '? '}${esc(efLabel(k))}</span>` : '';
   const imp = n => { const e = eqInfo(n); if (!e) return '<span class="imp imp1">hors matrice</span>'; const m = Math.max(...e.l), nTE = e.l.filter(x => x === 4).length;
     return `<span class="imp imp${Math.max(1, m)}" title="Impact max matrice G&C">${m === 4 ? 'Très élevé' + (nTE > 1 ? ' ×' + nTE : '') : m === 3 ? 'Élevé' : m === 2 ? 'Modéré' : 'Faible'}</span>`; };
-  const img = p => th[p.id] ? `<img src="${th[p.id]}" alt="">` : `<div class="noimg">${p.type === 'video' ? '🎬' : '—'}</div>`;
+  const img = p => th[p.id] ? `<img src="${th[p.id]}" alt="" data-n="${p.n}"${full[p.id] ? ` data-full="${esc(full[p.id].split('/').map(encodeURIComponent).join('/'))}"` : ''}>` : `<div class="noimg">${p.type === 'video' ? '🎬' : '—'}</div>`;
   const zNum = g => pad(zg.indexOf(g) + 1);
   /* carte (plan) : SVG qui réutilise l'image du plan, recadrée sur les points */
   const mapSvg = (pl, pts, crop) => {
@@ -776,7 +777,7 @@ function syntheseHtml(r, photos, th, planData) {
 <style>
 :root{--red:#C8102E;--ink:#1A1A1A;--paper:#F5F2EB;--pl:#FAF8F3;--bd:#D9D3C4;--taupe:#8B8680;--tint:#FBEAEC}
 *{box-sizing:border-box}body{margin:0;font:13.5px/1.45 Manrope,-apple-system,"Segoe UI",system-ui,sans-serif;color:var(--ink);background:var(--paper);-webkit-font-smoothing:antialiased}
-a{color:inherit}.wrap{max-width:1180px;margin:auto;padding:18px}
+a{color:inherit}main{min-width:0}
 .cover{background:var(--pl);border:1px solid var(--bd);border-top:6px solid var(--red);border-radius:12px;padding:26px 28px;margin-bottom:18px}
 .cover .lg{height:46px;width:auto;display:block;margin-bottom:18px}.kick{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--red);font-weight:800}
 .cover h1{font-size:30px;line-height:1.1;margin:6px 0 4px;font-weight:800;letter-spacing:-.01em}.cover .meta{color:var(--taupe);font-size:14px}
@@ -810,20 +811,70 @@ figcaption{padding:6px 8px 8px;font-size:12px}.cap1{display:flex;gap:7px;color:v
 .mute{color:var(--taupe)}.small{font-size:12px}.foot{color:var(--taupe);font-size:11px;text-align:center;padding:14px}
 @media (max-width:760px){.zgrid{grid-template-columns:1fr}.cover h1{font-size:24px}}
 @media print{@page{size:A4;margin:11mm}body{background:#fff;font-size:11.5px}.wrap{padding:0;max-width:none}.cover,.block,.zone{border-radius:0;break-inside:auto}.zone{break-before:page}.block.pl{break-before:page;break-inside:avoid}.att{grid-template-columns:repeat(3,1fr)}.att a,figure{break-inside:avoid}.g{grid-template-columns:repeat(4,1fr)}}
-</style></head><body>${defs}<div class="wrap">
+.layout{display:grid;grid-template-columns:290px minmax(0,1fr);gap:22px;max-width:1640px;margin:auto;padding:18px 22px}
+.toc{position:sticky;top:14px;align-self:start;max-height:calc(100vh - 28px);overflow:auto;background:var(--pl);border:1px solid var(--bd);border-radius:12px;padding:14px}
+.toc .lg{height:30px;margin-bottom:8px}.toc .tg{font-weight:800;font-size:15px;margin-bottom:10px}
+.toc a{display:flex;gap:7px;text-decoration:none;padding:4px 6px;border-radius:6px;font-size:12.5px;line-height:1.25}.toc a:hover{background:#fff}
+.toc a b{min-width:22px;color:var(--red)}.toc a em{margin-left:auto;font-style:normal;color:var(--taupe)}
+.toc .tn{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--taupe);margin:12px 6px 4px}
+.toc .tc{display:block;margin-top:14px;background:var(--ink);color:#fff;font-weight:800;text-align:center;padding:10px;border-radius:9px;border-left:6px solid var(--red)}.toc .tc:hover{background:#333}
+.toc .ts{padding-left:16px;color:var(--taupe)}
+.niv{margin-bottom:26px}.nh{display:flex;align-items:baseline;gap:12px;background:var(--ink);color:#fff;border-radius:12px 12px 0 0;padding:12px 18px}
+.nh h2{margin:0;font-size:21px}.nh span{opacity:.75;font-size:13px}.nivbody{border:1px solid var(--bd);border-top:0;border-radius:0 0 12px 12px;padding:16px;background:var(--paper)}
+.gocl{display:inline-block;margin-top:18px;background:var(--red);color:#fff;text-decoration:none;font-weight:800;padding:10px 16px;border-radius:9px}
+.concl{margin-top:34px;scroll-margin-top:14px}.clh{background:var(--ink);color:#fff;border-radius:14px;padding:22px 26px;border-left:10px solid var(--red);margin-bottom:16px}
+.clh .kick{color:#FF6B7D}.clh h2{font-size:30px;margin:6px 0 8px}.clh p{margin:0;font-size:15px;opacity:.9}
+.cl{background:#fff;border:2px solid var(--ink);border-radius:14px;padding:18px 20px;margin-bottom:18px;scroll-margin-top:14px}.cl>h2{font-size:22px;display:flex;align-items:center;gap:10px}
+.cl>h2 i{font-style:normal;background:var(--red);color:#fff;border-radius:8px;width:34px;height:34px;display:inline-flex;align-items:center;justify-content:center;font-size:16px}
+.cl .mx{font-size:14px}.cl .mx th,.cl .mx td{padding:9px 10px}.cl .mx td.c b{font-size:18px}
+.cl .fvc a{font-size:13px}.cl .fvc img,.cl .fvc .noimg{width:110px;height:82px}.cl .att{grid-template-columns:repeat(auto-fill,minmax(340px,1fr))}.cl .att img,.cl .att .noimg{width:120px;height:90px}.cl .att .t{font-size:13px}
+.g{grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}figure img{cursor:zoom-in}
+.lb{position:fixed;inset:0;background:rgba(10,10,10,.92);z-index:99;display:none;align-items:center;justify-content:center;flex-direction:column;padding:20px}.lb.on{display:flex}
+.lb .lc b,.lb .lc .cap1,.lb .lc .note{color:#fff}.lb .lc .cap1{justify-content:center}.lb img{max-width:96vw;max-height:80vh;object-fit:contain;border-radius:6px;background:#222}.lb .lc{color:#fff;max-width:1000px;text-align:center;margin-top:12px;font-size:14px}
+.lb button{position:absolute;background:rgba(255,255,255,.15);color:#fff;border:0;border-radius:10px;font-size:26px;width:52px;height:52px;cursor:pointer}.lb .x{top:16px;right:16px}.lb .pv{left:16px;top:50%}.lb .nx{right:16px;top:50%}
+@media (max-width:1000px){.layout{grid-template-columns:1fr;padding:12px}.toc{position:static;max-height:none}}
+@media print{.toc,.lb,.gocl{display:none!important}.layout{display:block;padding:0}.niv{break-before:page}.concl{break-before:page}.cl{break-inside:auto;border-width:1px}}
+</style></head><body>${defs}
+<div class="layout">
+<nav class="toc">${logo}<div class="tg">${esc(v.gare)}</div>
+${(() => { const NO = ['EXT', 'N-1', 'N0', 'N1', 'N2', 'N3', 'TOIT']; let h = '', cur = null;
+  zg.forEach(g => { if (g.niv !== cur) { cur = g.niv; h += `<div class="tn"><a href="#n-${esc(g.niv)}" style="padding:0;color:inherit">${esc(nivOf(g.niv).label)}</a></div>`; }
+    h += `<a href="#z${zNum(g)}"><b>${zNum(g)}</b><span>${esc(g.zone || 'Sans zone')}</span><em>${g.items.length}</em></a>`; });
+  return h; })()}
+<a class="tc" href="#conclusion">Conclusion</a>
+<a class="ts" href="#c-aleas">Aléas par zone</a><a class="ts" href="#c-facteurs">Facteurs de vulnérabilité</a>${attention.length ? '<a class="ts" href="#c-star">★ Photos importantes</a>' : ''}
+</nav>
+<main>
 <div class="cover">${logo}<div class="kick">Relevé photo de visite</div><h1>${esc(v.gare)}</h1>
 <div class="meta">Visite du ${new Date(v.debut).toLocaleDateString('fr-FR', {weekday:'long', day:'numeric', month:'long', year:'numeric'})} · ${hm(t0)}–${hm(t1)}${v.auteur ? ' · photos : ' + esc(v.auteur) : ''}</div>
 <div class="kpi"><div><b>${photos.length}</b><span>prises</span></div><div><b>${zg.length}</b><span>zones</span></div><div><b>${eqAll.size}</b><span>équipements distincts</span></div>
-<div><b>${photos.filter(p => p.pt).length}</b><span>pointées sur plan</span></div><div class="r"><b>${byEf.agg.length}</b><span>▲ aggravants</span></div><div class="g2"><b>${byEf.att.length}</b><span>▼ atténuants</span></div><div><b>${attention.length}</b><span>★ importantes</span></div>${todo ? `<div><b>${todo.items.length}</b><span>non classées</span></div>` : ''}</div>
-${alUsed.length ? `<h3 style="margin-top:18px">Aléas relevés</h3><div>${alUsed.map(([k]) => `${pill(k)}<span class="small mute" style="margin-right:10px">${photos.filter(p => p.al.includes(k)).length}</span>`).join('')}</div>` : ''}</div>
-<div class="block"><h2>Aléas par zone</h2>${matrix}</div>
-${byEf.agg.length + byEf.att.length + byEf.eva.length ? `<div class="block"><h2>Facteurs de vulnérabilité</h2><div class="fv">${[['agg', '▲ Facteurs aggravants'], ['att', '▼ Facteurs atténuants'], ['eva', '? Impacts à évaluer']].map(([k, lb]) => `<div class="fvc" style="--c:${EF_COL[k]}"><h3>${lb} <span>${byEf[k].length}</span></h3>${byEf[k].length ? byEf[k].map(p => `<a href="#p${p.n}">${img(p)}<div><b>n°${p.n}</b> · ${esc(p.zone || 'Sans zone')}<br><b>${esc(p.eqs.join(' · ') || 'Vue générale')}</b>${p.al.length ? '<br>' + p.al.map(pill).join('') : ''}${p.note ? '<br>' + esc(p.note) : ''}</div></a>`).join('') : '<p class="mute small">Aucun.</p>'}</div>`).join('')}</div></div>` : ''}
-${attention.length ? `<div class="block"><h2>★ Photos importantes</h2><div class="att">${attention.map(p => `<a href="#p${p.n}">${img(p)}<div class="t"><b>n°${p.n}</b> · ${esc(p.zone || '—')}<br><b>${esc(p.eqs.join(' · ') || 'Vue générale')}</b><br>${p.al.map(pill).join('')}${efPill(p.ef)}${p.note ? '<br>' + esc(p.note) : ''}</div></a>`).join('')}</div></div>` : ''}
-${Object.keys(planData).map(pl => `<div class="block pl"><h2>${esc(PLANS[pl].t)} <span class="small mute">— ${photos.filter(p => p.pt && p.pt.n === pl).length} prises pointées</span></h2>${mapSvg(pl, photos.filter(p => p.pt && p.pt.n === pl), false)}<div class="cap">Numéro = n° de photo (clic = aller à la photo) · couleur = effet : <b style="color:#C8102E">▲ aggravant</b>, <b style="color:#1D5E3A">▼ atténuant</b>, <b style="color:#C77800">? à évaluer</b>, noir = sans effet · contour doré = ★ · flèche = direction de prise de vue</div></div>`).join('')}
-${zg.map(zoneSec).join('')}
-${todo ? `<section class="zone" id="ztodo"><div class="zh"><span class="zn" style="background:#8B8680">?</span><div><h2>Non classées</h2><div class="sub">${todo.items.length} prises à ranger</div></div></div><div class="g">${todo.items.map(card).join('')}</div></section>` : ''}
-<div class="foot">Généré par GARÉo Photo ${esc(VERSION)} le ${new Date().toLocaleString('fr-FR')} · nomenclature équipements : matrice de risques SNCF G&C</div>
-</div></body></html>`;
+<div><b>${photos.filter(p => p.pt).length}</b><span>pointées sur plan</span></div><div class="r"><b>${byEf.agg.length}</b><span>▲ aggravants</span></div><div class="g2"><b>${byEf.att.length}</b><span>▼ atténuants</span></div><div><b>${attention.length}</b><span>★ importantes</span></div></div>
+${alUsed.length ? `<h3 style="margin-top:18px">Aléas relevés</h3><div>${alUsed.map(([k]) => `${pill(k)}<span class="small mute" style="margin-right:10px">${photos.filter(p => p.al.includes(k)).length}</span>`).join('')}</div>` : ''}
+<a class="gocl" href="#conclusion">Aller à la conclusion ↓</a></div>
+${(() => { const nivs = [...new Set(zg.map(g => g.niv))];
+  return nivs.map(ni => { const gs = zg.filter(g => g.niv === ni); const ps = gs.flatMap(g => g.items); const pl = nivOf(ni).plan; const pts = ps.filter(p => p.pt && p.pt.n === pl);
+    return `<section class="niv" id="n-${esc(ni)}"><div class="nh"><h2>${esc(nivOf(ni).label)}</h2><span>${gs.length} zone${gs.length > 1 ? 's' : ''} · ${ps.length} prise${ps.length > 1 ? 's' : ''}</span></div><div class="nivbody">
+      ${pl && pts.length && planData[pl] ? `<div class="block pl" style="margin-bottom:16px"><h2 style="font-size:16px">Plan du niveau <span class="small mute">— ${pts.length} prises pointées</span></h2>${mapSvg(pl, pts, false)}<div class="cap">Numéro = n° de photo (clic = aller à la photo) · couleur = effet : <b style="color:#C8102E">▲ aggravant</b>, <b style="color:#1D5E3A">▼ atténuant</b>, <b style="color:#C77800">? à évaluer</b>, noir = sans effet · contour doré = ★ · flèche = direction de prise de vue</div></div>` : ''}
+      ${gs.map(zoneSec).join('')}</div></section>`; }).join(''); })()}
+<section class="concl" id="conclusion">
+<div class="clh"><div class="kick">Conclusion de la visite</div><h2>Ce qu'il faut retenir</h2>
+<p>${alUsed.length} aléa${alUsed.length > 1 ? 's' : ''} relevé${alUsed.length > 1 ? 's' : ''} · <b style="color:#FF6B7D">${byEf.agg.length} facteur${byEf.agg.length > 1 ? 's' : ''} aggravant${byEf.agg.length > 1 ? 's' : ''}</b> · <b style="color:#7FD1A2">${byEf.att.length} atténuant${byEf.att.length > 1 ? 's' : ''}</b> · ${byEf.eva.length} à évaluer · ${attention.length} photo${attention.length > 1 ? 's' : ''} importante${attention.length > 1 ? 's' : ''}</p></div>
+<div class="cl" id="c-aleas"><h2><i>1</i>Aléas par zone</h2>${matrix}</div>
+<div class="cl" id="c-facteurs"><h2><i>2</i>Facteurs de vulnérabilité</h2>${byEf.agg.length + byEf.att.length + byEf.eva.length ? `<div class="fv">${[['agg', '▲ Facteurs aggravants'], ['att', '▼ Facteurs atténuants'], ['eva', '? Impacts à évaluer']].map(([k, lb]) => `<div class="fvc" style="--c:${EF_COL[k]}"><h3>${lb} <span>${byEf[k].length}</span></h3>${byEf[k].length ? byEf[k].map(p => `<a href="#p${p.n}">${img(p)}<div><b>n°${p.n}</b> · ${esc(p.zone || 'Sans zone')}<br><b>${esc(p.eqs.join(' · ') || 'Vue générale')}</b>${p.al.length ? '<br>' + p.al.map(pill).join('') : ''}${p.note ? '<br>' + esc(p.note) : ''}</div></a>`).join('') : '<p class="mute small">Aucun.</p>'}</div>`).join('')}</div>` : '<p class="mute">Aucun effet renseigné.</p>'}</div>
+${attention.length ? `<div class="cl" id="c-star"><h2><i>3</i>★ Photos importantes</h2><div class="att">${attention.map(p => `<a href="#p${p.n}">${img(p)}<div class="t"><b>n°${p.n}</b> · ${esc(p.zone || '—')}<br><b>${esc(p.eqs.join(' · ') || 'Vue générale')}</b><br>${p.al.map(pill).join('')}${efPill(p.ef)}${p.note ? '<br>' + esc(p.note) : ''}</div></a>`).join('')}</div></div>` : ''}
+</section>
+<div class="foot">Généré par GARÉo Photo ${esc(VERSION)} le ${new Date().toLocaleString('fr-FR')} · outil prototype, usage interne · nomenclature équipements : matrice de risques SNCF G&C</div>
+</main></div>
+<div class="lb" id="lb"><button class="x" title="Fermer (Échap)">✕</button><button class="pv" title="Précédente (←)">‹</button><button class="nx" title="Suivante (→)">›</button><img alt=""><div class="lc"></div></div>
+<script>(function(){var lb=document.getElementById('lb'),im=lb.querySelector('img'),lc=lb.querySelector('.lc');
+var list=[].slice.call(document.querySelectorAll('main .g figure img[data-n]')),i=-1;
+function show(k){if(k<0||k>=list.length)return;i=k;var s=list[k];im.src=s.dataset.full||s.src;im.onerror=function(){im.onerror=null;im.src=s.src;};
+var f=s.closest('figure');lc.innerHTML=f?f.querySelector('figcaption').innerHTML:'';lb.classList.add('on');}
+document.addEventListener('click',function(e){var t=e.target;if(t.tagName==='IMG'&&t.dataset.n&&t.closest('main .g figure')){e.preventDefault();show(list.indexOf(t));}});
+lb.querySelector('.x').onclick=function(){lb.classList.remove('on');};lb.querySelector('.pv').onclick=function(){show(i-1);};lb.querySelector('.nx').onclick=function(){show(i+1);};
+lb.addEventListener('click',function(e){if(e.target===lb)lb.classList.remove('on');});
+document.addEventListener('keydown',function(e){if(!lb.classList.contains('on'))return;if(e.key==='Escape')lb.classList.remove('on');if(e.key==='ArrowLeft')show(i-1);if(e.key==='ArrowRight')show(i+1);});})();<\/script>
+</body></html>`;
 }
 
 /* =====================================================================
@@ -881,7 +932,7 @@ async function zipExport() {
   await zw.add(`${root}/${v.code}_inventaire_photos.csv`, new Blob([csv(rows)], {type:'text/csv'}));
   await zw.add(`${root}/${v.code}_releve.json`, new Blob([JSON.stringify(r, null, 1)], {type:'application/json'}));
   if (X.zipSyn) { X.busy = {lb:'ZIP : synthèse…', done:0, total:1}; render();
-    const html = await synthHtmlFor(r, X.src === 'bureau'); await zw.add(`${root}/${v.code}_synthese.html`, new Blob([html], {type:'text/html'})); }
+    const html = await synthHtmlFor(r, X.src === 'bureau', Object.fromEntries(out.map(e => [e.p.id, e.dir + '/' + e.fname]))); await zw.add(`${root}/${v.code}_synthese.html`, new Blob([html], {type:'text/html'})); }
   flush(true); X.busy = null;
   X.zipLog = `✔ ${made.map(m => `<b>${esc(m.nm)}</b> (${(m.size / 1e6).toFixed(0)} Mo)`).join(', ')} téléchargé${made.length > 1 ? 's' : ''} : un dossier par zone puis par équipement, inventaire Excel, relevé${X.zipSyn ? ', synthèse' : ''}.${miss ? ` <b style="color:var(--red)">${miss} fichier(s) introuvable(s)</b>.` : ''}`;
   render();
@@ -1050,28 +1101,12 @@ async function mp4Time(f) {
 
 /* ---------- Aide ---------- */
 function viewAide() {
-  return `<div class="card help"><h2>Comment ça marche</h2>
-  <ol><li><b>📷 Photo</b> ouvre l'appareil photo. Après la prise, la <b>fiche</b> s'ouvre : tu touches le plan où tu es (1er appui) puis vers où tu regardes (2e appui ; un 3e appui replace le point), tu tapes la zone, tu ajoutes un ou plusieurs équipements, aléas, note.</li>
-  <li>La fiche reprend le lieu et les équipements de la photo précédente : souvent il suffit d'appuyer sur <b>✓ + 📷 suivante</b>.</li>
-  <li>Pressé ? Ferme la fiche sans rien remplir : la photo est gardée, tu la complètes plus tard en la touchant dans la liste.</li>
-  <li>Chaque photo est gardée <b>dans l'appli</b> et, dès la prise, une <b>copie de secours</b> part dans <b>Téléchargements</b> (ex. <code>PAZ_0012_094210.jpg</code>). Les noms complets (zone, équipement) sont donnés dans le ZIP.</li>
-  <li>Fin de visite : <b>💾 Exporter le relevé</b> → un .json + un .csv dans Téléchargements. Onglet <b>Export</b> : la <b>synthèse</b> prête à l'emploi (aléas, plans, fiches par zone), à imprimer en PDF.</li>
-  <li><b>Récupérer tout, rangé</b> : onglet <b>Export → 📦 ZIP classé</b>, directement depuis le téléphone (dossiers par zone puis par équipement, Excel, synthèse). Ou au bureau : copie le dossier <code>Download</code> du téléphone, onglet <b>Bureau</b> (relevé .json + fichiers), puis ZIP.</li></ol>
-  <h3>Ce soir</h3><ul><li>Ouvrir la page avec du réseau, menu ⋮ → <b>Ajouter à l'écran d'accueil</b>.</li>
-  <li>Autoriser la localisation et l'appareil photo quand c'est demandé.</li>
-  <li>Test : 3 photos + 1 vidéo, remplir les fiches, vérifier les copies dans Téléchargements (appli Fichiers), Exporter le relevé.</li>
-  <li>Batterie externe, 10 Go libres minimum (les vidéos prennent ~100 Mo/min, et elles sont stockées 2 fois : appli + Téléchargements).</li></ul>
-  <h3>Les photos utiles (ACC)</h3><ul>
-  <li>En entrant dans un espace : la porte / plaque du local ou le <b>plan d'évacuation « vous êtes ici »</b>.</li>
-  <li>Vues générales : 2 à 4 depuis les angles, sol et plafond visibles.</li>
-  <li>Équipement : plan large + serré + <b>plaque constructeur</b> (marque, modèle, année).</li>
-  <li>Inondation : hauteur de pose par rapport au sol (objet pour l'échelle), seuils, avaloirs, regards, pompes, traces d'eau, batardeaux, sorties inondables.</li>
-  <li>Chaleur : verrières, vitrages, protections solaires, ventilation, clim (intérieur et toiture), locaux techniques non climatisés.</li>
-  <li>Toitures / vent : éléments en toiture, fixations, marquises, chéneaux, descentes EP.</li>
-  <li>Désordres : fissures, infiltrations, corrosion — 1 large + 1 serrée.</li>
-  <li>Demande avant de photographier un agent, un écran de supervision ou un document.</li></ul>
+  return `<div class="card help"><h2>À propos</h2>
+  <p><b>GARÉo Photo</b> est un outil test, provisoire, de relevé photo de visite de site. Il est dérivé de <b>GARÉo</b>, l'outil de relevé de terrain développé pour la mission SERM Hauts-de-France.</p>
+  <p>Cette version est un <b>prototype</b> : des évolutions et des corrections sont à prévoir.</p>
+  <p><b>Usage interne exclusivement.</b></p>
   <h3>Réglages</h3><label class="row"><input type="checkbox" id="cDl" ${S.prefs.dlCopy ? 'checked' : ''}> Copie de secours de chaque photo dans Téléchargements dès la prise (recommandé)</label>
-  <p class="small mute">Version ${esc(VERSION)}</p></div>`;
+  <p class="small mute" style="margin-top:14px">Version ${esc(VERSION)}</p></div>`;
 }
 
 /* =====================================================================
