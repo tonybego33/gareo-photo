@@ -1,7 +1,7 @@
 /* GARÉo Photo — service worker : la page marche sans réseau une fois ouverte.
    HTML : réseau d'abord (2,5 s max) puis cache → pas de vieille version coincée.
    Plans / icônes : cache d'abord. */
-const CACHE = 'gareo-photo-v2026-11-09---10';
+const CACHE = 'gareo-photo-v2026-11-09---11';
 const ASSETS = ['./', './index.html', './manifest.webmanifest', './gareo-192.png', './gareo-512.png', './gareo-maskable-512.png', './gareo-apple-180.png',
   './plans/N00.jpg', './plans/N01.jpg', './plans/N02.jpg', './plans/N03.jpg'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting())); });
